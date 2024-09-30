@@ -1,65 +1,121 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import {useSelector} from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  TextField,
+  Paper,
+  Button,
+  InputAdornment,
+  IconButton,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function LoginForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const errors = useSelector(store => store.errors);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const errors = useSelector((store) => store.errors);
   const dispatch = useDispatch();
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const login = (event) => {
     event.preventDefault();
 
     if (username && password) {
       dispatch({
-        type: 'LOGIN',
+        type: "LOGIN",
         payload: {
           username: username,
           password: password,
         },
       });
     } else {
-      dispatch({ type: 'LOGIN_INPUT_ERROR' });
+      dispatch({ type: "LOGIN_INPUT_ERROR" });
     }
   }; // end login
 
   return (
-    <form className="formPanel" onSubmit={login}>
-      <h2>Login</h2>
-      {errors.loginMessage && (
-        <h3 className="alert" role="alert">
-          {errors.loginMessage}
-        </h3>
-      )}
-      <div>
-        <label htmlFor="username">
-          Username:
-          <input
-            type="text"
-            name="username"
-            required
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="password">
-          Password:
-          <input
-            type="password"
-            name="password"
-            required
+    <Paper
+      sx={{
+        width: "60%",
+        display: "flex",
+        flexDirection: "column",
+        textAlign: "center",
+        alignItems: 'center',
+        padding: "20px",
+      }}
+    >
+      <form className="formPanel" onSubmit={login}>
+        <h2>Login</h2>
+        {errors.loginMessage && (
+          <h3 className="alert" role="alert">
+            {errors.loginMessage}
+          </h3>
+        )}
+        <TextField
+          id="outlined-basic"
+          label="Username"
+          variant="outlined"
+          size="small"
+          sx={{ marginY: "10px", width: "100%" }}
+          name="username"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+          required
+        />
+        <FormControl
+          sx={{ marginY: "10px", width: "100%" }}
+          variant="outlined"
+          size="small"
+        >
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
           />
-        </label>
-      </div>
-      <div>
-        <input className="btn" type="submit" name="submit" value="Log In" />
-      </div>
-    </form>
+        </FormControl>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ borderRadius: "30px", paddingX: "40px" }}
+          name="submit"
+        >
+          Log In
+        </Button>
+        
+      </form>
+      <Button
+          type="=button"
+          variant="outlined"
+          sx={{ marginY: '15px', width: '126px', borderRadius: "30px", paddingX: "40px" }}
+          onClick={() => {
+            history.push('/registration');
+          }}
+        >
+          Register
+        </Button>
+    </Paper>
   );
 }
 
