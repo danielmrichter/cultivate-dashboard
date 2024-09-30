@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ScatterPlot from "../Graph Components/ScatterPlot";
 import LineGraph from "../Graph Components/LineGraph";
 import BarGraph from "../Graph Components/BarGraph";
+import LoginPage from "../Account Components/LoginPage/LoginPage.jsx";
+import RegisterPage from "../Account Components/RegisterPage/RegisterPage.jsx";
 
 const data = [
   {
@@ -72,31 +74,19 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <h1>hi</h1>
-      {/* <ScatterPlot
-        data={data}
-        x="longitude"
-        y="latitude"
-        xLabel="Longitude"
-        yLabel="Latitude"
-      /> */}
-
-      <LineGraph
-        data={data}
-        x="date"
-        y="temperature"
-        xLabel="Date"
-        yLabel="Temperature"
-      />
-      <BarGraph
-        data={data}
-        x="date"
-        y="temperature"
-        xLabel="Date"
-        yLabel="Temperature"
-      />
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          {user.id ? <Redirect to="/user" /> : <Redirect to="/login" />}
+        </Route>
+        <Route exact path="/login">
+          {user.id ? <Redirect to="/user" /> : <LoginPage />}
+        </Route>
+        <Route exact path="/registration">
+          {user.id ? <Redirect to="/user" /> : <RegisterPage />}
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
