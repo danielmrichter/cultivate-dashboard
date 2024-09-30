@@ -7,13 +7,19 @@ function LoginPage() {
   const history = useHistory();
 
   return (
-    <div>
+    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
       <LoginForm />
-
-      <center>
-        
-      </center>
-    </div>
+      <Button
+          type="=button"
+          variant="outlined"
+          sx={{ marginY: '15px', width: '126px', borderRadius: "30px", paddingX: "40px" }}
+          onClick={() => {
+            history.push('/registration');
+          }}
+        >
+          Register
+        </Button>
+    </Box>
   );
 }
 

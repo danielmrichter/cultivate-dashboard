@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {
   TextField,
   Paper,
@@ -20,6 +21,7 @@ function LoginForm() {
 
   const errors = useSelector((store) => store.errors);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -42,7 +44,8 @@ function LoginForm() {
   return (
     <Paper
       sx={{
-        width: "60%",
+        width: '80%',
+        maxWidth: "500px",
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
@@ -103,18 +106,7 @@ function LoginForm() {
         >
           Log In
         </Button>
-        
       </form>
-      <Button
-          type="=button"
-          variant="outlined"
-          sx={{ marginY: '15px', width: '126px', borderRadius: "30px", paddingX: "40px" }}
-          onClick={() => {
-            history.push('/registration');
-          }}
-        >
-          Register
-        </Button>
     </Paper>
   );
 }
