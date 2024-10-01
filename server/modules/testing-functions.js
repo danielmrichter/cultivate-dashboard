@@ -102,7 +102,7 @@ const timeString = (timestring) => {
 };
 
 const convertDateObjectToDateString = (dateObject) => {
-  const convertedDateObject = dateObject.toLocaleDateString({day: 'numeric', month: 'numeric'});
+  const convertedDateObject = dateObject.toLocaleDateString(undefined, {day: 'numeric', month: 'numeric'});
   return convertedDateObject;
 };
 
