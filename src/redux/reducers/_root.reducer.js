@@ -1,7 +1,12 @@
 import { combineReducers } from 'redux';
 import errors from './errors.reducer';
 import user from './user.reducer';
+<<<<<<< HEAD
+import siteData from './siteData.reducer';
+import siteList from './siteList.reducer';
+=======
 import site from './beet.reducer';
+>>>>>>> main
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -12,7 +17,12 @@ import site from './beet.reducer';
 const rootReducer = combineReducers({
   errors, // contains registrationMessage and loginMessage
   user, // will have an id and username if someone is logged in
+<<<<<<< HEAD
+  siteData, 
+  siteList,
+=======
   site,
+>>>>>>> main
 });
 
 export default rootReducer;

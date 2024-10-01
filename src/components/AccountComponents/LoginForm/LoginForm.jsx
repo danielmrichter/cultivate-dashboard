@@ -11,8 +11,8 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+// import Visibility from "@mui/icons-material/Visibility";
+// import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -91,7 +91,7 @@ function LoginForm() {
                   onClick={handleClickShowPassword}
                   edge="end"
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {/* {showPassword ? <VisibilityOff /> : <Visibility />} */}
                 </IconButton>
               </InputAdornment>
             }
