@@ -9,7 +9,9 @@ const passport = require('./strategies/user.strategy');
 
 // Route Includes
 const userRouter = require('./routes/user.router');
-const beetData = require('./routes/beetData.router')
+const beetData = require('./routes/beetData.router');
+const siteData = require('./routes/siteData.router');
+const siteList = require('./routes/siteList.router');
 
 // Express Middleware
 app.use(express.json());
@@ -25,7 +27,9 @@ app.use(passport.session());
 
 // Routes
 app.use('/api/user', userRouter);
-app.use('/api/beet_data', beetData)
+app.use('/api/beet_data', beetData);
+app.use('/api/siteData', siteData);
+app.use('/api/siteList', siteList);
 
 // Listen Server & Port
 app.listen(PORT, () => {

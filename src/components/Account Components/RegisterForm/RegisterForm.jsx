@@ -16,8 +16,8 @@ import {
   RadioGroup,
   FormLabel,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+// import Visibility from "@mui/icons-material/Visibility";
+// import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function RegisterForm() {
   const [username, setUsername] = useState("");
@@ -116,7 +116,7 @@ function RegisterForm() {
                   onClick={handleClickShowPassword}
                   edge="end"
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {/* {showPassword ? <VisibilityOff /> : <Visibility />} */}
                 </IconButton>
               </InputAdornment>
             }
