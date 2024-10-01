@@ -16,9 +16,13 @@ router.post("/", async (req, res) => {
   if (process.env.NODE_ENV === "production") {
     let client;
     try {
+      // Since there's multiple entries at a time, we're going to use
+      // a sql transaction. This allows us to double check that we're not
+      // creating orphan data.
       client = await pool.connect();
       await client.query("BEGIN");
-      await Promise.all(
+      // Now, let's send our data over.
+      const newBeetData = await Promise.all(
         req.body.map((data) => {
           const {
             temperature_time,
@@ -29,10 +33,11 @@ router.post("/", async (req, res) => {
             ticket_number,
           } = data;
           const sqlText = `
-      INSERT INTO "beet_data"
-      ("temperature_time", "temperature", "piler_id", "beetbox_id", "coordinates", "updated_at", "ticket_id")
-      VALUES
-      ($1, $2, $3, $4, $5, $6, $7);`;
+              INSERT INTO "beet_data"
+              ("temperature_time", "temperature", "piler_id", "beetbox_id", "coordinates", "updated_at", "ticket_id")
+               VALUES
+              ($1, $2, $3, $4, $5, $6, $7)
+              RETURNING *;`;
           const sqlValues = [
             temperature_time,
             temperature,
@@ -45,6 +50,24 @@ router.post("/", async (req, res) => {
           return client.query(sqlText, sqlValues);
         })
       );
+      // Now that that's done, we need to check if we have to create any
+      // alerts. First, let's check if there's any that we need to create.
+      const newAlertsToCreate = newBeetData.filter(
+        (data) => data.rows[0].temperature > 39
+      );
+      await Promise.all(
+        newAlertsToCreate.map((data) => {
+          const newAlertToCreate = data.rows[0];
+          const newAlertSqlText = `INSERT INTO "alerts"
+            ("piler_id", "beet_data_id")
+            VALUES
+            ($1, $2)`;
+          return client.query(newAlertSqlText, [
+            newAlertToCreate.piler_id,
+            newAlertToCreate.id,
+          ]);
+        })
+      );
       await client.query("COMMIT");
       res.sendStatus(201);
     } catch (error) {
@@ -53,11 +76,9 @@ router.post("/", async (req, res) => {
     } finally {
       client.release();
     }
-  }
-  // If we're in development, we expect the req to be in a certain shape.
-  // We also need to create ticket data for it.
-  // So we handle it a bit differently.
-  else {
+  } else {
+    // This is only used for testing and development purposes.
+    // Bypasses a few systems so we can make sure everything works.
     let response = await testingFunctions.developmentPostForBeetData(req);
     response ? res.sendStatus(201) : res.sendStatus(500);
   }
@@ -68,10 +89,10 @@ router.post("/", async (req, res) => {
 router.get("/:siteid", async (req, res) => {
   let siteId = req.params.siteid;
   try {
-  // These are some SQL Queries we'll use later.
+    // These are some SQL Queries we'll use later.
 
-  // This first one will get us a list of the pilers at a site, as well as shape some objects that will be our data.
-   const sqlPilerText = `
+    // This first one will get us a list of the pilers at a site, as well as shape some objects that will be our data.
+    const sqlPilerText = `
     SELECT "sites"."site" AS "site_name", 
     JSONB_AGG(JSONB_BUILD_OBJECT(
       'temperature', "beet_data"."temperature",
@@ -98,11 +119,11 @@ router.get("/:siteid", async (req, res) => {
         GROUP BY "beet_data"."temperature_time", "pilers"."id"
         ORDER BY "day";
      `;
-     // Now, let's query the database.
+    // Now, let's query the database.
     const sqlPilerResponse = await pool.query(sqlPilerText, [siteId]);
     // In case there was no data grabbed, we'll store it in this variable.
     let dataToSend = sqlPilerResponse.rows;
-    
+
     // If there was data, now we can shape it. The front end code
     // Expects it to be in a pretty specific shape to make the data work.
     if (sqlPilerResponse.rows[0]) {
@@ -121,27 +142,26 @@ router.get("/:siteid", async (req, res) => {
         ]);
 
         // Do some object destructuring to only send back the data we need in each object.
-              // We had to pull site info during the SQL query, but we only send it back once.
+        // We had to pull site info during the SQL query, but we only send it back once.
         const { dayActuals, piler_name, piler_id } = sqlPilerResponse.rows[i];
-        
-        const convertedDayActuals = dayActuals.map(day => {
-          return {...day,
-            time: testingFunctions.timeString(day.time),
-          }
-        })
 
-        const convertedMonth = monthlyAvgResponse.rows.map(month => {
-          console.log(month)
-          return {...month,
-            day: testingFunctions.dateString(month.day)
+        const convertedDayActuals = dayActuals.map((day) => {
+          return { ...day, time: testingFunctions.timeString(day.time) };
+        });
+
+        const convertedMonthlyAverages = monthlyAvgResponse.rows.map(
+          (month) => {
+            return {
+              ...month,
+              day: testingFunctions.convertDateObjectToDateString(month.day),
+            };
           }
-        })
-        
+        );
         const newPilerObj = {
           piler_name,
           piler_id,
           dayActuals: convertedDayActuals,
-          monthAvgDaily: monthlyAvgResponse.rows,
+          monthAvgDaily: convertedMonthlyAverages,
         };
         // Now that we have a piler object, shove it into an array to send back.
         dataToSend.pilers.push(newPilerObj);
@@ -153,8 +173,5 @@ router.get("/:siteid", async (req, res) => {
     res.sendStatus(500);
   }
 });
-
-
-
 
 module.exports = router;
