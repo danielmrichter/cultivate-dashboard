@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import BaseNav from '../Nav/BaseNav';
 import SiteManagerNav from '../Nav/SiteManagerNav';
 import GenManagerNav from '../Nav/GenManagerNav';
-import LogOutButton from '../Account Components/LogOutButton/LogOutButton';
+import LogOutButton from '../AccountComponents/LogOutButton/LogOutButton';
 
 function Header() {
   const user = useSelector((store) => store.user);
