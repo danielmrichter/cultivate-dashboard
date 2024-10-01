@@ -76,8 +76,7 @@ router.post("/", async (req, res) => {
     } finally {
       client.release();
     }
-  }
-  else {
+  } else {
     // This is only used for testing and development purposes.
     // Bypasses a few systems so we can make sure everything works.
     let response = await testingFunctions.developmentPostForBeetData(req);
@@ -124,7 +123,7 @@ router.get("/:siteid", async (req, res) => {
     const sqlPilerResponse = await pool.query(sqlPilerText, [siteId]);
     // In case there was no data grabbed, we'll store it in this variable.
     let dataToSend = sqlPilerResponse.rows;
-    
+
     // If there was data, now we can shape it. The front end code
     // Expects it to be in a pretty specific shape to make the data work.
     if (sqlPilerResponse.rows[0]) {
@@ -145,24 +144,24 @@ router.get("/:siteid", async (req, res) => {
         // Do some object destructuring to only send back the data we need in each object.
         // We had to pull site info during the SQL query, but we only send it back once.
         const { dayActuals, piler_name, piler_id } = sqlPilerResponse.rows[i];
-        
-        const convertedDayActuals = dayActuals.map(day => {
-          return {...day,
-            time: testingFunctions.timeString(day.time),
-          }
-        })
 
-        const convertedMonth = monthlyAvgResponse.rows.map(month => {
-          console.log(month)
-          return {...month,
-            day: testingFunctions.dateString(month.day)
+        const convertedDayActuals = dayActuals.map((day) => {
+          return { ...day, time: testingFunctions.timeString(day.time) };
+        });
+
+        const convertedMonthlyAverages = monthlyAvgResponse.rows.map(
+          (month) => {
+            return {
+              ...month,
+              day: testingFunctions.convertDateObjectToDateString(month.day),
+            };
           }
-        })
+        );
         const newPilerObj = {
           piler_name,
           piler_id,
           dayActuals: convertedDayActuals,
-          monthAvgDaily: convertedMonth,
+          monthAvgDaily: convertedMonthlyAverages,
         };
         // Now that we have a piler object, shove it into an array to send back.
         dataToSend.pilers.push(newPilerObj);
