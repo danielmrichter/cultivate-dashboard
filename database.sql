@@ -52,9 +52,9 @@ CREATE TABLE IF NOT EXISTS "pilers" (
 
 CREATE TABLE IF NOT EXISTS "alerts" (
 	"id" serial PRIMARY KEY NOT NULL UNIQUE,
-	"is_active" boolean NOT NULL,
+	"is_active" boolean NOT NULL DEFAULT true,
 	"beet_data_id" int NOT NULL,
-	"site_id" int NOT NULL
+	"piler_id" int NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "users_sites" (
@@ -85,7 +85,7 @@ ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk6" FOREIGN KEY ("ticket_id")
 ALTER TABLE "pilers" ADD CONSTRAINT "pilers_fk1" FOREIGN KEY ("site_id") REFERENCES "sites"("id");
 ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk2" FOREIGN KEY ("beet_data_id") REFERENCES "beet_data"("id");
 
-ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk3" FOREIGN KEY ("site_id") REFERENCES "sites"("id");
+ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id");
 ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk1" FOREIGN KEY ("users_id") REFERENCES "user"("id");
 
 ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk2" FOREIGN KEY ("sites_id") REFERENCES "sites"("id");
