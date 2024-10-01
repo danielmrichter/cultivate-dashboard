@@ -23,9 +23,9 @@ console.log(data[0])
   // Define the color dependent on the temperature reading.
   const fillColor = (temp) => {
     let fill = "";
-    if (parseFloat(temp) > 42) {
+    if (temp > 42) {
       fill = theme.palette.error.main;
-    } else if (parseFloat(temp) > 39 && parseFloat(temp) < 43) {
+    } else if (temp >= 40 && temp < 43) {
       fill = theme.palette.warning.main;
     } else {
       fill = theme.palette.success.main;
@@ -35,7 +35,7 @@ console.log(data[0])
 
   const enrichedData = data.map((entry) => ({
     ...entry,
-    fill: fillColor(entry.temperature), // Add the fill color based on temperature
+    fill: fillColor(entry[y]), // Add the fill color based on temperature
   }));
 
   //Formatter function for the graph tick marks on the Axes

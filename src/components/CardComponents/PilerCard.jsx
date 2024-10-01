@@ -30,7 +30,7 @@ export default function PilerCard(props) {
       data={monthAvgDaily}
       x="day"
       y="avgTempOfEachDay"
-      xLabel="Time"
+      xLabel="Day"
       yLabel="Average Daily Temp"
       />
     )

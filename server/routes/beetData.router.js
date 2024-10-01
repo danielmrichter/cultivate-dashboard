@@ -116,7 +116,7 @@ router.get("/:siteid", async (req, res) => {
         JOIN "beet_data" ON "pilers"."id" = "beet_data"."piler_id"
         WHERE "pilers"."id" = $1
         AND "beet_data"."temperature_time" >= NOW() - INTERVAL '1 month'
-        GROUP BY "beet_data"."temperature_time", "pilers"."id"
+        GROUP BY "day", "pilers"."id"
         ORDER BY "day";
      `;
     // Now, let's query the database.
@@ -152,7 +152,7 @@ router.get("/:siteid", async (req, res) => {
         const convertedMonthlyAverages = monthlyAvgResponse.rows.map(
           (month) => {
             return {
-              ...month,
+              avgTempOfEachDay: Number(month.avgTempOfEachDay),
               day: testingFunctions.convertDateObjectToDateString(month.day),
             };
           }
