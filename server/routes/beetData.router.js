@@ -124,7 +124,7 @@ router.get("/:siteid", async (req, res) => {
     const sqlPilerResponse = await pool.query(sqlPilerText, [siteId]);
     // In case there was no data grabbed, we'll store it in this variable.
     let dataToSend = sqlPilerResponse.rows;
-
+    
     // If there was data, now we can shape it. The front end code
     // Expects it to be in a pretty specific shape to make the data work.
     if (sqlPilerResponse.rows[0]) {
@@ -141,14 +141,28 @@ router.get("/:siteid", async (req, res) => {
         const monthlyAvgResponse = await pool.query(sqlMonthlyAvgText, [
           sqlPilerResponse.rows[i].piler_id,
         ]);
+
         // Do some object destructuring to only send back the data we need in each object.
         // We had to pull site info during the SQL query, but we only send it back once.
         const { dayActuals, piler_name, piler_id } = sqlPilerResponse.rows[i];
+        
+        const convertedDayActuals = dayActuals.map(day => {
+          return {...day,
+            time: testingFunctions.timeString(day.time),
+          }
+        })
+
+        const convertedMonth = monthlyAvgResponse.rows.map(month => {
+          console.log(month)
+          return {...month,
+            day: testingFunctions.dateString(month.day)
+          }
+        })
         const newPilerObj = {
           piler_name,
           piler_id,
-          dayActuals,
-          monthAvgDaily: monthlyAvgResponse.rows,
+          dayActuals: convertedDayActuals,
+          monthAvgDaily: convertedMonth,
         };
         // Now that we have a piler object, shove it into an array to send back.
         dataToSend.pilers.push(newPilerObj);
