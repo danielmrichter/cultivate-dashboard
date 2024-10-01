@@ -18,7 +18,8 @@ import {
 export default function ScatterPlot({ data, x, y, xLabel, yLabel }) {
   // This grabs the theme from MUI.
   const theme = useTheme();
-
+console.log('data is:', data, "x is:", x, "y is:", y, 'xLabel is:', xLabel, "yLabel is:", yLabel)
+console.log(data[0])
   // Define the color dependent on the temperature reading.
   const fillColor = (temp) => {
     let fill = "";
@@ -39,7 +40,8 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel }) {
 
   //Formatter function for the graph tick marks on the Axes
   const formatTick = (value) => {
-    return parseFloat(value).toFixed(3);
+    const num = parseFloat(value);
+    return num.toFixed(3);
   };
 
   const tooltipRenderFn = ({ active, payload, label }) => {
@@ -56,38 +58,30 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel }) {
   };
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" style={{marginBottom: "20px", marginLeft:"15px"}}>
       <ScatterChart
-        margin={{
-          top: 15,
-          right: 15,
-          bottom: 15,
-          left: 15,
-        }}
-      >
+      overflow = "visible"
+      style={{padding: "10px"}}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
-          dataKey={x}
-          type="number"
-          label={{ value: xLabel, position: "bottom" }}
-          // This looks funny. I know. ReCharts allows for callback functions in calculating
-          // the domain (AKA, the upper and lower bounds of the graph, where the edges are).
-          // This is basically finding the range, and then adding 10% to it.
-          domain={([dataMin, dataMax]) => {
-            return [
-              dataMin - (dataMax - dataMin) * 0.1,
-              dataMax + (dataMax - dataMin) * 0.1,
-            ];
-          }}
-          // Helper function to round the displays of the ticks to be three decimal places.
-          // Does not affect functionality, only visuals.
-          tickFormatter={formatTick}
-          interval={"preserveStartEnd"}
-        />
+  dataKey={x}
+  type={typeof x === 'number' ? 'number' : 'category'} // Use 'category' if x is not a number
+  label={{ value: xLabel, position: "bottom", offset: 30 }}
+  // Conditionally add domain and tickFormatter if x is a number
+  {...(typeof x === 'number' ? {
+    domain: ([dataMin, dataMax]) => [
+      dataMin - (dataMax - dataMin) * 0.1,
+      dataMax + (dataMax - dataMin) * 0.1,
+    ],
+    tickFormatter: formatTick,
+  } : {tick: {angle: -45, dy: 15, dx: -15}})}
+  
+  interval={"preserveStartEnd"}
+/>
         <YAxis
           dataKey={y}
           type="number"
-          label={{ value: yLabel, angle: -90, position: "left" }}
+          label={{ value: yLabel, angle: -90, position: "left", offset: 15 }}
           // See notes above for explanation. Same logic.
           domain={([dataMin, dataMax]) => {
             return [
@@ -95,6 +89,7 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel }) {
               dataMax + (dataMax - dataMin) * 0.1,
             ];
           }}
+          
           // Helper function to round the displays of the ticks to be three decimal places.
           // Does not affect functionality, only visuals.
           tickFormatter={formatTick}

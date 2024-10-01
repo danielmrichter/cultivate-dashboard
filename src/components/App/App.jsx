@@ -7,14 +7,9 @@ import {
 } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import ScatterPlot from "../Graph Components/ScatterPlot";
-import LineGraph from "../Graph Components/LineGraph";
-import BarGraph from "../Graph Components/BarGraph";
-import LoginPage from "../Account Components/LoginPage/LoginPage.jsx";
-import RegisterPage from "../Account Components/RegisterPage/RegisterPage.jsx";
-import Header from "../Header/Header.jsx";
-
-
+import LoginPage from "../AccountComponents/LoginPage/LoginPage.jsx";
+import RegisterPage from "../AccountComponents/RegisterPage/RegisterPage.jsx";
+import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
 
 
 function App() {
@@ -38,6 +33,9 @@ function App() {
         </Route>
         <Route exact path="/registration">
           {user.id ? <Redirect to="/user" /> : <RegisterPage />}
+        </Route>
+        <Route exact path="/site/:id">
+          <SiteManagerView data={data}/>
         </Route>
       </Switch>
     </Router>
