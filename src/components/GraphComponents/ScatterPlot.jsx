@@ -39,8 +39,10 @@ console.log('data is:', data, "x is:", x, "y is:", y, 'xLabel is:', xLabel, "yLa
 
   //Formatter function for the graph tick marks on the Axes
   const formatTick = (value) => {
-    return parseFloat(value).toFixed(3);
+    const num = parseFloat(value);
+    return isNaN(num) ? '' : num.toFixed(3);
   };
+  
 
   const tooltipRenderFn = ({ active, payload, label }) => {
     if (active && payload && payload.length)
@@ -57,14 +59,7 @@ console.log('data is:', data, "x is:", x, "y is:", y, 'xLabel is:', xLabel, "yLa
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <ScatterChart
-        margin={{
-          top: 15,
-          right: 15,
-          bottom: 15,
-          left: 15,
-        }}
-      >
+      <ScatterChart>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey={x}
@@ -74,11 +69,11 @@ console.log('data is:', data, "x is:", x, "y is:", y, 'xLabel is:', xLabel, "yLa
           // the domain (AKA, the upper and lower bounds of the graph, where the edges are).
           // This is basically finding the range, and then adding 10% to it.
           domain={([dataMin, dataMax]) => {
-            return [
-              dataMin - (dataMax - dataMin) * 0.1,
-              dataMax + (dataMax - dataMin) * 0.1,
-            ];
+            const min = isNaN(dataMin) ? 0 : dataMin;
+            const max = isNaN(dataMax) ? 1 : dataMax;
+            return [min - (max - min) * 0.1, max + (max - min) * 0.1];
           }}
+          
           // Helper function to round the displays of the ticks to be three decimal places.
           // Does not affect functionality, only visuals.
           tickFormatter={formatTick}
@@ -90,11 +85,11 @@ console.log('data is:', data, "x is:", x, "y is:", y, 'xLabel is:', xLabel, "yLa
           label={{ value: yLabel, angle: -90, position: "left" }}
           // See notes above for explanation. Same logic.
           domain={([dataMin, dataMax]) => {
-            return [
-              dataMin - (dataMax - dataMin) * 0.1,
-              dataMax + (dataMax - dataMin) * 0.1,
-            ];
+            const min = isNaN(dataMin) ? 0 : dataMin;
+            const max = isNaN(dataMax) ? 1 : dataMax;
+            return [min - (max - min) * 0.1, max + (max - min) * 0.1];
           }}
+          
           // Helper function to round the displays of the ticks to be three decimal places.
           // Does not affect functionality, only visuals.
           tickFormatter={formatTick}

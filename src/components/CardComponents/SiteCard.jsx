@@ -13,7 +13,9 @@ return (
         gap: "16px"
       }}
     >
-        <h2>This is the Site Card</h2>
+        <h2>Average Temp at Site</h2>
+        <img src="/radial-image.png" ></img>
+        <h3>36&deg;F</h3>
     </Paper>
 )
 }

@@ -11,54 +11,54 @@ const sampleData = {
             piler_id: 1,
             piler_name: 'Piler 1',
             dayActuals: [
-                { beet_data_id: 101, temperature: 36.5, time: '2024-09-01 00:00:00' },
-                { beet_data_id: 102, temperature: 38.2, time: '2024-09-01 06:00:00' },
-                { beet_data_id: 103, temperature: 40.1, time: '2024-09-01 12:00:00' },
-                { beet_data_id: 104, temperature: 42.7, time: '2024-09-01 18:00:00' },
-                { beet_data_id: 105, temperature: 35.9, time: '2024-09-01 23:59:59' },
+                { beet_data_id: 101, temperature: 36.54634, time: '2024-09-01 00:00:00' },
+                { beet_data_id: 102, temperature: 38.22456, time: '2024-09-01 06:00:00' },
+                { beet_data_id: 103, temperature: 40.153456, time: '2024-09-01 12:00:00' },
+                { beet_data_id: 104, temperature: 42.773456, time: '2024-09-01 18:00:00' },
+                { beet_data_id: 105, temperature: 35.93345, time: '2024-09-01 23:59:59' },
             ],
             monthAvgDaily: [
-                { day: '2024-09-01', avgTempOfEachDay: 38.68 },
-                { day: '2024-09-02', avgTempOfEachDay: 41.12 },
-                { day: '2024-09-03', avgTempOfEachDay: 39.45 },
-                { day: '2024-09-04', avgTempOfEachDay: 42.31 },
-                { day: '2024-09-05', avgTempOfEachDay: 43.5 }
+                { day: '2024-09-01', avgTempOfEachDay: 38.683456 },
+                { day: '2024-09-02', avgTempOfEachDay: 41.123456 },
+                { day: '2024-09-03', avgTempOfEachDay: 39.45345 },
+                { day: '2024-09-04', avgTempOfEachDay: 42.31345 },
+                { day: '2024-09-05', avgTempOfEachDay: 43.54345 }
             ]
         },
         {
             piler_id: 2,
             piler_name: 'Piler 2',
             dayActuals: [
-                { beet_data_id: 201, temperature: 39.0, time: '2024-09-01 00:00:00' },
-                { beet_data_id: 202, temperature: 41.5, time: '2024-09-01 06:00:00' },
-                { beet_data_id: 203, temperature: 43.8, time: '2024-09-01 12:00:00' },
-                { beet_data_id: 204, temperature: 44.6, time: '2024-09-01 18:00:00' },
-                { beet_data_id: 205, temperature: 37.1, time: '2024-09-01 23:59:59' },
+                { beet_data_id: 201, temperature: 39.023456, time: '2024-09-01 00:00:00' },
+                { beet_data_id: 202, temperature: 41.545678, time: '2024-09-01 06:00:00' },
+                { beet_data_id: 203, temperature: 43.855678, time: '2024-09-01 12:00:00' },
+                { beet_data_id: 204, temperature: 44.66765, time: '2024-09-01 18:00:00' },
+                { beet_data_id: 205, temperature: 37.1454, time: '2024-09-01 23:59:59' },
             ],
             monthAvgDaily: [
-                { day: '2024-09-01', avgTempOfEachDay: 41.2 },
-                { day: '2024-09-02', avgTempOfEachDay: 42.8 },
-                { day: '2024-09-03', avgTempOfEachDay: 40.9 },
-                { day: '2024-09-04', avgTempOfEachDay: 39.7 },
-                { day: '2024-09-05', avgTempOfEachDay: 43.1 }
+                { day: '2024-09-01', avgTempOfEachDay: 41.24456 },
+                { day: '2024-09-02', avgTempOfEachDay: 42.86456 },
+                { day: '2024-09-03', avgTempOfEachDay: 40.97456 },
+                { day: '2024-09-04', avgTempOfEachDay: 39.73764 },
+                { day: '2024-09-05', avgTempOfEachDay: 43.137654 }
             ]
         },
         {
             piler_id: 3,
             piler_name: 'Piler 3',
             dayActuals: [
-                { beet_data_id: 301, temperature: 36.7, time: '2024-09-01 00:00:00' },
-                { beet_data_id: 302, temperature: 38.9, time: '2024-09-01 06:00:00' },
-                { beet_data_id: 303, temperature: 40.3, time: '2024-09-01 12:00:00' },
-                { beet_data_id: 304, temperature: 45.0, time: '2024-09-01 18:00:00' },
-                { beet_data_id: 305, temperature: 46.5, time: '2024-09-01 23:59:59' },
+                { beet_data_id: 301, temperature: 36.74765, time: '2024-09-01 00:00:00' },
+                { beet_data_id: 302, temperature: 38.927654, time: '2024-09-01 06:00:00' },
+                { beet_data_id: 303, temperature: 40.387654, time: '2024-09-01 12:00:00' },
+                { beet_data_id: 304, temperature: 45.09765, time: '2024-09-01 18:00:00' },
+                { beet_data_id: 305, temperature: 46.56465, time: '2024-09-01 23:59:59' },
             ],
             monthAvgDaily: [
-                { day: '2024-09-01', avgTempOfEachDay: 41.48 },
-                { day: '2024-09-02', avgTempOfEachDay: 39.0 },
-                { day: '2024-09-03', avgTempOfEachDay: 44.2 },
-                { day: '2024-09-04', avgTempOfEachDay: 42.7 },
-                { day: '2024-09-05', avgTempOfEachDay: 43.9 }
+                { day: '2024-09-01', avgTempOfEachDay: 41.48456 },
+                { day: '2024-09-02', avgTempOfEachDay: 39.057654 },
+                { day: '2024-09-03', avgTempOfEachDay: 44.257564 },
+                { day: '2024-09-04', avgTempOfEachDay: 42.777654 },
+                { day: '2024-09-05', avgTempOfEachDay: 43.98745 }
             ]
         }
     ]
