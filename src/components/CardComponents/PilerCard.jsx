@@ -8,6 +8,7 @@ export default function PilerCard(props) {
   const pilerData = props.data;
   const dayData = pilerData.dayActuals;
   const monthAvgDaily = pilerData.monthAvgDaily;
+  console.log(dayData)
 
   const handleChange = (event, newAlignment) => {
     setChartFormat(newAlignment);
@@ -43,8 +44,8 @@ export default function PilerCard(props) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        width: "300px",
-        height: "500px",
+        width: "400px",
+        height: "550px",
         padding: "16px",
         gap: "16px"
       }}

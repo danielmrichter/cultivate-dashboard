@@ -78,4 +78,20 @@ async function developmentPostForBeetData(req) {
       }
 }
 
-module.exports = { getRandomInt, developmentPostForBeetData };
+const timeString = (timestring) => {
+const timePart = timestring.split('T')[1].split('-')[0].split('+')[0]
+const [hours, minutes] = timePart.split(':');
+const formattedTime = `${hours}:${minutes}`;
+console.log(formattedTime);
+return formattedTime;
+}
+
+const dateString = (timestring) => {
+  console.log('timestring is:', typeof timestring)
+  const datePart = timestring.toString().split('T')[0]
+  console.log('datePart is:', datePart)
+  return datePart;
+}
+
+
+module.exports = { getRandomInt, developmentPostForBeetData, timeString, dateString };
