@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import LoginPage from "../AccountComponents/LoginPage/LoginPage.jsx";
 import RegisterPage from "../AccountComponents/RegisterPage/RegisterPage.jsx";
 import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
+import Header from "../Header/Header.jsx";
 
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
           {user.id ? <Redirect to="/user" /> : <RegisterPage />}
         </Route>
         <Route exact path="/site/:id">
-          <SiteManagerView data={data}/>
+          <SiteManagerView />
         </Route>
       </Switch>
     </Router>
