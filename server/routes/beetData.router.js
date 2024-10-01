@@ -136,11 +136,12 @@ router.get("/:siteid", async (req, res) => {
             day: testingFunctions.dateString(month.day)
           }
         })
+        
         const newPilerObj = {
           piler_name,
           piler_id,
           dayActuals: convertedDayActuals,
-          monthAvgDaily: convertedMonth,
+          monthAvgDaily: monthlyAvgResponse.rows,
         };
         // Now that we have a piler object, shove it into an array to send back.
         dataToSend.pilers.push(newPilerObj);

@@ -8,7 +8,6 @@ export default function PilerCard(props) {
   const pilerData = props.data;
   const dayData = pilerData.dayActuals;
   const monthAvgDaily = pilerData.monthAvgDaily;
-  console.log(dayData)
 
   const handleChange = (event, newAlignment) => {
     setChartFormat(newAlignment);
@@ -29,8 +28,8 @@ export default function PilerCard(props) {
     return (
       <ScatterPlot 
       data={monthAvgDaily}
-      x="time"
-      y="temperature"
+      x="day"
+      y="avgTempOfEachDay"
       xLabel="Time"
       yLabel="Average Daily Temp"
       />
@@ -70,13 +69,7 @@ export default function PilerCard(props) {
           Month
         </ToggleButton>
       </ToggleButtonGroup>
-      <ScatterPlot
-        data={dayData}
-        x="time"
-        y="temperature"
-        xLabel="Time"
-        yLabel="Temperature"
-      />
+      {scatterChartDisplay()}
       <Button variant="contained" sx={{ borderRadius: "30px" }}>
         Piler Details
       </Button>
