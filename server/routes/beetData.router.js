@@ -145,10 +145,14 @@ router.get("/:siteid", async (req, res) => {
         // We had to pull site info during the SQL query, but we only send it back once.
         const { dayActuals, piler_name, piler_id } = sqlPilerResponse.rows[i];
 
+        // We're not getting the datetime in the format we want. So, we need to convert it.
+        // These are helper functions to convert it to the format we want.
         const convertedDayActuals = dayActuals.map((day) => {
-          return { ...day, time: testingFunctions.timeString(day.time) };
+          return {
+            ...day,
+            time: testingFunctions.convertDateTimeStringToTimeString(day.time),
+          };
         });
-
         const convertedMonthlyAverages = monthlyAvgResponse.rows.map(
           (month) => {
             return {

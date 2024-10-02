@@ -1,0 +1,198 @@
+[
+    {
+        "beetbox_id": "beetbox019",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-02T08:00:00.000000",
+        "temperature": 36.5
+    },
+    {
+        "beetbox_id": "beetbox020",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-02T09:00:00.000000",
+        "temperature": 37.0
+    },
+    {
+        "beetbox_id": "beetbox021",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-02T10:00:00.000000",
+        "temperature": 38.1
+    },
+    {
+        "beetbox_id": "beetbox022",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-02T08:00:00.000000",
+        "temperature": 35.5
+    },
+    {
+        "beetbox_id": "beetbox023",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-02T09:00:00.000000",
+        "temperature": 36.4
+    },
+    {
+        "beetbox_id": "beetbox024",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-02T10:00:00.000000",
+        "temperature": 37.2
+    },
+    {
+        "beetbox_id": "beetbox025",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-02T08:00:00.000000",
+        "temperature": 40.3
+    },
+    {
+        "beetbox_id": "beetbox026",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-02T09:00:00.000000",
+        "temperature": 41.1
+    },
+    {
+        "beetbox_id": "beetbox027",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-02T10:00:00.000000",
+        "temperature": 42.0
+    },
+    {
+        "beetbox_id": "beetbox028",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-02T11:00:00.000000",
+        "temperature": 39.5
+    },
+    {
+        "beetbox_id": "beetbox001",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-02T12:30:00.000000",
+        "temperature": 37.5
+    },
+    {
+        "beetbox_id": "beetbox002",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-03T12:30:00.000000",
+        "temperature": 38.2
+    },
+    {
+        "beetbox_id": "beetbox003",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-04T12:30:00.000000",
+        "temperature": 39.0
+    },
+    {
+        "beetbox_id": "beetbox004",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-02T12:30:00.000000",
+        "temperature": 36.8
+    },
+    {
+        "beetbox_id": "beetbox005",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-03T12:30:00.000000",
+        "temperature": 37.1
+    },
+    {
+        "beetbox_id": "beetbox006",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-04T12:30:00.000000",
+        "temperature": 38.4
+    },
+    {
+        "beetbox_id": "beetbox007",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-02T12:30:00.000000",
+        "temperature": 40.0
+    },
+    {
+        "beetbox_id": "beetbox008",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-03T12:30:00.000000",
+        "temperature": 41.2
+    },
+    {
+        "beetbox_id": "beetbox009",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-04T12:30:00.000000",
+        "temperature": 42.5
+    },
+    {
+        "beetbox_id": "beetbox010",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-05T12:30:00.000000",
+        "temperature": 36.7
+    },
+    {
+        "beetbox_id": "beetbox011",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-06T12:30:00.000000",
+        "temperature": 37.9
+    },
+    {
+        "beetbox_id": "beetbox012",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "1",
+        "temperature_time": "2024-10-07T12:30:00.000000",
+        "temperature": 38.6
+    },
+    {
+        "beetbox_id": "beetbox013",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-05T12:30:00.000000",
+        "temperature": 36.2
+    },
+    {
+        "beetbox_id": "beetbox014",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-06T12:30:00.000000",
+        "temperature": 37.3
+    },
+    {
+        "beetbox_id": "beetbox015",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "2",
+        "temperature_time": "2024-10-07T12:30:00.000000",
+        "temperature": 38.0
+    },
+    {
+        "beetbox_id": "beetbox016",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-05T12:30:00.000000",
+        "temperature": 40.5
+    },
+    {
+        "beetbox_id": "beetbox017",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-06T12:30:00.000000",
+        "temperature": 41.8
+    },
+    {
+        "beetbox_id": "beetbox018",
+        "coordinates": "POINT(-117.223500 44.292000)",
+        "piler_id": "3",
+        "temperature_time": "2024-10-07T12:30:00.000000",
+        "temperature": 42.9
+    }
+]
