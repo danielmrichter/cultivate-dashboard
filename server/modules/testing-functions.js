@@ -94,21 +94,27 @@ async function developmentPostForBeetData(req) {
   }
 }
 
-const timeString = (timestring) => {
-  const timePart = timestring.split("T")[1].split("-")[0].split("+")[0];
-  const [hours, minutes] = timePart.split(":");
-  const formattedTime = `${hours}:${minutes}`;
-  return formattedTime;
+const convertDateTimeStringToTimeString = (dateTimeString) => {
+  const parsedDate = Date.parse(dateTimeString);
+  const dateObject = new Date(parsedDate);
+  const convertedToHoursAndMinutes = dateObject.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return convertedToHoursAndMinutes;
 };
 
 const convertDateObjectToDateString = (dateObject) => {
-  const convertedDateObject = dateObject.toLocaleDateString(undefined, {day: 'numeric', month: 'numeric'});
+  const convertedDateObject = dateObject.toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "numeric",
+  });
   return convertedDateObject;
 };
 
 module.exports = {
   getRandomInt,
   developmentPostForBeetData,
-  timeString,
+  convertDateTimeStringToTimeString,
   convertDateObjectToDateString,
 };
