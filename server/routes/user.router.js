@@ -11,7 +11,6 @@ const router = express.Router();
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the database)
-  console.log('user get req.user is ', req.user)
   const userId = [req.user.id];
   let userData = {}
     const queryText = `
@@ -24,9 +23,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
     const queryValues = userId
   pool.query(queryText, queryValues)
   .then((result) => {
-    console.log('result is', result)
     userData = {...req.user, ...result.rows[0]}
-    console.log('userData is now ',userData)
     res.send(userData);
   })
   .catch(err => {

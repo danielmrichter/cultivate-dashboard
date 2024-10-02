@@ -11,7 +11,8 @@ import LoginPage from "../AccountComponents/LoginPage/LoginPage.jsx";
 import RegisterPage from "../AccountComponents/RegisterPage/RegisterPage.jsx";
 import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
 import Header from "../Header/Header.jsx";
-
+import RedirectComponent from "../RedirectComponent/RedirectComponent.jsx";
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx'
 
 function App() {
   const dispatch = useDispatch();
@@ -35,9 +36,10 @@ function App() {
         <Route exact path="/registration">
           {user.id ? <Redirect to="/user" /> : <RegisterPage />}
         </Route>
-        <Route exact path="/site/:id">
+        <RedirectComponent exact path="/user" />
+        <ProtectedRoute exact path="/site/:id">
           <SiteManagerView />
-        </Route>
+        </ProtectedRoute>
       </Switch>
     </Router>
   );
