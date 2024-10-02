@@ -6,8 +6,9 @@ import { useEffect } from "react";
 
 export default function SiteManagerView () {
   const dispatch = useDispatch();
-  
+  const user = useSelector(store => store.user)
   useEffect(() => {
+    console.log('user site id is:', user.site_id)
     dispatch({type: 'FETCH_SITE', payload: 1 })
   }, [])
   const siteData = useSelector(store => store.site)

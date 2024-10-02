@@ -4,7 +4,9 @@ import { put, takeLatest } from 'redux-saga/effects';
 // worker Saga: will be fired on "FETCH_USER" actions
 function* fetchSite(action) {
 try {
-    const response = yield axios.get(`/api/beet_data/${action.payload}`)
+  const siteId = action.payload
+  console.log("site id is:", siteId)
+    const response = yield axios.get(`/api/beet_data/${siteId}`)
     yield put({type: 'SET_SITE', payload: response.data})
 } catch (error) {
     console.log('Fetch Site failed:', error)
