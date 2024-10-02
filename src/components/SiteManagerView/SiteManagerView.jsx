@@ -10,8 +10,11 @@ export default function SiteManagerView () {
   useEffect(() => {
     console.log('user site id is:', user.site_id)
     dispatch({type: 'FETCH_SITE', payload: 1 })
+    dispatch({type: 'FETCH_ALERTS'})
   }, [])
   const siteData = useSelector(store => store.site)
+  const alerts = useSelector(store => store.alerts)
+
   return (
     <Box
       sx={{
@@ -40,7 +43,7 @@ export default function SiteManagerView () {
 
       </Box>
       <Box sx={{ flex: '0 1 250px', marginLeft: 2 }}>
-        <SiteCard />
+        {siteData && siteData.pilers && alerts && alerts.length > 0 && siteData.pilers.length > 0 ? <SiteCard /> : <div>No site Data</div>}
       </Box>
     </Box>
   );
