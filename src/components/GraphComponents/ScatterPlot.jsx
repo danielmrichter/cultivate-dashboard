@@ -18,14 +18,12 @@ import {
 export default function ScatterPlot({ data, x, y, xLabel, yLabel }) {
   // This grabs the theme from MUI.
   const theme = useTheme();
-console.log('data is:', data, "x is:", x, "y is:", y, 'xLabel is:', xLabel, "yLabel is:", yLabel)
-console.log(data[0])
   // Define the color dependent on the temperature reading.
   const fillColor = (temp) => {
     let fill = "";
     if (temp > 42) {
       fill = theme.palette.error.main;
-    } else if (temp >= 40 && temp < 43) {
+    } else if (temp >= 39 && temp < 43) {
       fill = theme.palette.warning.main;
     } else {
       fill = theme.palette.success.main;

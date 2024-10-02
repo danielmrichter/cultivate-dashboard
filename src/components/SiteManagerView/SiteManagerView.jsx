@@ -29,9 +29,9 @@ export default function SiteManagerView() {
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          gap: 2,
+          gap: 3,
           justifyContent: "center",
-          flex: 1,
+          alignItems: 'start'
         }}
       >
         {siteData && siteData.pilers && siteData.pilers.length > 0 ? (
@@ -43,7 +43,7 @@ export default function SiteManagerView() {
         )}
       </Box>
       <Box sx={{ flex: '0 1 250px', marginLeft: 2 }}>
-        {siteData && siteData.pilers && alerts && alerts.length > 0 && siteData.pilers.length > 0 ? <SiteCard /> : <div>No site Data</div>}
+        {siteData && siteData.pilers && siteData.pilers.length > 0 ? <SiteCard /> : <div>No site Data</div>}
       </Box>
     </Box>
   );

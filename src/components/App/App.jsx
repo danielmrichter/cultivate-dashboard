@@ -5,7 +5,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-
+import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import LoginPage from "../AccountComponents/LoginPage/LoginPage.jsx";
 import RegisterPage from "../AccountComponents/RegisterPage/RegisterPage.jsx";
@@ -25,6 +25,7 @@ function App() {
 
   return (
     <Router>
+      <Box sx={{backgroundColor: "#E5E5E5"}}>
       <Header />
       <Switch>
         <Route exact path="/">
@@ -41,6 +42,7 @@ function App() {
           <SiteManagerView />
         </ProtectedRoute>
       </Switch>
+      </Box>
     </Router>
   );
 }
