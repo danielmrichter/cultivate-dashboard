@@ -1,131 +1,145 @@
+import * as React from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItemButton, ListItemText, Collapse, Box, Button, Link } from '@mui/material';
+import ListSubheader from '@mui/material/ListSubheader';
+import { useState } from 'react';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import { useDispatch, useSelector } from 'react-redux';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useHistory, useEffect } from 'react-router-dom/cjs/react-router-dom.min';
+import LogOutButton from '../AccountComponents/LogOutButton/LogOutButton';
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { AppBar, 
-         Toolbar, 
-         Typography, 
-         IconButton, 
-         Menu, MenuItem, 
-         Button, 
-        } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import MenuIcon from '@mui/icons-material/Menu'  
-import ArrowRight from '@mui/icons-material/ArrowRight'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-function GenManagerNav() {
-  const dispatch = useDispatch();
-  const history = useHistory();
+
+export default function GenManagerNav() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [nestedOpen, setNestedOpen] = useState(true);
   const user = useSelector((store) => store.user);
-  const siteList = useSelector((store) => store.siteList);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
-  const [isMainMenuOpen, setIsMainMenuOpen] = useState(false)
-  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false)
+  const siteList = useSelector((store) => store.siteList)
+  const history = useHistory();
+  const dispatch = useDispatch();
 
-
-  useEffect(() => {
+  React.useEffect(() => {
     dispatch({type: 'GET_SITE_LIST'})
   },[]);
-
-  // Main Menu handlers
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setIsMainMenuOpen(true)
-  };
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setSubmenuAnchorEl(null);
-    setIsMainMenuOpen(false)
+    // open or close the Drawer
+  const toggleDrawer = (open) => (event) => {
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
   };
 
-  // Submenu handlers
-  const handleSubmenuOpen = (event) => {
-    setSubmenuAnchorEl(event.currentTarget);
-    setIsSubmenuOpen(true)
-  };  
-  const handleSubmenuClose = () => {
-    setSubmenuAnchorEl(null);
-    setIsSubmenuOpen(false)
-    setIsMainMenuOpen(false)
-  }; 
-  
-  // handle navigation based on which menu item is clicked
+   // expand or condense the collapsible list
+  const handleNestedClick = () => {
+    setNestedOpen(!nestedOpen);
+  };
+
   const handleNavigation = (path) => {
     history.push(path);
-    handleMenuClose();
   };
 
-  return (
-
-    <AppBar position="static">
-    <Toolbar>
-      {/* Icon on the left */}
-      <IconButton  sx={{ mr: 2 }}
-        edge="start" 
-        color="inherit" 
-        aria-label="menu"
-        onClick={handleMenuClick}
-      >
-        <MenuIcon />
-      </IconButton>
-
-    {/* Main Menu */}
-    <Menu
-      anchorEl={anchorEl}
-      open={isMainMenuOpen}
-      onClose={handleMenuClose}
+  // Contents of the Drawer
+  const drawerList = (
+    <Box
+      sx={{ width: 160 }}
+      role="presentation"
+    //   onClick={toggleDrawer(false)}   
+    //   onKeyDown={toggleDrawer(false)}
+    //   having them here closes the Drawer on any subsequent click
     >
-      <MenuItem onClick={() => handleNavigation('/user')}>Admin Dashboard</MenuItem>
-      <MenuItem
-        onMouseEnter={handleSubmenuOpen}
-        onMouseLeave={handleSubmenuClose}
-        onClick={handleSubmenuOpen}
-        >
-        Sites  <ArrowRight sx={{ml:6}} />
-      </MenuItem>
-      <MenuItem onClick={() => handleNavigation('/managers')}>Site Managers</MenuItem>
-      {siteList[0] && siteList.map((site) => {
-            <MenuItem 
-                key={site.id} 
-                onClick={() => handleNavigation(`/sites/${site.id}`)}>
-                {site.site} 
-            </MenuItem>})}
-    </Menu>
-    {/* Submenu  */}
-    <Menu
-        anchorEl={submenuAnchorEl}
-        open={isSubmenuOpen}
-        onClose={handleSubmenuClose}
-        anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-        }}
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-        }}
-        MenuListProps={{ onMouseLeave: handleSubmenuClose }}
-        >
-        {/* Submenu items */}
-        {siteList[0] && siteList.map((site) => {
-            return(
-                <MenuItem 
-                key={site.id} 
-                onClick={() => handleNavigation(`/sites/${site.id}`)}>
-                {site.site} 
-            </MenuItem>)})}
-    </Menu>
+      <List
+        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        // subheader={
+        //   <ListSubheader component="div" id="nested-list-subheader">
+        //     could put some instructions here if we think users need help
+        //   </ListSubheader>
+        // }
+      >
+          {/* Dashboard list item */}
+        <ListItemButton key="dashboard" >
+          <ListItemText primary="ADMIN DASHBOARD"
+            onClick={() =>  { handleNavigation(`/admin`);setDrawerOpen(false);}}
+            onKeyDown={toggleDrawer(false)}/>
+        </ListItemButton>
 
-      {/* Rest of the Header */}
-      {/* Spacer div to center the title */}
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-        Cultivate General Manager
-      </Typography>
-      {/* Empty space to balance the title in the center */}
-      <div style={{ width: 48 }} /> {/* Adjust width to match icon's space */}
-    </Toolbar>
-  </AppBar>
+          {/* Site list item */}
+        <ListItemButton key="sites"
+            onClick={handleNestedClick} sx={{backgroundColor:'#F1F1F1'}}>
+          <ListItemText primary="SITES" />
+          {nestedOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+
+           {/* sites mapped into the collapsible list */}
+        <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {siteList[0] && siteList.map((site) => {
+              return(
+              <ListItemButton sx={{ pl: 4, backgroundColor:'#F1F1F1'}} 
+                  key={site.id} >
+                  <ListItemText primary={site.site}  
+                      onClick={() => {   {/* collapses the Drawer and goes to site page */}
+                        setDrawerOpen(false);
+                        handleNavigation(`/site/${site.id}`)}}
+                      />
+              </ListItemButton>
+            )})}
+          </List>
+        </Collapse>
+            {/* Alerts list item */}
+        <ListItemButton key="users">
+          <ListItemText primary="USER LIST"
+            onClick={() => {setDrawerOpen(false);handleNavigation(`/user-list`)}}
+            onKeyDown={toggleDrawer(false)}/>
+        </ListItemButton>
+
+           {/* /Trends list item */}
+        {/* <ListItemButton key="users">
+          <ListItemText primary="TRENDS"
+            onClick={() => {setDrawerOpen(false);handleNavigation(`/trends`)}}
+            onKeyDown={toggleDrawer(false)}/>
+        </ListItemButton> */}
+      </List>
+    </Box>
+  );
+
+  return (
+    <div>
+      {/* AppBar and Toolbar for the Header */}
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(!drawerOpen)}
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
+            Cultivate General Manager
+          </Typography>
+      <LogOutButton />
+        </Toolbar>
+      </AppBar>
+
+      {/* Drawer that opens below the AppBar */}
+      <Drawer
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+        variant="persistent"
+        sx={{
+          '& .MuiDrawer-paper': {
+            marginTop: '64px', // keeps the Drawer below the AppBar
+            width: 160,
+          },
+        }}
+      >
+        {drawerList}
+      </Drawer>
+    </div>
   );
 }
-export default GenManagerNav;
