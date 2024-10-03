@@ -1,5 +1,4 @@
 -- Database Name: 'cultivate'
-
 CREATE TABLE IF NOT EXISTS "user" (
 	"id" serial PRIMARY KEY NOT NULL UNIQUE,
 	"username" varchar(255) NOT NULL,
@@ -54,7 +53,8 @@ CREATE TABLE IF NOT EXISTS "alerts" (
 	"id" serial PRIMARY KEY NOT NULL UNIQUE,
 	"is_active" boolean NOT NULL DEFAULT true,
 	"beet_data_id" int NOT NULL,
-	"piler_id" int NOT NULL
+	"piler_id" int NOT NULL,
+	"updated_at" timestamptz DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "users_sites" (
@@ -73,6 +73,11 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON "beet_data"
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON "alerts"
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
@@ -166,3 +171,45 @@ INSERT INTO "pilers" ("site_id", "name") VALUES
 (9, 'Service Center Piler 2'),
 (9, 'Service Center Piler 3'),
 (10, 'Branch C Piler 1');
+
+INSERT INTO "tickets" ("ticket_number", "grower_id", "truck") VALUES
+(30005, 5, 1024),
+(30006, 12, 1050),
+(30007, 8, 1098),
+(30008, 15, 1102),
+(30009, 1, 1065),
+(30010, 3, 1043),
+(30011, 20, 1081),
+(30012, 10, 1077),
+(30013, 18, 1045),
+(30014, 9, 1039),
+(30015, 25, 1089),
+(30016, 22, 1073),
+(30017, 11, 1107),
+(30018, 30, 1090),
+(30019, 17, 1046),
+(30020, 6, 1084),
+(30021, 14, 1029),
+(30022, 4, 1072),
+(30023, 33, 1095),
+(30024, 16, 1044),
+(30025, 2, 1069),
+(30026, 27, 1087),
+(30027, 21, 1037),
+(30028, 19, 1099),
+(30029, 13, 1057),
+(30030, 31, 1061),
+(30031, 29, 1031),
+(30032, 26, 1105),
+(30033, 7, 1022),
+(30034, 24, 1070),
+(30035, 32, 1088),
+(30036, 23, 1103),
+(30037, 28, 1035),
+(30038, 1, 1028),
+(30039, 9, 1042),
+(30040, 11, 1064),
+(30041, 5, 1076),
+(30042, 12, 1085),
+(30043, 3, 1106),
+(30044, 15, 1097);
