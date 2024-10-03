@@ -15,7 +15,11 @@ export const themeOptions = {
     },
     warning: {
       main: '#ffdc23',
-      light: '#ffff5a',
+      light: '#f7f7a1',
+    },
+    error: {
+      main: '#ff3932',
+      light: '#ffc4ad',
     },
   },
   typography: {

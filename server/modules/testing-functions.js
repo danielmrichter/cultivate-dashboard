@@ -119,7 +119,6 @@ const convertDateTimeStringToDateTime = (dateTimeString) => {
     hour: 'numeric',
     minute: 'numeric',
   }).format(dateTimeString)
-console.log('parsedDate is:', parsedDate)
   return parsedDate;
 };
 
