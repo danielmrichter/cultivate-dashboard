@@ -2,7 +2,7 @@ import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 import React from 'react';
 
-function* fetchSiteData(action) {
+function* fetchSiteData(action) {  //list of pilers for a site
     try {
         const siteData = yield axios.get(`/api/siteData/${action.payload}`);
         yield put({type: 'SET_SITE_DATA', payload: siteData.data});
@@ -11,7 +11,7 @@ function* fetchSiteData(action) {
     }
 }
 
-function* fetchSiteList(action) {
+function* fetchSiteList(action) {  //list of all sites
     try {
         const siteList = yield axios.get(`/api/siteList`);
         console.log('site list is', siteList)
@@ -23,8 +23,8 @@ function* fetchSiteList(action) {
 }
 
 function * siteDataSaga() {
-    yield takeLatest('GET_SITE_DATA', fetchSiteData);
-    yield takeLatest('GET_SITE_LIST', fetchSiteList);
-}
+    yield takeLatest('GET_SITE_DATA', fetchSiteData);  //gets pilers for each site
+    yield takeLatest('GET_SITE_LIST', fetchSiteList);  //gets list of sites
+}  
 
 export default siteDataSaga;

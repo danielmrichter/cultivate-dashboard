@@ -22,15 +22,13 @@ function Header() {
 
         {/* If Site Manger is logged in */}
         {(user.id && user.access_level==1) && (
-        <div><SiteManagerNav />
-        <LogOutButton />
-        </div>
+       <SiteManagerNav />
+        
         )}
 
         {/* If General Manger is logged in */}
         {(user.id && user.access_level==2) && (
         <div><GenManagerNav />
-        <LogOutButton />
         </div>
         )}
       
