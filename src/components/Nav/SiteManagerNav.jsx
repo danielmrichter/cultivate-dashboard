@@ -123,12 +123,18 @@ export default function SiteManagerNav() {
       <Drawer
         open={drawerOpen}
         onClose={toggleDrawer(false)}
-        variant="persistent"
+        variant="temporary"
         sx={{
           '& .MuiDrawer-paper': {
             marginTop: '64px', // keeps the Drawer below the AppBar
             width: 160,
           },
+        }}
+        ModalProps={{
+          keepMounted: true, // Improves performance when Drawer is hidden
+          BackdropProps: {
+            style: { backgroundColor: 'rgba(0,0,0,0.5)' } // Makes the rest of the screen gray
+          }
         }}
       >
         {drawerList}

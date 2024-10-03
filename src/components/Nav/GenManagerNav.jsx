@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItemButton, ListItemText, Collapse, Box, Button, Link } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItemButton, ListItemText, Collapse, Box} from '@mui/material';
 import ListSubheader from '@mui/material/ListSubheader';
 import { useState } from 'react';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -130,12 +130,15 @@ export default function GenManagerNav() {
       <Drawer
         open={drawerOpen}
         onClose={toggleDrawer(false)}
-        variant="persistent"
+        variant="temporary"
         sx={{
           '& .MuiDrawer-paper': {
             marginTop: '64px', // keeps the Drawer below the AppBar
             width: 160,
           },
+        }}
+        ModalProps={{
+          keepMounted: true, // Improves performance when Drawer is hidden  
         }}
       >
         {drawerList}
