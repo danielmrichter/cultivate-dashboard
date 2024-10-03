@@ -118,8 +118,6 @@ const convertDateTimeStringToDateTime = (dateTimeString) => {
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-    timeZone: 'America/Chicago',
-    timeZoneName: 'short'
   }).format(dateTimeString)
 console.log('parsedDate is:', parsedDate)
   return parsedDate;
