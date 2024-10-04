@@ -36,7 +36,6 @@ export default function PilerView() {
     dispatch({ type: "FETCH_PILER_DATA", payload: pilerId });
   }, [pilerId, dispatch]);
 
-  // Ensure all rows have unique IDs
   const ticketData = pilerData.ticketData?.map((row, index) => ({
     ...row,
     beet_data_id: row.beet_data_id || `temp_id_${index}`,
@@ -61,7 +60,9 @@ export default function PilerView() {
             color: "white",
             "&:hover": { backgroundColor: theme.palette.primary.main },
           }}
-          onClick={() => handleMarkResolved(params.row.ticket_number)}
+          onClick={() => {
+            console.log('params.row.beet_data_id is: ', params.row.beet_data_id) 
+            handleDeleteTicket(params.row.beet_data_id)}}
         >
           Delete
         </Button>
@@ -73,7 +74,7 @@ export default function PilerView() {
     const mergedRow = { ...originalRow, ...updatedRow };
     setPendingUpdate(mergedRow);
     setOpenDialog(true);
-    return mergedRow; // Immediately return the updated row to let DataGrid process it
+    return mergedRow;
   };
 
   const handleConfirmUpdate = () => {
@@ -88,6 +89,14 @@ export default function PilerView() {
   const handleCancelUpdate = () => {
     setOpenDialog(false);
     setPendingUpdate(null);
+  };
+
+  const handleDeleteTicket = (beet_data_id) => {
+    if (!beet_data_id) {
+      console.error('Missing ticketId for delete operation.');
+      return;
+    }
+    dispatch({ type: 'DELETE_PILER_TICKET', payload: { beet_data_id } });
   };
 
   const handleProcessRowUpdateError = (error) => {
@@ -187,7 +196,7 @@ export default function PilerView() {
         />
       </Paper>
 
-      {/* Confirmation Dialog */}
+      {/* Confirmation Editing Dialog */}
       <Dialog open={openDialog} onClose={handleCancelUpdate}>
         <DialogTitle>Confirm Update</DialogTitle>
         <DialogContent>

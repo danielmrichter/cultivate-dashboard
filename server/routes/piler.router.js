@@ -175,4 +175,38 @@ router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
   }
 });
 
+
+router.delete('/ticket/:beet_data_id', async (req, res) => {
+  const beetDataId = req.params.beet_data_id;
+
+  // SQL query to delete beet_data, related alerts, and the associated ticket
+  const queryText = `
+    WITH deleted_beet_data AS (
+      DELETE FROM beet_data
+      WHERE id = $1
+      RETURNING id, piler_id, ticket_id
+    ),
+    deleted_alerts AS (
+      DELETE FROM alerts
+      WHERE beet_data_id IN (SELECT id FROM deleted_beet_data)
+      RETURNING *
+    )
+    DELETE FROM tickets WHERE id = (SELECT ticket_id FROM deleted_beet_data LIMIT 1)
+    RETURNING (SELECT piler_id FROM deleted_beet_data LIMIT 1);
+  `;
+
+  try {
+    const result = await pool.query(queryText, [beetDataId]);
+
+    // Extracting piler_id from the result
+    const pilerId = result.rows.length > 0 ? result.rows[0].piler_id : null;
+
+    // Sending success response with the piler_id
+    res.send({piler_id: pilerId});
+  } catch (error) {
+    console.error('Error deleting beet data, alerts, and ticket:', error);
+    res.sendStatus(500)
+  }
+});
+
 module.exports = router;
