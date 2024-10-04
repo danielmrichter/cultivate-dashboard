@@ -1,12 +1,14 @@
-import { Button, Paper, Box } from "@mui/material";
+import { Button, Paper, Box, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 export default function AlertHistory() {
     const dispatch = useDispatch();
+    const history = useHistory();
     const theme = useTheme();
     
     useEffect(() => {
@@ -15,6 +17,7 @@ export default function AlertHistory() {
 
     const redAlerts = useSelector(store => store.alerts.allSiteAlerts.redAlerts);
     const warningAlerts = useSelector(store => store.alerts.allSiteAlerts.warningAlerts);
+    const siteId = useSelector(store => store.site.site_id)
 
     const handleMarkResolved = (id) => {
         dispatch({ type: 'MARK_RESOLVED', payload: id });
@@ -58,11 +61,14 @@ export default function AlertHistory() {
             ),
         },
     ];
+const handleBackClick = () => {
+    history.push(`/site/${siteId}`)
+}
 
     return (
         <Box sx={{ padding: '24px' }}>
-            <h2><b><u>Alert History:</u></b></h2>
-            <Button><ArrowBack />Return to Dashboard</Button>
+            <Typography variant="h3"><b>Alert History:</b></Typography>
+            <Button sx={{mb: 4}} onClick={handleBackClick}><ArrowBack />Return to Dashboard</Button>
             <Paper sx={{ padding: '24px' }}>
                 <h3>Red Alerts:</h3>
                 <div style={{ height: '100%', width: '100%' }}>

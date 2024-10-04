@@ -34,7 +34,7 @@ export default function SiteManagerView() {
           alignItems: 'start'
         }}
       >
-        {siteData && siteData.pilers && siteData.pilers.length > 0 ? (
+        {siteData && siteData.pilers ? (
           siteData.pilers.map((piler) => (
             <PilerCard key={piler.piler_id} data={piler} />
           ))
