@@ -13,6 +13,7 @@ import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
 import Header from "../Header/Header.jsx";
 import RedirectComponent from "../RedirectComponent/RedirectComponent.jsx";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx'
+import PilerView from "../PilerView/PilerView.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,6 +42,9 @@ function App() {
         <ProtectedRoute exact path="/site/:id">
           <SiteManagerView />
         </ProtectedRoute>
+        <Route exact path='/pilerDetails/:pilerId'>
+          <PilerView />
+        </Route>
       </Switch>
       </Box>
     </Router>

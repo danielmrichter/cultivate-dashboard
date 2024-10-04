@@ -36,7 +36,6 @@ export default function PilerCard(props) {
     )
   }
 }
-
   return (
     <Paper
       sx={{
