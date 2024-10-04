@@ -50,7 +50,7 @@ function App() {
         <ProtectedRoute exact path="/alert-history/:id">
           <AlertHistory />
         </ProtectedRoute>
-        <Route exact path='/pilerDetails/:pilerId'>
+        <Route exact path='/piler-details/:pilerId'>
           <PilerView />
         </Route>
       </Switch>
