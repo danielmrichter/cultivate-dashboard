@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Snackbar, Button, Box } from "@mui/material";
+import { Snackbar, Button, Box, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 
 function WarningSnackbar({ alert }) {
@@ -12,7 +12,7 @@ function WarningSnackbar({ alert }) {
 
   const handleMarkResolved = () => {
     dispatch({ type: "MARK_RESOLVED", payload: alertData.alert_id });
-    setOpen(false)
+    setOpen(false);
   };
 
   const handleOnClose = (event, reason) => {
@@ -35,9 +35,16 @@ function WarningSnackbar({ alert }) {
         <Box sx={{ backgroundColor: "warning.main", p: 2, borderRadius: 1 }}>
           <strong>Warning</strong>
           <p>{alertData.pilerName} has a higher temp reading:</p>
-          <p>
-            {alertData.temperature} {alertData.temperature_time}
-          </p>
+          <Typography
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <p>Temp: {alertData.temperature}&deg;F</p>{" "}
+            <p>Time: {alertData.temperature_time}</p>
+          </Typography>
           <Button
             onClick={() => {
               handleMarkResolved();
