@@ -63,6 +63,12 @@ CREATE TABLE IF NOT EXISTS "users_sites" (
 	"sites_id" int NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS "users_alerts" (
+ "id" SERIAL PRIMARY KEY,
+ "user_id" INT NOT NULL,
+ "alert_id" INT NOT NULL);
+
+
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -81,19 +87,22 @@ BEFORE UPDATE ON "alerts"
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
-ALTER TABLE "tickets" ADD CONSTRAINT "tickets_fk2" FOREIGN KEY ("grower_id") REFERENCES "growers"("id");
+ALTER TABLE "tickets" ADD CONSTRAINT "tickets_fk2" FOREIGN KEY ("grower_id") REFERENCES "growers"("id") ON DELETE CASCADE;
 
-ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id");
+ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id") ON DELETE CASCADE;
 
-ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk6" FOREIGN KEY ("ticket_id") REFERENCES "tickets"("id");
+ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk6" FOREIGN KEY ("ticket_id") REFERENCES "tickets"("id") ON DELETE CASCADE;
 
-ALTER TABLE "pilers" ADD CONSTRAINT "pilers_fk1" FOREIGN KEY ("site_id") REFERENCES "sites"("id");
-ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk2" FOREIGN KEY ("beet_data_id") REFERENCES "beet_data"("id");
+ALTER TABLE "pilers" ADD CONSTRAINT "pilers_fk1" FOREIGN KEY ("site_id") REFERENCES "sites"("id") ON DELETE CASCADE;
+ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk2" FOREIGN KEY ("beet_data_id") REFERENCES "beet_data"("id") ON DELETE CASCADE;
 
-ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id");
-ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk1" FOREIGN KEY ("users_id") REFERENCES "user"("id");
+ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id") ON DELETE CASCADE;
+ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk1" FOREIGN KEY ("users_id") REFERENCES "user"("id") ON DELETE CASCADE;
 
-ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk2" FOREIGN KEY ("sites_id") REFERENCES "sites"("id");
+ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk2" FOREIGN KEY ("sites_id") REFERENCES "sites"("id") ON DELETE CASCADE;
+
+ALTER TABLE "users_alerts" ADD CONSTRAINT "users_alerts_fk1" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE;
+ALTER TABLE "users_alerts" ADD CONSTRAINT "users_alerts_fk2" FOREIGN KEY ("alert_id") REFERENCES "alerts"("id") ON DELETE CASCADE;
 
 
 -- Dummy Data for testing purposes

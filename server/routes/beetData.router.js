@@ -121,9 +121,7 @@ router.get("/:siteid", async (req, res) => {
      `;
     // Now, let's query the database.
     const sqlPilerResponse = await pool.query(sqlPilerText, [siteId]);
-    // In case there was no data grabbed, we'll store it in this variable.
-    let dataToSend = sqlPilerResponse.rows;
-
+    let dataToSend;
     // If there was data, now we can shape it. The front end code
     // Expects it to be in a pretty specific shape to make the data work.
     if (sqlPilerResponse.rows[0]) {
@@ -170,6 +168,10 @@ router.get("/:siteid", async (req, res) => {
         // Now that we have a piler object, shove it into an array to send back.
         dataToSend.pilers.push(newPilerObj);
       }
+    } else {
+      // This is to accomodate the edge case where there are no tickets for the day.
+      // This will go get the monthly data that should already exist.
+      dataToSend = await testingFunctions.getMonthlyData(siteId)
     }
     res.send(dataToSend);
   } catch (error) {

@@ -1,8 +1,12 @@
 const express = require("express");
 const pool = require("../modules/pool");
 const router = express.Router();
-const { rejectUnauthenticated } = require("../modules/authentication-middleware");
-const { convertDateTimeStringToDateTime } = require("../modules/testing-functions");
+const {
+  rejectUnauthenticated,
+} = require("../modules/authentication-middleware");
+const {
+  convertDateTimeStringToDateTime,
+} = require("../modules/testing-functions");
 
 router.get("/mini", rejectUnauthenticated, async (req, res) => {
   try {
@@ -20,29 +24,29 @@ router.get("/mini", rejectUnauthenticated, async (req, res) => {
     AND "alerts".is_active = true;
 
   `;
-  const dbRes = await pool.query(sqlText, [req.user.id])
+    const dbRes = await pool.query(sqlText, [req.user.id]);
     let newAlertList = [];
-      
-    for (let i=0; i<dbRes.rows.length; i++) {
-        const { temperature_time } = dbRes.rows[i]
-        
-        const convertedAlertTime = convertDateTimeStringToDateTime(temperature_time);
 
-        const newAlert = {
-          ...dbRes.rows[i],
-          temperature_time: convertedAlertTime,
-        }
+    for (let i = 0; i < dbRes.rows.length; i++) {
+      const { temperature_time } = dbRes.rows[i];
 
-        newAlertList.push(newAlert);
-      }
-      
-      res.send(newAlertList)
-    } catch (dbErr) {
-      console.log("Error getting alerts from the DB! ", dbErr);
-      res.sendStatus(500);
-    };
+      const convertedAlertTime =
+        convertDateTimeStringToDateTime(temperature_time);
+
+      const newAlert = {
+        ...dbRes.rows[i],
+        temperature_time: convertedAlertTime,
+      };
+
+      newAlertList.push(newAlert);
+    }
+
+    res.send(newAlertList);
+  } catch (dbErr) {
+    console.log("Error getting alerts from the DB! ", dbErr);
+    res.sendStatus(500);
+  }
 });
-
 router.get("/site", rejectUnauthenticated, async (req, res) => {
   try {
     const sqlText = `
@@ -67,7 +71,7 @@ router.get("/site", rejectUnauthenticated, async (req, res) => {
     JOIN "growers" ON "tickets".grower_id = "growers".id
     WHERE "users_sites"."users_id" = $1;
     `;
-    
+
     const dbRes = await pool.query(sqlText, [req.user.id]);
 
     // Sets new arrays for the warnings and for the red alerts
@@ -78,7 +82,8 @@ router.get("/site", rejectUnauthenticated, async (req, res) => {
       const { temperature, temperature_time } = dbRes.rows[i];
 
       // Converts the alert time
-      const convertedAlertTime = convertDateTimeStringToDateTime(temperature_time);
+      const convertedAlertTime =
+        convertDateTimeStringToDateTime(temperature_time);
 
       // Creates a new alert object with the converted time
       const newAlert = {
@@ -96,34 +101,32 @@ router.get("/site", rejectUnauthenticated, async (req, res) => {
 
     res.send({
       warningAlerts,
-      redAlerts
+      redAlerts,
     });
-
   } catch (dbErr) {
     console.log("Error getting alerts from the DB! ", dbErr);
     res.sendStatus(500);
   }
 });
 
-router.post("/resolved", rejectUnauthenticated, async (req, res) => {
-  const { id } = req.body;
+router.post("/", rejectUnauthenticated, (req, res) => {
+  console.log("req.body is", req.body.id);
+  const sqlText = `
+    INSERT INTO "users_alerts"
+    ("user_id", "alert_id")
+    VALUES
+    ($1, $2);`;
+  const sqlValues = [req.user.id, req.body.id];
 
-  try {
-      // This gets the current is_active status of the alert
-      const selectSql = `SELECT "is_active" FROM "alerts" WHERE "id" = $1;`;
-      const selectResult = await pool.query(selectSql, [id]);
-
-      const currentStatus = selectResult.rows[0].is_active;
-
-      // This toggles the is_active status
-      const updateSql = `UPDATE "alerts" SET "is_active" = $1 WHERE "id" = $2;`;
-      await pool.query(updateSql, [!currentStatus, id]);
-
-      res.sendStatus(200);
-  } catch (dbErr) {
-      console.log("Error updating alert status: ", dbErr);
+  pool
+    .query(sqlText, sqlValues)
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((error) => {
+      console.log("dbError posting alert as seen ", error);
       res.sendStatus(500);
-  }
+    });
 });
 
 router.put("/:id", rejectUnauthenticated, (req, res) => {
@@ -135,6 +138,46 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
     .then((dbRes) => res.sendStatus(200))
     .catch((dbErr) => {
       console.log("Error updating alerts: ", dbErr);
+      res.sendStatus(500);
+    });
+});
+
+router.get("/", (req, res) => {
+  const queryText = ` SELECT
+    "pilers"."name" AS "pilerName",
+    "beet_data"."temperature",
+    "beet_data"."temperature_time",
+    "alerts"."id" AS "alert_id"
+    FROM "alerts"
+    JOIN "pilers" ON "alerts"."piler_id" = "pilers"."id"
+    JOIN "sites" ON "pilers"."site_id" = "sites"."id"
+    JOIN "users_sites" ON "sites"."id" = "users_sites"."sites_id"
+    JOIN "user" ON "user"."id" = "users_sites"."users_id"
+    JOIN "beet_data" ON "alerts"."beet_data_id" = "beet_data"."id"
+    WHERE "user"."id" = $1
+    AND "alerts"."is_active" = TRUE
+    AND ("alerts"."id") NOT IN(
+      SELECT "alerts"."id" FROM "alerts"
+      JOIN "users_alerts" ON "alerts"."id" = "users_alerts"."alert_id"
+      JOIN "user" ON "user"."id" = "users_alerts"."user_id"
+      WHERE "user"."id" = $1
+    );`;
+  const queryValues = [req.user.id];
+  pool
+    .query(queryText, queryValues)
+    .then((result) => {
+      const formattedResponseData = result.rows.map((entry) => {
+        return {
+          ...entry,
+          temperature_time: convertDateTimeStringToDateTime(
+            entry.temperature_time
+          ),
+        };
+      });
+      res.send(formattedResponseData);
+    })
+    .catch((error) => {
+      console.log("error getting list of alerts", error);
       res.sendStatus(500);
     });
 });

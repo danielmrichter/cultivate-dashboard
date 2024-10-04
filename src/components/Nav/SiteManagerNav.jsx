@@ -132,9 +132,6 @@ export default function SiteManagerNav() {
         }}
         ModalProps={{
           keepMounted: true, // Improves performance when Drawer is hidden
-          BackdropProps: {
-            style: { backgroundColor: 'rgba(0,0,0,0.5)' } // Makes the rest of the screen gray
-          }
         }}
       >
         {drawerList}

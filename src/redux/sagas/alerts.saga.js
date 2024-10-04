@@ -1,38 +1,58 @@
-import axios from 'axios';
-import { put, takeLatest } from 'redux-saga/effects';
+import axios from "axios";
+import { put, takeLatest } from "redux-saga/effects";
 
 function* fetchSiteMiniAlerts(action) {
-try {
-    const response = yield axios.get(`/api/alerts/mini`)
-    yield put({type: 'SET_MINI_ALERTS', payload: response.data})
-} catch (error) {
-    console.log('Fetch Mini Alerts failed:', error)
-}
+  try {
+    const response = yield axios.get(`/api/alerts/mini`);
+    yield put({ type: "SET_MINI_ALERTS", payload: response.data });
+  } catch (error) {
+    console.log("Fetch Mini Alerts failed:", error);
+  }
 }
 
 function* fetchAllSiteAlerts(action) {
   try {
-      const response = yield axios.get(`/api/alerts/site`)
-      yield put({type: 'SET_ALL_ALERTS', payload: response.data})
+    const response = yield axios.get(`/api/alerts/site`);
+    yield put({ type: "SET_ALL_ALERTS", payload: response.data });
   } catch (error) {
-      console.log('Fetch All Alerts failed:', error)
+    console.log("Fetch All Alerts failed:", error);
   }
-  }
+}
 
-  function* markAlertResolved(action) {
-    try {
-        yield axios.put(`/api/alerts/${action.payload}`);
-        yield put({type: 'FETCH_MINI_ALERTS' });
-        yield put({type: 'FETCH_ALL_ALERTS' });
-    } catch (error) {
-      console.log('Mark Resolved/Unresolved action failed:', error)
-    }
+function* markAlertResolved(action) {
+  try {
+    yield axios.put(`/api/alerts/${action.payload}`);
+    yield put({ type: "FETCH_MINI_ALERTS" });
+    yield put({ type: "FETCH_ALL_ALERTS" });
+  } catch (error) {
+    console.log("Mark Resolved/Unresolved action failed:", error);
+  }
+}
+
+function* markAlertSeen(action) {
+  try {
+    yield axios.post(`/api/alerts`, { id: action.payload });
+    yield put({ type: "FETCH_MINI_ALERTS" });
+  } catch (error) {
+    console.log("error marking alert as having been seen", error);
+  }
+}
+
+function* fetchUnseenAlerts(action) {
+  try {
+    const response = yield axios.get("/api/alerts");
+    yield put({ type: "SET_UNSEEN_ALERTS", payload: response.data });
+  } catch (error) {
+    console.log("error getting list of unseen alerts", error);
+  }
 }
 
 function* alertsSaga() {
-  yield takeLatest('FETCH_MINI_ALERTS', fetchSiteMiniAlerts);
-  yield takeLatest('FETCH_ALL_ALERTS', fetchAllSiteAlerts);
-  yield takeLatest('MARK_RESOLVED', markAlertResolved);
+  yield takeLatest("FETCH_MINI_ALERTS", fetchSiteMiniAlerts);
+  yield takeLatest("FETCH_ALL_ALERTS", fetchAllSiteAlerts);
+  yield takeLatest("MARK_RESOLVED", markAlertResolved);
+  yield takeLatest("HAS_SEEN_ALERT", markAlertSeen);
+  yield takeLatest("GET_UNSEEN_ALERTS", fetchUnseenAlerts);
 }
 
 export default alertsSaga;
