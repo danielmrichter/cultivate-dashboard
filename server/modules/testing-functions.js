@@ -26,7 +26,7 @@ async function developmentPostForBeetData(req) {
         let trucks = ["Truck1", "Truck2", "Truck3", "Truck4", "Truck5"];
         let truckId = getRandomInt(0, 5);
 
-        // No, I don't need to sanitize it. I'm creating it. But this is incase this is used
+        // No, I don't need to escape it. I'm creating it. But this is incase this is used
         // Somewhere else in the future.
         let ticketSqlText = `INSERT INTO "tickets"
                               ("ticket_number", "grower_id", "truck")
@@ -53,14 +53,14 @@ async function developmentPostForBeetData(req) {
           INSERT INTO "beet_data"
           ("temperature_time", "temperature", "piler_id", "beetbox_id", "coordinates", "updated_at", "ticket_id")
           VALUES
-          ($1, $2, $3, $4, $5, $6, $7)
+          ($1, $2, $3, $4, $5::point, $6, $7)
           RETURNING *;`;
         const devSqlValues = [
           temperature_time,
           temperature,
           piler_id,
           beetbox_id,
-          coordinates,
+          formatCoordinates(coordinates),
           temperature_time,
           newTickets[i].rows[0].id,
         ];
@@ -113,15 +113,29 @@ const convertDateObjectToDateString = (dateObject) => {
 };
 
 const convertDateTimeStringToDateTime = (dateTimeString) => {
-  const parsedDate = new Intl.DateTimeFormat('en-US', {
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  }).format(dateTimeString)
-console.log('parsedDate is:', parsedDate)
+  const parsedDate = new Intl.DateTimeFormat("en-US", {
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  }).format(dateTimeString);
   return parsedDate;
 };
+
+function formatCoordinates(string) {
+  const regex = /[A-Za-z]/gi;
+  const filteredString = string.replace(regex, "");
+  return filteredString.replace(" ", ",");
+}
+
+function convertDateTimeStringToHour(dateTimeString) {
+  const parsedDate = Date.parse(dateTimeString);
+  const dateObject = new Date(parsedDate);
+  const convertedToHoursAndMinutes = dateObject.toLocaleTimeString([], {
+    hour: "numeric",
+  });
+  return convertedToHoursAndMinutes;
+}
 
 module.exports = {
   getRandomInt,
@@ -129,4 +143,6 @@ module.exports = {
   convertDateTimeStringToTimeString,
   convertDateObjectToDateString,
   convertDateTimeStringToDateTime,
+  formatCoordinates,
+  convertDateTimeStringToHour,
 };
