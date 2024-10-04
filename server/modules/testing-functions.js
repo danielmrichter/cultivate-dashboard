@@ -141,8 +141,8 @@ async function getMonthlyData(siteId) {
   const sqlGetPilers = `
     SELECT 
     "pilers"."name" AS "piler_name",
-     "pilers"."id" AS "pilers_id",
-     "sites"."name" AS "site_name"
+     "pilers"."id" AS "piler_id",
+     "sites"."site" AS "site_name"
       FROM "sites"
 JOIN "pilers" ON "sites"."id" = "pilers"."site_id"
 WHERE "sites"."id" = $1;`;
@@ -188,6 +188,7 @@ WHERE "sites"."id" = $1;`;
     // Now that we have a piler object, shove it into an array to send back.
     dataToSend.pilers.push(newPilerObj);
   }
+  console.log('dataToSend is: ', dataToSend)
   return dataToSend
 }
 
@@ -199,4 +200,5 @@ module.exports = {
   convertDateTimeStringToDateTime,
   formatCoordinates,
   convertDateTimeStringToHour,
+  getMonthlyData
 };
