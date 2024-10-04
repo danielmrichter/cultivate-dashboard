@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "beet_data" (
 	"temperature" numeric NOT NULL,
 	"piler_id" int NOT NULL,
 	"beetbox_id" varchar(255) NOT NULL,
-	"coordinates" varchar NOT NULL,
+	"coordinates" POINT NOT NULL,
 	"ticket_id" int NOT NULL,
 	"updated_at" timestamptz NOT NULL
 );

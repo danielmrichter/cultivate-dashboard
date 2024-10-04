@@ -21,6 +21,7 @@ import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useTheme } from "@mui/material";
+import { ResponsiveContainer } from "recharts";
 
 export default function PilerView() {
   const theme = useTheme();
@@ -36,18 +37,34 @@ export default function PilerView() {
     dispatch({ type: "FETCH_PILER_DATA", payload: pilerId });
   }, [pilerId, dispatch]);
 
-  const ticketData = pilerData.ticketData?.map((row, index) => ({
-    ...row,
-    beet_data_id: row.beet_data_id || `temp_id_${index}`,
-  })) || [];
+  const ticketData =
+    pilerData.ticketData?.map((row, index) => ({
+      ...row,
+      beet_data_id: row.beet_data_id || `temp_id_${index}`,
+    })) || [];
 
   const columnsDef = [
-    { field: "ticket_number", headerName: "Ticket #", editable: true, flex: 0.5 },
+    {
+      field: "ticket_number",
+      headerName: "Ticket #",
+      editable: true,
+      flex: 0.5,
+    },
     { field: "temperature", headerName: "Temp", editable: true, flex: 0.5 },
-    { field: "temperature_time", headerName: "Temperature Time", editable: true, flex: 1 },
+    {
+      field: "temperature_time",
+      headerName: "Temperature Time",
+      editable: true,
+      flex: 1,
+    },
     { field: "truck", headerName: "Truck", editable: true, flex: 0.5 },
     { field: "field", headerName: "Grower", editable: false, flex: 1 },
-    { field: "coordinates", headerName: "Coordinates", editable: true, flex: 1 },
+    {
+      field: "coordinates",
+      headerName: "Coordinates",
+      editable: true,
+      flex: 1,
+    },
     { field: "updated_at", headerName: "Last Updated", flex: 1 },
     {
       field: "markResolved",
@@ -61,8 +78,12 @@ export default function PilerView() {
             "&:hover": { backgroundColor: theme.palette.primary.main },
           }}
           onClick={() => {
-            console.log('params.row.beet_data_id is: ', params.row.beet_data_id) 
-            handleDeleteTicket(params.row.beet_data_id)}}
+            console.log(
+              "params.row.beet_data_id is: ",
+              params.row.beet_data_id
+            );
+            handleDeleteTicket(params.row.beet_data_id);
+          }}
         >
           Delete
         </Button>
@@ -79,10 +100,10 @@ export default function PilerView() {
 
   const handleConfirmUpdate = () => {
     if (pendingUpdate && pendingUpdate.beet_data_id) {
-      dispatch({ type: 'UPDATE_PILER_TICKET', payload: pendingUpdate });
+      dispatch({ type: "UPDATE_PILER_TICKET", payload: pendingUpdate });
       setOpenDialog(false);
     } else {
-      console.error('Missing beet_data_id in pending update:', pendingUpdate);
+      console.error("Missing beet_data_id in pending update:", pendingUpdate);
     }
   };
 
@@ -93,21 +114,32 @@ export default function PilerView() {
 
   const handleDeleteTicket = (beet_data_id) => {
     if (!beet_data_id) {
-      console.error('Missing ticketId for delete operation.');
+      console.error("Missing ticketId for delete operation.");
       return;
     }
-    dispatch({ type: 'DELETE_PILER_TICKET', payload: { beet_data_id } });
+    dispatch({ type: "DELETE_PILER_TICKET", payload: { beet_data_id } });
   };
 
   const handleProcessRowUpdateError = (error) => {
-    console.error('Error updating row:', error);
+    console.error("Error updating row:", error);
   };
+  const chartTitleRender = () => {
+    if (chartFormatToDisplay === "day") {
+      return (
+        <Typography variant="h4" sx={{alignSelf: "start"}}><b>Averages Over The Day</b></Typography>
+      )
+    } else if (chartFormatToDisplay === "month") {
+      return (
+        <Typography variant="h4" sx={{alignSelf: "start"}}><b>Averages Over The Month</b></Typography>
+      )
+    }
+    return <div>Error</div>;
+  }
 
   const chartFormatRender = () => {
     if (chartFormatToDisplay === "day") {
       return (
         <>
-          <Typography variant="h4">Averages Over The Day</Typography>
           <BarGraph
             data={pilerData.barChartDayData}
             x="hour"
@@ -120,7 +152,6 @@ export default function PilerView() {
     } else if (chartFormatToDisplay === "month") {
       return (
         <>
-          <Typography variant="h4">Averages Over The Month</Typography>
           <BarGraph
             data={pilerData.barChartMonthData}
             x="day"
@@ -145,17 +176,32 @@ export default function PilerView() {
         width: "100vw",
       }}
     >
-      <Link
-        sx={{ alignSelf: "flex-start", ml: 5, mt: 2 }}
-        onClick={() => history.push(`/site/${pilerData.id}`)}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          paddingTop: 4,
+          paddingLeft: 4
+        }}
       >
-        <ArrowBack />
-        Back To Site Details
-      </Link>
-
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 5 }}>
-        <Paper sx={{ height: "50vh", pb: 5 }}>
-          <Typography variant="h4">Heat Map Of Pile</Typography>
+        <Typography variant="h3"><b>{pilerData.siteInfo.piler_name} Details:</b></Typography>
+        <Box sx={{display: "flex", flexDirection: "row", mt: 2}} onClick={() => history.push(`/site/${pilerData.id}`)}>
+        <ArrowBack sx={{fill: theme.palette.primary.main}} />
+        <Link> 
+          Back To Site Details
+        </Link>
+        </Box>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 5, width: "100%" }}>
+        <Paper sx={{ display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "550px",
+        width: "44%",
+        padding: "16px",
+        gap: "16px" }}>
+          <Typography variant="h4" sx={{alignSelf: "start"}}><b>Heat Map Of Pile</b></Typography>
           <ScatterPlot
             data={pilerData.heatMapData}
             x="x"
@@ -166,23 +212,34 @@ export default function PilerView() {
           />
         </Paper>
 
-        <Paper sx={{ height: "50vh", pb: 5 }}>
-          {chartFormatRender()}
+        <Paper sx={{ display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "550px",
+        width: "44%",
+        padding: "16px",
+        gap: "16px" }}>
+         {chartTitleRender()}
           <ToggleButtonGroup
             size="small"
             value={chartFormatToDisplay}
             exclusive
             onChange={(e, n) => setChartFormatToDisplay(n)}
             sx={{ width: "100%" }}
-          >
-            <ToggleButton value="day" sx={{ flexGrow: 1 }}>Day</ToggleButton>
-            <ToggleButton value="month" sx={{ flexGrow: 1 }}>Month</ToggleButton>
+            >
+            <ToggleButton value="day" sx={{ flexGrow: 1 }}>
+              Day
+            </ToggleButton>
+            <ToggleButton value="month" sx={{ flexGrow: 1 }}>
+              Month
+            </ToggleButton>
           </ToggleButtonGroup>
+            {chartFormatRender()}
         </Paper>
       </Box>
 
       <Paper sx={{ padding: 4, width: "90%" }}>
-        <Typography variant="h4">Ticket Data</Typography>
+        <Typography variant="h4"><b>Ticket Data</b></Typography>
         <DataGrid
           columns={columnsDef}
           rows={ticketData}
@@ -201,12 +258,17 @@ export default function PilerView() {
         <DialogTitle>Confirm Update</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to update ticket {pendingUpdate?.ticket_number}?
+            Are you sure you want to update ticket{" "}
+            {pendingUpdate?.ticket_number}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelUpdate} color="primary">No</Button>
-          <Button onClick={handleConfirmUpdate} color="primary">Yes</Button>
+          <Button onClick={handleCancelUpdate} color="primary">
+            No
+          </Button>
+          <Button onClick={handleConfirmUpdate} color="primary">
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
