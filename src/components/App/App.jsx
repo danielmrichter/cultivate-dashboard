@@ -13,9 +13,10 @@ import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
 import Header from "../Header/Header.jsx";
 import RedirectComponent from "../RedirectComponent/RedirectComponent.jsx";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx'
-import TemperatureWarning from "../AlertComponents/Snackbar.jsx";
+import TemperatureWarning from "../AlertComponents/WarningSnackbar.jsx";
 import AlertHistory from "../AlertHistory/AlertHistory.jsx";
 import PilerView from "../PilerView/PilerView.jsx";
+import AlertCaller from "../AlertComponents/AlertCaller.jsx";
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
     <Router>
       <Box sx={{backgroundColor: "#E5E5E5"}}>
       <Header />
-      {/* <TemperatureWarning /> */}
+      <AlertCaller />
       <Switch>
         <Route exact path="/">
           {user.id ? <Redirect to="/user" /> : <Redirect to="/login" />}
