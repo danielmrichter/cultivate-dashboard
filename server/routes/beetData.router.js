@@ -171,6 +171,7 @@ router.get("/:siteid", async (req, res) => {
     } else {
       // This is to accomodate the edge case where there are no tickets for the day.
       // This will go get the monthly data that should already exist.
+      // It's in a helper function, since it's basically the same code
       dataToSend = await testingFunctions.getMonthlyData(siteId)
     }
     res.send(dataToSend);
