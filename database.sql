@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "beet_data" (
 	"temperature" numeric NOT NULL,
 	"piler_id" int NOT NULL,
 	"beetbox_id" varchar(255) NOT NULL,
-	"coordinates" varchar NOT NULL,
+	"coordinates" POINT NOT NULL,
 	"ticket_id" int NOT NULL,
 	"updated_at" timestamptz NOT NULL
 );
@@ -62,6 +62,12 @@ CREATE TABLE IF NOT EXISTS "users_sites" (
 	"users_id" int NOT NULL,
 	"sites_id" int NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS "users_alerts" (
+ "id" SERIAL PRIMARY KEY,
+ "user_id" INT NOT NULL,
+ "alert_id" INT NOT NULL);
+
 
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$
@@ -94,6 +100,9 @@ ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk3" FOREIGN KEY ("piler_id") REFERE
 ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk1" FOREIGN KEY ("users_id") REFERENCES "user"("id");
 
 ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk2" FOREIGN KEY ("sites_id") REFERENCES "sites"("id");
+
+ALTER TABLE "users_alerts" ADD CONSTRAINT "users_alerts_fk1" FOREIGN KEY ("user_id") REFERENCES "user"("id");
+ALTER TABLE "users_alerts" ADD CONSTRAINT "users_alerts_fk2" FOREIGN KEY ("alert_id") REFERENCES "alerts"("id");
 
 
 -- Dummy Data for testing purposes
