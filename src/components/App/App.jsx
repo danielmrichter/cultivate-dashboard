@@ -14,6 +14,9 @@ import Header from "../Header/Header.jsx";
 import RedirectComponent from "../RedirectComponent/RedirectComponent.jsx";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx'
 import TemperatureWarning from "../AlertComponents/Snackbar.jsx";
+import AlertHistory from "../AlertHistory/AlertHistory.jsx";
+import PilerView from "../PilerView/PilerView.jsx";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -43,6 +46,12 @@ function App() {
         <ProtectedRoute exact path="/site/:id">
           <SiteManagerView />
         </ProtectedRoute>
+        <ProtectedRoute exact path="/alert-history/:id">
+          <AlertHistory />
+        </ProtectedRoute>
+        <Route exact path='/pilerDetails/:pilerId'>
+          <PilerView />
+        </Route>
       </Switch>
       </Box>
     </Router>

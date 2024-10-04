@@ -12,10 +12,10 @@ export default function SiteManagerView() {
 
   useEffect(() => {
     dispatch({ type: "FETCH_SITE", payload: id });
-    dispatch({type: 'FETCH_ALERTS'})
+    dispatch({type: 'FETCH_MINI_ALERTS'})
   }, []);
   const siteData = useSelector((store) => store.site);
-  const alerts = useSelector(store => store.alerts)
+  
   return (
     <Box
       sx={{

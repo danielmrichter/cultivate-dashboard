@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
           } = data;
           const sqlText = `
               INSERT INTO "beet_data"
-              ("temperature_time", "temperature", "piler_id", "beetbox_id", "coordinates", "updated_at", "ticket_id")
+              ("temperature_time", "temperature", "piler_id", "beetbox_id", "updated_at", "ticket_id", "coordinates")
                VALUES
               ($1, $2, $3, $4, $5, $6, $7)
               RETURNING *;`;
@@ -43,9 +43,9 @@ router.post("/", async (req, res) => {
             temperature,
             piler_id,
             beetbox_id,
-            coordinates,
             temperature_time,
             ticket_number,
+            testingFunctions.formatCoordinates(coordinates)
           ];
           return client.query(sqlText, sqlValues);
         })
