@@ -13,6 +13,7 @@ import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
 import Header from "../Header/Header.jsx";
 import RedirectComponent from "../RedirectComponent/RedirectComponent.jsx";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute.jsx'
+import TemperatureWarning from "../AlertComponents/Snackbar.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function App() {
     <Router>
       <Box sx={{backgroundColor: "#E5E5E5"}}>
       <Header />
+      {/* <TemperatureWarning /> */}
       <Switch>
         <Route exact path="/">
           {user.id ? <Redirect to="/user" /> : <Redirect to="/login" />}
