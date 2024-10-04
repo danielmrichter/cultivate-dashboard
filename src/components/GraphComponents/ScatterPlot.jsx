@@ -15,7 +15,7 @@ import {
 
 // xLabel is going to be a string that will be displayed as the label on the x axis.
 // Similarly for the yLabel.
-export default function ScatterPlot({ data, x, y, xLabel, yLabel }) {
+export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
   // This grabs the theme from MUI.
   const theme = useTheme();
   // Define the color dependent on the temperature reading.
@@ -33,7 +33,7 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel }) {
 
   const enrichedData = data.map((entry) => ({
     ...entry,
-    fill: fillColor(entry[y]), // Add the fill color based on temperature
+    fill: fillColor(entry[temp]), // Add the fill color based on temperature
   }));
 
   //Formatter function for the graph tick marks on the Axes

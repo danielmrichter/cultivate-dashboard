@@ -131,9 +131,10 @@ export default function PilerView() {
           <ScatterPlot
             data={pilerData.heatMapData}
             x="x"
-            y="temperature"
+            y="y"
             xLabel="Latitude"
             yLabel="Temperature"
+            temp="temperature"
           />
         </Paper>
         <Paper
