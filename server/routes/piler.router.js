@@ -9,21 +9,22 @@ const {
 router.get("/:id", rejectUnauthenticated, async (req, res) => {
   try {
     const pilerId = req.params.id;
-    const ticketDataSqlText = `SELECT 
-"tickets"."id" AS "ticketd", 
-"tickets"."ticket_number", 
-"beet_data"."temperature",
-"beet_data"."updated_at",
-"tickets"."truck",
-"growers"."field",
-"beet_data"."coordinates",
-"beet_data"."temperature_time",
-"beet_data"."id"
-FROM "pilers"
-JOIN "beet_data" ON "pilers"."id" = "beet_data"."piler_id"
-JOIN "tickets" ON "beet_data"."ticket_id" = "tickets"."id"
-JOIN "growers" ON "tickets"."grower_id" = "growers"."id"
-WHERE "pilers"."id" = $1;`;
+    const ticketDataSqlText = `
+    SELECT    
+      "tickets"."id" AS "ticketId", 
+      "tickets"."ticket_number", 
+      "beet_data"."temperature",
+      "beet_data"."updated_at",
+      "tickets"."truck",
+      "growers"."field",
+      "beet_data"."coordinates",
+      "beet_data"."temperature_time",
+      "beet_data"."id" AS "beet_data_id"
+      FROM "pilers"
+      JOIN "beet_data" ON "pilers"."id" = "beet_data"."piler_id"
+      JOIN "tickets" ON "beet_data"."ticket_id" = "tickets"."id"
+      JOIN "growers" ON "tickets"."grower_id" = "growers"."id"
+      WHERE "pilers"."id" = $1;`;
     const ticketData = await pool.query(ticketDataSqlText, [pilerId]);
 
     // One thing to explain about this query:
@@ -81,7 +82,8 @@ GROUP BY "day";`;
     const siteInfoQuery = `
 SELECT 
 "sites"."site" AS "site_name", 
-"sites"."id", 
+"sites"."id",
+"pilers"."id" AS "piler_id", 
 "pilers"."name" AS "piler_name" FROM "sites"
 JOIN "pilers" ON "pilers"."site_id" = "sites"."id"
 WHERE "pilers"."id" = $1;`;
@@ -96,6 +98,79 @@ WHERE "pilers"."id" = $1;`;
     res.send(dataToSend);
   } catch (error) {
     console.log("Error in GET/api/piler/:id: ", error);
+    res.sendStatus(500);
+  }
+});
+
+router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
+  const beetDataId = req.params.id;
+  const {
+    ticket_number,
+    temperature,
+    truck,
+    coordinates,
+    temperature_time,
+    ticketId
+  } = req.body;
+
+  try {
+    // Updating ticket table
+    const updateTicketSqlText = `
+      UPDATE "tickets" 
+      SET 
+        "ticket_number" = $1,
+        "truck" = $2 
+      WHERE "id" = $3 
+      RETURNING "id";`;
+
+    const ticketResult = await pool.query(updateTicketSqlText, [
+      ticket_number,
+      truck,
+      ticketId,
+    ]);
+
+    if (ticketResult.rows.length === 0) {
+      return res.sendStatus(404);
+    }
+
+    const updatedGrowerId = ticketResult.rows[0].grower_id;
+
+    // Update beet_data table
+    const updateBeetDataSqlText = `
+      UPDATE "beet_data" 
+      SET 
+        "temperature" = $1,
+        "coordinates" = POINT($2, $3),
+        "temperature_time" = $4
+      WHERE "id" = $5;`;
+
+    await pool.query(updateBeetDataSqlText, [
+      temperature,
+      coordinates.x,
+      coordinates.y,
+      temperature_time,
+      beetDataId,
+    ]);
+
+    // Fetching the Piler Id to send back to update DOM
+    const getPilerIdSqlText = `
+      SELECT "beet_data"."piler_id" 
+      FROM "beet_data"  
+      WHERE "beet_data"."id" = $1;`;
+
+    const pilerResult = await pool.query(getPilerIdSqlText, [beetDataId]);
+
+    if (pilerResult.rows.length === 0) {
+      return res.sendStatus(404);
+    }
+    console.log('beetDataId is:', pilerResult.rows)
+    
+    const pilerId = pilerResult.rows[0].piler_id;
+    console.log('Piler ID is:', pilerId);
+
+    res.send({ pilerId });
+  } catch (error) {
+    console.log("Error in PUT/api/piler/:id: ", error);
     res.sendStatus(500);
   }
 });

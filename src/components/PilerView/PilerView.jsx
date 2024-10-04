@@ -4,60 +4,96 @@ import {
   Link,
   Paper,
   ToggleButton,
+  Button,
   ToggleButtonGroup,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ScatterPlot from "../GraphComponents/ScatterPlot";
 import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
+import { useTheme } from "@mui/material";
 
 export default function PilerView() {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const { pilerId } = useParams();
   const history = useHistory();
   const pilerData = useSelector((store) => store.piler);
+  const [chartFormatToDisplay, setChartFormatToDisplay] = useState("day");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [pendingUpdate, setPendingUpdate] = useState(null);
+
   useEffect(() => {
     dispatch({ type: "FETCH_PILER_DATA", payload: pilerId });
-  }, [pilerId]);
+  }, [pilerId, dispatch]);
 
-  const [chartFormatToDisplay, setChartFormatToDisplay] = useState("day");
-  // We have to define the columns that the MUI Data Grid will use.
+  // Ensure all rows have unique IDs
+  const ticketData = pilerData.ticketData?.map((row, index) => ({
+    ...row,
+    beet_data_id: row.beet_data_id || `temp_id_${index}`,
+  })) || [];
+
   const columnsDef = [
+    { field: "ticket_number", headerName: "Ticket #", editable: true, flex: 0.5 },
+    { field: "temperature", headerName: "Temp", editable: true, flex: 0.5 },
+    { field: "temperature_time", headerName: "Temperature Time", editable: true, flex: 1 },
+    { field: "truck", headerName: "Truck", editable: true, flex: 0.5 },
+    { field: "field", headerName: "Grower", editable: false, flex: 1 },
+    { field: "coordinates", headerName: "Coordinates", editable: true, flex: 1 },
+    { field: "updated_at", headerName: "Last Updated", flex: 1 },
     {
-      field: "ticket_number",
-      headerName: "Ticket Number",
-    },
-    {
-      field: "truck",
-      headerName: "Truck",
-    },
-    {
-      field: "field",
-      headerName: "Grower",
-    },
-    {
-      field: "temperature",
-      headerName: "Temperature",
-    },
-    {
-      field: "coordinates",
-      headerName: "Coordinates",
-    },
-    {
-      field: "temperature_time",
-      headerName: "Temperature Time",
-      width: "150px",
-    },
-    {
-      field: "updated_at",
-      headerName: "Last Updated",
-      width: "150px",
+      field: "markResolved",
+      headerName: "",
+      flex: 0.5,
+      renderCell: (params) => (
+        <Button
+          sx={{
+            backgroundColor: theme.palette.error.main,
+            color: "white",
+            "&:hover": { backgroundColor: theme.palette.primary.main },
+          }}
+          onClick={() => handleMarkResolved(params.row.ticket_number)}
+        >
+          Delete
+        </Button>
+      ),
     },
   ];
+
+  const handleRowEdit = (updatedRow, originalRow) => {
+    const mergedRow = { ...originalRow, ...updatedRow };
+    setPendingUpdate(mergedRow);
+    setOpenDialog(true);
+    return mergedRow; // Immediately return the updated row to let DataGrid process it
+  };
+
+  const handleConfirmUpdate = () => {
+    if (pendingUpdate && pendingUpdate.beet_data_id) {
+      dispatch({ type: 'UPDATE_PILER_TICKET', payload: pendingUpdate });
+      setOpenDialog(false);
+    } else {
+      console.error('Missing beet_data_id in pending update:', pendingUpdate);
+    }
+  };
+
+  const handleCancelUpdate = () => {
+    setOpenDialog(false);
+    setPendingUpdate(null);
+  };
+
+  const handleProcessRowUpdateError = (error) => {
+    console.error('Error updating row:', error);
+  };
+
   const chartFormatRender = () => {
     if (chartFormatToDisplay === "day") {
       return (
@@ -72,30 +108,29 @@ export default function PilerView() {
           />
         </>
       );
-    }
-    if (chartFormatToDisplay === "month") {
+    } else if (chartFormatToDisplay === "month") {
       return (
         <>
-          <Typography variant="h4">Averages Over The Day</Typography>
+          <Typography variant="h4">Averages Over The Month</Typography>
           <BarGraph
             data={pilerData.barChartMonthData}
             x="day"
             y="temperature"
             xLabel="Day"
-            yLabel="temperature"
+            yLabel="Temperature"
           />
         </>
       );
     }
     return <div>Error</div>;
   };
-  // First, we have to check if we have data to render
+
   return pilerData.ticketData ? (
     <Box
       sx={{
         display: "flex",
-        alignItems: "center",
         flexDirection: "column",
+        alignItems: "center",
         gap: 5,
         marginX: 0,
         width: "100vw",
@@ -108,25 +143,9 @@ export default function PilerView() {
         <ArrowBack />
         Back To Site Details
       </Link>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "row",
-          alignContent: "center",
-          gap: 5,
-        }}
-      >
-        <Paper
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            height: "50vh",
-            pb: 5,
-          }}
-        >
+
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 5 }}>
+        <Paper sx={{ height: "50vh", pb: 5 }}>
           <Typography variant="h4">Heat Map Of Pile</Typography>
           <ScatterPlot
             data={pilerData.heatMapData}
@@ -137,63 +156,53 @@ export default function PilerView() {
             temp="temperature"
           />
         </Paper>
-        <Paper
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            height: "50vh",
-            pb: 5,
-          }}
-        >
+
+        <Paper sx={{ height: "50vh", pb: 5 }}>
           {chartFormatRender()}
           <ToggleButtonGroup
             size="small"
-            sx={{
-              width: "100%",
-            }}
-            color="primary"
             value={chartFormatToDisplay}
             exclusive
             onChange={(e, n) => setChartFormatToDisplay(n)}
-            aria-label="Platform"
+            sx={{ width: "100%" }}
           >
-            <ToggleButton
-              sx={{ flexGrow: 1, borderRadius: "25px" }}
-              value="day"
-            >
-              Day
-            </ToggleButton>
-            <ToggleButton
-              sx={{ flexGrow: 1, borderRadius: "25px" }}
-              value="month"
-            >
-              Month
-            </ToggleButton>
+            <ToggleButton value="day" sx={{ flexGrow: 1 }}>Day</ToggleButton>
+            <ToggleButton value="month" sx={{ flexGrow: 1 }}>Month</ToggleButton>
           </ToggleButtonGroup>
         </Paper>
       </Box>
-      <DataGrid
-        autosizeOnMount
-        columns={columnsDef}
-        rows={pilerData.ticketData}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10, 20]}
-        checkboxSelection={false}
-        disableRowSelectionOnClick
-        autoHeight
-      />
+
+      <Paper sx={{ padding: 4, width: "90%" }}>
+        <Typography variant="h4">Ticket Data</Typography>
+        <DataGrid
+          columns={columnsDef}
+          rows={ticketData}
+          getRowId={(row) => row.beet_data_id}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10, 20]}
+          disableRowSelectionOnClick
+          autoHeight
+          processRowUpdate={handleRowEdit}
+          onProcessRowUpdateError={handleProcessRowUpdateError}
+        />
+      </Paper>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={openDialog} onClose={handleCancelUpdate}>
+        <DialogTitle>Confirm Update</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to update ticket {pendingUpdate?.ticket_number}?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelUpdate} color="primary">No</Button>
+          <Button onClick={handleConfirmUpdate} color="primary">Yes</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   ) : (
-    // If we don't have data to render, let's just show a loading icon.
-    <Box
-      sx={{
-        display: "flex",
-        alignContent: "center",
-        justifyContent: "center",
-        height: "100vh",
-      }}
-    >
+    <Box sx={{ display: "flex", justifyContent: "center", height: "100vh" }}>
       <CircularProgress color="primary.main" />
     </Box>
   );
