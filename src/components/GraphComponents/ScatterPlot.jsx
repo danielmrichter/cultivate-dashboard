@@ -80,7 +80,6 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel }) {
           dataKey={y}
           type="number"
           label={{ value: yLabel, angle: -90, position: "left", offset: 15 }}
-          // See notes above for explanation. Same logic.
           domain={([dataMin, dataMax]) => {
             return [
               dataMin - (dataMax - dataMin) * 0.1,

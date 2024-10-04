@@ -176,6 +176,11 @@ export default function PilerView() {
         autosizeOnMount
         columns={columnsDef}
         rows={pilerData.ticketData}
+        pageSize={5}
+        rowsPerPageOptions={[5, 10, 20]}
+        checkboxSelection={false}
+        disableRowSelectionOnClick
+        autoHeight
       />
     </Box>
   ) : (
