@@ -137,6 +137,60 @@ function convertDateTimeStringToHour(dateTimeString) {
   return convertedToHoursAndMinutes;
 }
 
+async function getMonthlyData(siteId) {
+  const sqlGetPilers = `
+    SELECT 
+    "pilers"."name" AS "piler_name",
+     "pilers"."id" AS "pilers_id",
+     "sites"."name" AS "site_name"
+      FROM "sites"
+JOIN "pilers" ON "sites"."id" = "pilers"."site_id"
+WHERE "sites"."id" = $1;`;
+  const pilers = await pool.query(sqlGetPilers, [siteId]);
+  const sqlMonthlyAvgText = `SELECT 
+    AVG("beet_data"."temperature") AS "avgTempOfEachDay", 
+    DATE_TRUNC('day', "beet_data"."temperature_time") AS "day"
+	      FROM "pilers"
+        JOIN "beet_data" ON "pilers"."id" = "beet_data"."piler_id"
+        WHERE "pilers"."id" = $1
+        AND "beet_data"."temperature_time" >= NOW() - INTERVAL '1 month'
+        GROUP BY "day", "pilers"."id"
+        ORDER BY "day";
+     `;
+  let dataToSend = {
+    site_id: siteId,
+    site_name: pilers.rows[0].site_name,
+    pilers: [],
+  }
+  for (let piler of pilers.rows) {
+    const monthlyAvgResponse = await pool.query(sqlMonthlyAvgText, [
+      piler.piler_id,
+    ]);
+
+    // Do some object destructuring to only send back the data we need in each object.
+    // We had to pull site info during the SQL query, but we only send it back once.
+    const { piler_name, piler_id } = piler;
+
+    // We're not getting the datetime in the format we want. So, we need to convert it.
+   
+    const convertedMonthlyAverages = monthlyAvgResponse.rows.map((month) => {
+      return {
+        avgTempOfEachDay: Number(month.avgTempOfEachDay),
+        day: convertDateObjectToDateString(month.day),
+      };
+    });
+    const newPilerObj = {
+      piler_name,
+      piler_id,
+      dayActuals: [],
+      monthAvgDaily: convertedMonthlyAverages,
+    };
+    // Now that we have a piler object, shove it into an array to send back.
+    dataToSend.pilers.push(newPilerObj);
+  }
+  return dataToSend
+}
+
 module.exports = {
   getRandomInt,
   developmentPostForBeetData,
