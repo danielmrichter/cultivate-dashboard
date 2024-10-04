@@ -22,6 +22,7 @@ export default function PilerCard(props) {
         y="temperature"
         xLabel="Time"
         yLabel="Temperature"
+        temp="temperature"
       />
     )
   } else if (chartFormat === "month") {
@@ -32,6 +33,7 @@ export default function PilerCard(props) {
       y="avgTempOfEachDay"
       xLabel="Day"
       yLabel="Average Daily Temp"
+      temp="avgTempOfEachDay"
       />
     )
   }

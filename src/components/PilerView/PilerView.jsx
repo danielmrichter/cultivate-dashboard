@@ -131,9 +131,10 @@ export default function PilerView() {
           <ScatterPlot
             data={pilerData.heatMapData}
             x="x"
-            y="temperature"
+            y="y"
             xLabel="Latitude"
             yLabel="Temperature"
+            temp="temperature"
           />
         </Paper>
         <Paper
@@ -176,6 +177,11 @@ export default function PilerView() {
         autosizeOnMount
         columns={columnsDef}
         rows={pilerData.ticketData}
+        pageSize={5}
+        rowsPerPageOptions={[5, 10, 20]}
+        checkboxSelection={false}
+        disableRowSelectionOnClick
+        autoHeight
       />
     </Box>
   ) : (

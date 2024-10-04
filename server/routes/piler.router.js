@@ -66,6 +66,12 @@ GROUP BY "day";`;
         hour: testingFunctions.convertDateTimeStringToHour(entry.hour),
       };
     });
+    const formattedHeatMapData = heatMatData.rows.map((entry) => {
+      return {
+        ...entry,
+        temperature: Number(entry.temperature),
+      };
+    });
     const formattedBarChartMonthData = barChartMonthData.rows.map((entry) => {
       return {
         temperature: Number(entry.temperature),
@@ -82,7 +88,7 @@ WHERE "pilers"."id" = $1;`;
     const siteInfo = await pool.query(siteInfoQuery, [pilerId]);
     const dataToSend = {
       barChartDayData: formattedBarChartDayData,
-      heatMapData: heatMatData.rows,
+      heatMapData: formattedHeatMapData,
       ticketData: ticketData.rows,
       barChartMonthData: formattedBarChartMonthData,
       siteInfo: siteInfo.rows[0],
