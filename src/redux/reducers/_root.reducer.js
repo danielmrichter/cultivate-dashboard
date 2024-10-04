@@ -5,6 +5,7 @@ import siteData from './siteData.reducer';
 import siteList from './siteList.reducer';
 import site from './beet.reducer';
 import alerts from './alerts.reducer';
+import piler from './piler.reducer'
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   siteData, 
   siteList,
   site,
-  alerts
+  alerts,
+  piler
 });
 
 export default rootReducer;
