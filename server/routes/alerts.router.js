@@ -47,7 +47,6 @@ router.get("/mini", rejectUnauthenticated, async (req, res) => {
     res.sendStatus(500);
   }
 });
-
 router.get("/site", rejectUnauthenticated, async (req, res) => {
   try {
     const sqlText = `
@@ -111,7 +110,7 @@ router.get("/site", rejectUnauthenticated, async (req, res) => {
 });
 
 router.post("/", rejectUnauthenticated, (req, res) => {
-  console.log('req.body is', req.body.id)
+  console.log("req.body is", req.body.id);
   const sqlText = `
     INSERT INTO "users_alerts"
     ("user_id", "alert_id")
@@ -167,7 +166,15 @@ router.get("/", (req, res) => {
   pool
     .query(queryText, queryValues)
     .then((result) => {
-      res.send(result.rows);
+      const formattedResponseData = result.rows.map((entry) => {
+        return {
+          ...entry,
+          temperature_time: convertDateTimeStringToDateTime(
+            entry.temperature_time
+          ),
+        };
+      });
+      res.send(formattedResponseData);
     })
     .catch((error) => {
       console.log("error getting list of alerts", error);
