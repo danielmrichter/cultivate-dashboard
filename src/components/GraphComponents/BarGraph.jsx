@@ -38,7 +38,7 @@ export default function BarGraph({ data, x, y, xLabel, yLabel }) {
 
   const enrichedData = data.map((entry) => ({
     ...entry,
-    fill: fillColor(entry.temperature), // Add the fill color based on temperature
+    fill: fillColor(entry[y]), // Add the fill color based on temperature
   }));
 
   //Formatter function for the graph tick marks on the Axes
@@ -75,6 +75,7 @@ export default function BarGraph({ data, x, y, xLabel, yLabel }) {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey={x}
+          type="category"
           label={{ value: xLabel, position: "bottom" }}
           interval={"preserveStartEnd"}
         />
