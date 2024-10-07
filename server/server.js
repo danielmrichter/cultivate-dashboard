@@ -14,6 +14,8 @@ const siteList = require("./routes/siteList.router");
 const beetDataRouter = require("./routes/beetData.router");
 const alertsRouter = require("./routes/alerts.router");
 const pilerRouter = require("./routes/piler.router");
+const growersRouter = require("./routes/growers.router")
+const addRouter = require("./routes/addTicket.router")
 
 // Express Middleware
 app.use(express.json());
@@ -34,6 +36,8 @@ app.use("/api/siteList", siteList);
 app.use("/api/beet_data", beetDataRouter);
 app.use("/api/alerts", alertsRouter);
 app.use("/api/piler", pilerRouter);
+app.use("/api/growers", growersRouter)
+app.use('/api/add_ticket', addRouter)
 
 // Listen Server & Port
 app.listen(PORT, () => {

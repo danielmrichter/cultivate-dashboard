@@ -16,7 +16,7 @@ export default function PilerCard(props) {
   };
 
   const handlePilerDetails = () => {
-    history.push(`/pilerDetails/${pilerData.piler_id}`)
+    history.push(`/piler-details/${pilerData.piler_id}`)
   }
 
   const scatterChartDisplay = () => {

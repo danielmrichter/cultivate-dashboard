@@ -14,7 +14,8 @@ router.get("/mini", rejectUnauthenticated, async (req, res) => {
     SELECT 
       "beet_data".temperature, 
       "beet_data".temperature_time, 
-      "pilers"."name" AS "piler_name"  
+      "pilers"."name" AS "piler_name", 
+      "sites"."id" AS "site_id" 
     FROM "alerts"
     JOIN "beet_data" ON "alerts".beet_data_id = "beet_data".id
     JOIN "pilers" ON "alerts"."piler_id" = "pilers"."id"

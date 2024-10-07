@@ -24,6 +24,7 @@ const history = useHistory();
 
   return (
     <Paper
+    key={siteInfo.id}
       sx={{
         display: "flex",
         flexDirection: "column",
