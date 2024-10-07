@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 
+// these are the Active Alerts displayed on site page
 const miniAlerts = (state = {}, action) => {
   switch (action.type) {
     case "SET_MINI_ALERTS":
@@ -22,6 +23,7 @@ const allSiteAlerts = (state = {}, action) => {
   }
 };
 
+// calls the alerts that haven't been seen by a specific user
 const unseenAlerts = (state = [], action) => {
   switch (action.type) {
     case "SET_UNSEEN_ALERTS":

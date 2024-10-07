@@ -14,7 +14,6 @@ function* fetchSiteData(action) {  //list of pilers for a site
 function* fetchSiteList(action) {  //list of all sites
     try {
         const siteList = yield axios.get(`/api/siteList`);
-        console.log('site list is', siteList)
         yield put({type: 'SET_SITE_LIST', payload: siteList.data});
 
     } catch (error) {

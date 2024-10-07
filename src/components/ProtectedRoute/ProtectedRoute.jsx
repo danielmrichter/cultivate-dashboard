@@ -16,7 +16,6 @@ function ProtectedRoute({ component, children, ...props }) {
   const { pathname } = useLocation();
 
   const id = pathname.split('/')[2]
-  console.log('pathname is:', id)
   // We return a Route component that gets added to our list of routes
   return (
     <Route
