@@ -14,7 +14,7 @@ export default function MiniAlert (props) {
         return newFill;
     }
     return (
-        <Box sx={{backgroundColor: fillColor(), paddingX: 2, paddingY: 1, borderRadius: 5, width:"250px"}}>
+        <Box sx={{backgroundColor: fillColor(), px: 2, py: 1, my:1, borderRadius: 5, width:"250px"}}>
             <div>
             <b>{alert.temperature}&deg;F</b> {alert.piler_name} 
             </div>

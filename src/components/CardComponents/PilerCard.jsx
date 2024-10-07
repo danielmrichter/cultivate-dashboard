@@ -1,7 +1,6 @@
 import { Button, ToggleButtonGroup, Paper, ToggleButton } from "@mui/material";
 import ScatterPlot from "../GraphComponents/ScatterPlot";
 import { useState } from "react";
-import { ResponsiveContainer } from "recharts";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function PilerCard(props) {
@@ -16,7 +15,7 @@ export default function PilerCard(props) {
   };
 
   const handlePilerDetails = () => {
-    history.push(`/pilerDetails/${pilerData.piler_id}`)
+    history.push(`/piler-details/${pilerData.piler_id}`)
   }
 
   const scatterChartDisplay = () => {

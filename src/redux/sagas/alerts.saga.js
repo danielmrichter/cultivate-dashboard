@@ -3,7 +3,7 @@ import { put, takeLatest } from "redux-saga/effects";
 
 function* fetchSiteMiniAlerts(action) {
   try {
-    const response = yield axios.get(`/api/alerts/mini`);
+    const response = yield axios.get(`/api/alerts/mini/${action.payload}`);
     yield put({ type: "SET_MINI_ALERTS", payload: response.data });
   } catch (error) {
     console.log("Fetch Mini Alerts failed:", error);

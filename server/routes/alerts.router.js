@@ -8,7 +8,7 @@ const {
   convertDateTimeStringToDateTime,
 } = require("../modules/testing-functions");
 
-router.get("/mini", rejectUnauthenticated, async (req, res) => {
+router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
   try {
     const sqlText = `
     SELECT 
@@ -24,7 +24,7 @@ router.get("/mini", rejectUnauthenticated, async (req, res) => {
     AND "alerts".is_active = true;
 
   `;
-    const dbRes = await pool.query(sqlText, [req.user.id]);
+    const dbRes = await pool.query(sqlText, [req.params.id]);
     let newAlertList = [];
 
     for (let i = 0; i < dbRes.rows.length; i++) {
