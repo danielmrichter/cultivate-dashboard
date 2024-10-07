@@ -4,16 +4,22 @@ import PilerCard from "../CardComponents/PilerCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
+import useInterval from "../../hooks/useInterval";
 
 export default function SiteManagerView() {
   const dispatch = useDispatch();
 
   const { id } = useParams();
 
-  useEffect(() => {
+  const dataFetches = () => {
     dispatch({ type: "FETCH_SITE", payload: id });
     dispatch({ type: "FETCH_MINI_ALERTS", payload: id });
+  }
+
+  useEffect(() => {
+    dataFetches()
   }, []);
+  useInterval(dataFetches, 300000)
   const siteData = useSelector((store) => store.site);
   const alerts = useSelector((store) => store.alerts.miniAlerts);
 

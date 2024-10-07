@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import SiteCard from "../CardComponents/SiteCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useInterval from "../../hooks/useInterval";
 
 export default function AdminView() {
   const siteList = useSelector((store) => store.siteList);
@@ -42,6 +43,8 @@ export default function AdminView() {
   useEffect(() => {
     fetchSiteData();
   }, [siteList]);
+
+  useInterval(fetchSiteData, 300000)
 
   return (
     <>
