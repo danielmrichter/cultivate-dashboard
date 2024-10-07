@@ -12,10 +12,11 @@ export default function SiteManagerView() {
 
   useEffect(() => {
     dispatch({ type: "FETCH_SITE", payload: id });
-    dispatch({type: 'FETCH_MINI_ALERTS'})
+    dispatch({ type: "FETCH_MINI_ALERTS", payload: id });
   }, []);
   const siteData = useSelector((store) => store.site);
-  
+  const alerts = useSelector((store) => store.alerts.miniAlerts);
+
   return (
     <Box
       sx={{
@@ -31,10 +32,10 @@ export default function SiteManagerView() {
           flexWrap: "wrap",
           gap: 3,
           justifyContent: "center",
-          alignItems: 'start'
+          alignItems: "start",
         }}
       >
-        {siteData && siteData.pilers ? (
+        {siteData.pilers ? (
           siteData.pilers.map((piler) => (
             <PilerCard key={piler.piler_id} data={piler} />
           ))
@@ -42,8 +43,12 @@ export default function SiteManagerView() {
           <div></div>
         )}
       </Box>
-      <Box sx={{ flex: '0 1 250px', marginLeft: 2 }}>
-        {siteData && siteData.pilers && siteData.pilers.length > 0 ? <SiteCard /> : <div>No site Data</div>}
+      <Box sx={{ flex: "0 1 250px", marginLeft: 2 }}>
+        {siteData.pilers ? (
+          <SiteCard siteInfo={siteData} miniAlertData={alerts} />
+        ) : (
+          <div>No site Data</div>
+        )}
       </Box>
     </Box>
   );
