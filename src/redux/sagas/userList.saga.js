@@ -19,9 +19,20 @@ function* newSiteAssignment(action) {
     }
 }
 
+function* unassignUser(action){
+    const {userId} = action.payload
+    try {
+        yield axios.delete(`api/userList/${userId}`)
+        yield put ({ type: "FETCH_ALL_USERS"})
+    } catch (error) {
+        console.log('error removing user from a site', error)
+    }
+}
+
 function* userListSaga() {
   yield takeLatest('FETCH_ALL_USERS', fetchAllUsers);
   yield takeLatest('NEW_SITE_ASSIGNMENT', newSiteAssignment);
+  yield takeLatest('UNASSIGN_USER', unassignUser);
 }
 
 export default userListSaga;

@@ -1,4 +1,11 @@
-import { Button, Paper, Box, Typography, Select, MenuItem } from "@mui/material";
+import {
+  Button,
+  Paper,
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,30 +20,34 @@ export default function UserList() {
 
   useEffect(() => {
     dispatch({ type: "GET_SITE_LIST" });
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch({ type: "FETCH_ALL_USERS" });
   }, [dispatch]);
 
+
   const userList = useSelector((store) => store.userList);
   const siteList = useSelector((store) => store.siteList);
+  const [rows, setRows] = useState();
 
-  const [rows, setRows] = useState(
-    userList.map((row) => ({ ...row, isClicked: false }))
-  );
-  
 
-    // Handle the site selection from the dropdown
-    // Also inputs site.id into the object so that it can
-    //    be used in the handleSiteChange function
-    const handleSiteSelect = (id, siteId, newSite) => {
-        setRows((prevRows) =>
-          prevRows.map((row) =>
-            row.id === id ? { ...row, sitename: newSite, selectedSiteId: siteId } : row
-          )
-        );
-      };
+    // this will initially setRows as well as anytime a users site is updated
+    // for some reason the userlist wasn't always populating correctly and 
+    // the table would show up empty
+    useEffect(() => {
+        (userList && userList.length > 0) && (setRows(userList.map((row) => ({ ...row, isClicked: false })))
+        )}, [userList]);
+    
+  // Handle the site selection from the dropdown
+  // Also inputs site.id into the object so that it can
+  //    be used in the handleSiteChange function
+  const handleSiteSelect = (id, siteId, newSite) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.id === id
+          ? { ...row, sitename: newSite, selectedSiteId: siteId }
+          : row
+      )
+    );
+  };
 
   // toggle betwen 'ReAssign Site' and 'Confirm' which also
   // instantiates the pulldown menu
@@ -49,20 +60,35 @@ export default function UserList() {
   };
 
   const handleSiteChange = (userId, newSiteId) => {
-    dispatch({ type: "NEW_SITE_ASSIGNMENT", payload: {userId, newSiteId}});
+    dispatch({ type: "NEW_SITE_ASSIGNMENT", payload: { userId, newSiteId } });
   };
 
+  const handleRemoveUser = (userId) => {
+    console.log('userId is', userId)
+    dispatch({ type: "UNASSIGN_USER", payload: {userId}});
+    dispatch({ type: "FETCH_ALL_USERS" });
+  }
+
+  // Creating the columns  --------------------------------
   const columns = [
     { field: "username", headerName: "Username", flex: 1 },
     { field: "fullname", headerName: "Name", flex: 1 },
-    { field: "phone", headerName: "Phone", flex: 1 },
+    { field: "phone", headerName: "Phone", flex: .75,
+        renderCell: (params) => {
+            const phoneFormat = (params.row.phone).replace(
+                    /(\d{3})(\d{3})(\d{4})/,
+                    "($1)-$2-$3"
+                  );
+                  return phoneFormat;
+        }
+     },
     { field: "email", headerName: "Email", flex: 1 },
- 
-    // next column displays either site name or dropdown to choose site
+
+    // SITE column displays either site name or dropdown to choose site
     {
       field: "sitename",
       headerName: "Site",
-      flex: 1,
+      flex: .8,
       renderCell: (params) => {
         const isClicked = params.row.isClicked;
 
@@ -70,12 +96,17 @@ export default function UserList() {
           // Render the dropdown when ReAssign clicked
           <Select
             value={params.row.sitename}
-            onChange={(event) => {   //gets object that matches selected site
-                const selectedSite = siteList.find(   
-                  (site) => site.site === event.target.value
-                );
-                handleSiteSelect(params.row.id, selectedSite.id, selectedSite.site);
-              }}
+            onChange={(event) => {
+              //gets object that matches selected site
+              const selectedSite = siteList.find(
+                (site) => site.site === event.target.value
+              );
+              handleSiteSelect(
+                params.row.id,
+                selectedSite.id,
+                selectedSite.site
+              );
+            }}
           >
             {siteList.map((site) => (
               <MenuItem key={site.id} value={site.site}>
@@ -89,38 +120,39 @@ export default function UserList() {
         );
       },
     },
+    //  ASSIGN NEW SITE column, toggles to CONFIRM button
     {
       field: "action",
       headerName: "",
-      flex: 1,
+      flex: .75,
       renderCell: (params) => {
         const isClicked = params.row.isClicked;
 
         return isClicked ? (
-          // Render the second button if the first button was clicked
-          <Button
+          // Render the Confirm button if the first button was clicked
+          <Button  
             variant="contained"
             color="primary"
-            onClick={() => { 
-                handleSiteChange(params.row.id, params.row.selectedSiteId);
-                toggleButton(params.row.id)
+            onClick={() => {
+              handleSiteChange(params.row.id, params.row.selectedSiteId);
+              toggleButton(params.row.id);
             }}
           >
             Confirm
           </Button>
         ) : (
-          // Render the default button initially
-          <Button
+          // Render Assign New Site button initially
+          <Button sx={{width:'110px'}}
             variant="contained"
             color="secondary"
             onClick={() => toggleButton(params.row.id)}
           >
-            Reassign Site
+            Assign New Site
           </Button>
         );
       },
     },
-
+  // UNASSIGN USER column
     {
       field: "delete",
       headerName: "",
@@ -137,9 +169,9 @@ export default function UserList() {
               backgroundColor: theme.palette.primary.main, // No active change
             },
           }}
-          onClick={() => handleMarkResolved(params.row.alert_id)}
+          onClick={() => handleRemoveUser(params.row.id)}
         >
-          Delete User
+          Unassign User
         </Button>
       ),
     },
