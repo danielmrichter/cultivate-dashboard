@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useHistory } from "react-router-dom";
 
 export default function UserList() {
   const dispatch = useDispatch();
@@ -35,7 +35,6 @@ export default function UserList() {
     phone: number
     sitename: string
   }
-  interface userList<user>
 
   // this will initially setRows as well as anytime a users site is updated
   // for some reason the userlist wasn't always populating correctly and
@@ -43,7 +42,7 @@ export default function UserList() {
   useEffect(() => {
     userList &&
       userList.length > 0 &&
-      setRows(userList.map((row) => ({ ...row, isClicked: false })));
+      setRows(userList.map((row:user) => ({ ...row, isClicked: false })));
   }, [userList]);
 
   // Handle the site selection from the dropdown
@@ -112,7 +111,7 @@ export default function UserList() {
             onChange={(event) => {
               //gets object that matches selected site
               const selectedSite = siteList.find(
-                (site) => site.site === event.target.value
+                (site: { site: any; }) => site.site === event.target.value
               );
               handleSiteSelect(
                 params.row.id,
