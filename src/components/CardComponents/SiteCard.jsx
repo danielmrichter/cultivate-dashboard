@@ -45,7 +45,7 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
         >
           <h2>{siteInfo.site_name}</h2>
           <Button variant="contained" size="small"
-        sx={{height: 25}} onClick={() => history.push(`/site/${siteInfo.site_id}`)}>Site Details</Button>
+        sx={{height: 25, minWidth: 40}} onClick={() => history.push(`/site/${siteInfo.site_id}`)}>Site Details</Button>
         </Box>
       )}
       <h3>Average Temp at Site</h3>
