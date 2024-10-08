@@ -65,7 +65,7 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     }
 
     await client.query("COMMIT");
-    res.sendStatus(201);
+    res.send(piler_id);
   } catch (error) {
     await client.query("ROLLBACK");
     console.error("Error adding ticket and beet data:", error);

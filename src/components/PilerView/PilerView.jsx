@@ -198,13 +198,7 @@ export default function PilerView() {
         <Typography variant="h3">
           <b>{pilerData.siteInfo.piler_name} Details:</b>
         </Typography>
-        <Box
-          onClick={handleBackClick}
-          sx={{ display: "flex", flexDirection: "row", mt: 2 }}
-        >
-          <ArrowBack sx={{ fill: "primary.main" }} />
-          <Link>Back To Site Details</Link>
-        </Box>
+        <Button sx={{mb: 4, alignSelf: 'flex-start'}} onClick={handleBackClick}><ArrowBack />Back to Dashboard</Button>
       </Box>
       <Box
         sx={{
