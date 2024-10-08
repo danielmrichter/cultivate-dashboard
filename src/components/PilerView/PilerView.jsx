@@ -119,9 +119,14 @@ export default function PilerView() {
     dispatch({ type: "DELETE_PILER_TICKET", payload: { beet_data_id } });
   };
 
+  const handleAddTicket = (piler, siteId) => {
+    history.push(`/add-ticket/${siteId}/${piler}`)
+  }
+
   const handleProcessRowUpdateError = (error) => {
     console.error("Error updating row:", error);
   };
+
   const chartTitleRender = () => {
     if (chartFormatToDisplay === "day") {
       return (
@@ -177,6 +182,7 @@ export default function PilerView() {
         gap: 5,
         marginX: 0,
         width: "100vw",
+        paddingBottom: 4
       }}
     >
       <Box
@@ -264,9 +270,12 @@ export default function PilerView() {
       </Box>
 
       <Paper sx={{ padding: 4, width: "90%" }}>
-        <Typography variant="h4">
-          <b>Ticket Data</b>
-        </Typography>
+        <Box sx={{display: 'flex', flexDirection: 'row', gap: 5, mb: 4}}>
+          <Typography variant="h4">
+            <b>Ticket Data</b>
+          </Typography>{" "}
+          <Button variant="contained" sx={{borderRadius: 15}} onClick={() => handleAddTicket(pilerData.siteInfo.id, pilerId)}>Add Ticket</Button>
+        </Box>
         <DataGrid
           columns={columnsDef}
           rows={ticketData}

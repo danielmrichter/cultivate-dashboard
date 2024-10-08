@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
   HashRouter as Router,
   Redirect,
@@ -17,6 +19,7 @@ import TemperatureWarning from "../AlertComponents/WarningSnackbar.jsx";
 import AlertHistory from "../AlertHistory/AlertHistory.jsx";
 import PilerView from "../PilerView/PilerView.jsx";
 import AlertCaller from "../AlertComponents/AlertCaller.jsx";
+import AddTicket from "../AddTicket/AddTicket.jsx";
 import AdminView from "../AdminView/AdminView.jsx";
 
 function App() {
@@ -53,6 +56,9 @@ function App() {
           <Route exact path="/piler-details/:pilerId">
             <PilerView />
           </Route>
+<Route exact path='/add-ticket/:siteId/:pilerId'>
+          <AddTicket />
+        </Route>
           <ProtectedRoute exact path="/admin">
             <AdminView />
           </ProtectedRoute>

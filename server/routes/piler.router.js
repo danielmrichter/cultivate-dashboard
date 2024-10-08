@@ -175,7 +175,6 @@ router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
   }
 });
 
-
 router.delete('/ticket/:beet_data_id', async (req, res) => {
   const beetDataId = req.params.beet_data_id;
 
