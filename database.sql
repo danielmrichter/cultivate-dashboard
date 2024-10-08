@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS "tickets" (
 	"id" serial PRIMARY KEY NOT NULL UNIQUE,
 	"ticket_number" int NOT NULL,
 	"grower_id" int NOT NULL,
-	"truck" varchar NOT NULL
+	"truck" varchar NOT NULL,
+	"updated_at" timestamptz DEFAULT NOW(),
+	"inserted_at" timestamptz DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "growers" (
@@ -55,7 +57,8 @@ CREATE TABLE IF NOT EXISTS "alerts" (
 	"is_active" boolean NOT NULL DEFAULT true,
 	"beet_data_id" int NOT NULL,
 	"piler_id" int NOT NULL,
-	"updated_at" timestamptz DEFAULT NOW()
+	"updated_at" timestamptz DEFAULT NOW(),
+	"inserted_at" timestamptz DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "users_sites" (
@@ -68,7 +71,6 @@ CREATE TABLE IF NOT EXISTS "users_alerts" (
  "id" SERIAL PRIMARY KEY,
  "user_id" INT NOT NULL,
  "alert_id" INT NOT NULL);
-
 
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$
@@ -88,23 +90,19 @@ BEFORE UPDATE ON "alerts"
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
-ALTER TABLE "tickets" ADD CONSTRAINT "tickets_fk2" FOREIGN KEY ("grower_id") REFERENCES "growers"("id") ON DELETE CASCADE;
+ALTER TABLE "tickets" ADD CONSTRAINT "tickets_fk2" FOREIGN KEY ("grower_id") REFERENCES "growers"("id");
 
-ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id") ON DELETE CASCADE;
+ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id");
 
-ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk6" FOREIGN KEY ("ticket_id") REFERENCES "tickets"("id") ON DELETE CASCADE;
+ALTER TABLE "beet_data" ADD CONSTRAINT "beet_data_fk6" FOREIGN KEY ("ticket_id") REFERENCES "tickets"("id");
 
-ALTER TABLE "pilers" ADD CONSTRAINT "pilers_fk1" FOREIGN KEY ("site_id") REFERENCES "sites"("id") ON DELETE CASCADE;
-ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk2" FOREIGN KEY ("beet_data_id") REFERENCES "beet_data"("id") ON DELETE CASCADE;
-
-ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id") ON DELETE CASCADE;
-ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk1" FOREIGN KEY ("users_id") REFERENCES "user"("id") ON DELETE CASCADE;
-
-ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk2" FOREIGN KEY ("sites_id") REFERENCES "sites"("id") ON DELETE CASCADE;
-
+ALTER TABLE "pilers" ADD CONSTRAINT "pilers_fk1" FOREIGN KEY ("site_id") REFERENCES "sites"("id");
+ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk2" FOREIGN KEY ("beet_data_id") REFERENCES "beet_data"("id");
+ALTER TABLE "alerts" ADD CONSTRAINT "alerts_fk3" FOREIGN KEY ("piler_id") REFERENCES "pilers"("id");
+ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk1" FOREIGN KEY ("users_id") REFERENCES "user"("id");
+ALTER TABLE "users_sites" ADD CONSTRAINT "users_sites_fk2" FOREIGN KEY ("sites_id") REFERENCES "sites"("id");
 ALTER TABLE "users_alerts" ADD CONSTRAINT "users_alerts_fk1" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE;
 ALTER TABLE "users_alerts" ADD CONSTRAINT "users_alerts_fk2" FOREIGN KEY ("alert_id") REFERENCES "alerts"("id") ON DELETE CASCADE;
-
 
 -- Dummy Data for testing purposes
 INSERT INTO "growers" ("name", "field", "email", "phone") VALUES
