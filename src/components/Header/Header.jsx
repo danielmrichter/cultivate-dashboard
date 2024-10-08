@@ -19,10 +19,10 @@ function Header() {
       {!user.id && <BaseNav />}
 
       {/* If Site Manger is logged in */}
-      {user.id && user.access_level == 1 && <SiteManagerNav />}
+      {user.id && user.access_level === 1 && <SiteManagerNav />}
 
       {/* If General Manger is logged in */}
-      {user.id && user.access_level == 2 && (
+      {user.id && user.access_level === 2 && (
         <div>
           <GenManagerNav />
         </div>

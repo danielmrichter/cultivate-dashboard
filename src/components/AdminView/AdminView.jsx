@@ -39,12 +39,12 @@ export default function AdminView() {
   // This should probably done in suspense, but I don't know enough
   // about it to do it in this project.
 
-    // More info: https://stackoverflow.com/questions/53332321/react-hook-warnings-for-async-function-in-useeffect-useeffect-function-must-ret
+  // More info: https://stackoverflow.com/questions/53332321/react-hook-warnings-for-async-function-in-useeffect-useeffect-function-must-ret
   useEffect(() => {
     fetchSiteData();
   }, [siteList]);
-
-  useInterval(fetchSiteData, 300000)
+  
+  useInterval(fetchSiteData, 300000);
 
   return (
     <>
