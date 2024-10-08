@@ -40,7 +40,7 @@ try {
 function* addTicket(action) {
 try {
 const response = yield axios.post('/api/add_ticket', action.payload)
-// need to refetch the data after we post it.
+yield put({type: 'FETCH_PILER_DATA', payload: response.data.piler_id})
 } catch (error) {
   console.log('Error Adding Ticket', error)
 }

@@ -41,6 +41,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.2.1",
     "nodemon": "^3.1.0",
     "typescript": "^5.6.2",

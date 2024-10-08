@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 export default function AlertHistory() {
     const dispatch = useDispatch();
@@ -17,7 +17,7 @@ export default function AlertHistory() {
 
     const redAlerts = useSelector(store => store.alerts.allSiteAlerts.redAlerts);
     const warningAlerts = useSelector(store => store.alerts.allSiteAlerts.warningAlerts);
-    const siteId = useSelector(store => store.site.site_id)
+    const { id } = useParams();
 
     const handleMarkResolved = (id) => {
         dispatch({ type: 'MARK_RESOLVED', payload: id });
@@ -86,7 +86,8 @@ export default function AlertHistory() {
         },
     ];
 const handleBackClick = () => {
-    history.push(`/site/${siteId}`)
+    console.log('Site Id is:', id)
+    history.push(`/site/${id}`)
 }
 
     return (
