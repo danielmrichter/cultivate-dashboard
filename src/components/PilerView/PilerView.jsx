@@ -76,9 +76,9 @@ export default function PilerView() {
       renderCell: (params) => (
         <Button
           sx={{
-            backgroundColor: theme.palette.error.main,
+            backgroundColor: "error.main",
             color: "white",
-            "&:hover": { backgroundColor: theme.palette.primary.main },
+            "&:hover": { backgroundColor: "primary.main" },
           }}
           onClick={() => {
             handleDeleteTicket(params.row.beet_data_id);
@@ -201,7 +201,7 @@ export default function PilerView() {
           sx={{ display: "flex", flexDirection: "row", mt: 2 }}
           onClick={() => history.push(`/site/${pilerData.siteInfo.id}`)}
         >
-          <ArrowBack sx={{ fill: theme.palette.primary.main }} />
+          <ArrowBack sx={{ fill: "primary.main" }} />
           <Link>
             Back To Site Details
           </Link>

@@ -24,7 +24,7 @@ import LogOutButton from "../AccountComponents/LogOutButton/LogOutButton";
 
 export default function GenManagerNav() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [nestedOpen, setNestedOpen] = useState(true);
+  const [nestedOpen, setNestedOpen] = useState(false);
   const user = useSelector((store) => store.user);
   const siteList = useSelector((store) => store.siteList);
   const history = useHistory();
