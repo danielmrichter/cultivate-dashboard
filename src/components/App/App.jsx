@@ -31,7 +31,7 @@ function App() {
 
   return (
     <Router>
-      <Box sx={{ backgroundColor: "#E5E5E5" }}>
+      <Box sx={{ backgroundColor: "#E5E5E5", minHeight: '100vh', pb: 10 }}>
         <Header />
         <AlertCaller />
         <Switch>
