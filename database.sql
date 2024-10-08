@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS "beet_data" (
 	"beetbox_id" varchar(255) NOT NULL,
 	"coordinates" POINT NOT NULL,
 	"ticket_id" int NOT NULL,
-	"updated_at" timestamptz NOT NULL
+	"updated_at" timestamptz DEFAULT NOW(),
+	"inserted_at" timestamptz DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "sites" (

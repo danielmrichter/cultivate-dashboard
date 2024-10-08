@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import LoginPage from "../AccountComponents/LoginPage/LoginPage.jsx";
+import LoginPage from "../AccountComponents/LoginPage/LoginPage.js";
 import RegisterPage from "../AccountComponents/RegisterPage/RegisterPage.jsx";
 import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
 import Header from "../Header/Header.jsx";
