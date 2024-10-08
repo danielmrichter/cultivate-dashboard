@@ -157,7 +157,11 @@ export default function UserList() {
       field: "delete",
       headerName: "",
       flex: 0.75,
-      renderCell: (params) => (
+      renderCell: (params) => {
+        if(!params.row.sitename){
+            return null;
+        }
+         return (
         <Button
           sx={{
             backgroundColor: theme.palette.primary.main,
@@ -173,7 +177,7 @@ export default function UserList() {
         >
           Unassign User
         </Button>
-      ),
+      )},
     },
   ];
   const handleBackClick = () => {
