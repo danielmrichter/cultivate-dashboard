@@ -24,13 +24,37 @@ export default function AlertHistory() {
     };
 
     const columns = [
-        { field: 'ticket_number', headerName: 'Ticket #', flex: 0.5 },
-        { field: 'temperature', headerName: 'Temp', flex: 0.5 },
-        { field: 'temperature_time', headerName: 'Temperature Time', flex: 1 },
-        { field: 'piler_name', headerName: 'Piler', flex: 1 },
-        { field: 'truck', headerName: 'Truck', flex: 1 },
-        { field: 'grower_name', headerName: 'Grower', flex: 1 },
-        { field: 'coordinates', headerName: 'Coordinates', flex: 2 },
+        { field: 'ticket_number', headerName: 'Ticket #', flex: .75 },
+        { field: 'temperature', headerName: 'Temp', flex: .75},
+        { field: 'temperature_time', headerName: 'Time', flex: 1 },
+        { field: 'piler_name', headerName: 'Piler', flex: .75 },
+        { field: 'truck', headerName: 'Truck', flex: .75 },
+        {
+            field: 'coordinates',
+            headerName: 'Coordinates',
+            flex: 1,
+            renderCell: (params) => {
+                const { coordinates } = params.row;
+                if (coordinates && coordinates.x !== undefined && coordinates.y !== undefined) {
+                    return (
+                        <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100%',
+                            textAlign: 'center',
+                        }}
+                    >
+                        <Typography fontSize={12}>
+                            {Number.parseFloat(coordinates.x).toFixed(2)}, {Number.parseFloat(coordinates.y).toFixed(2)}
+                        </Typography>
+                    </Box>);
+                }
+                return 'N/A';
+            },
+        },
         { field: 'updated_at', headerName: 'Updated At', flex: 1 },
         {
             field: 'status',
@@ -41,7 +65,7 @@ export default function AlertHistory() {
         {
             field: 'markResolved',
             headerName: '',
-            flex: 1.5,
+            flex: 1.25,
             renderCell: (params) => (
                 <Button
                     sx={{
@@ -68,7 +92,7 @@ const handleBackClick = () => {
     return (
         <Box sx={{ padding: '24px' }}>
             <Typography variant="h3"><b>Alert History:</b></Typography>
-            <Button sx={{mb: 4}} onClick={handleBackClick}><ArrowBack />Return to Dashboard</Button>
+            <Button sx={{mb: 4}} onClick={handleBackClick}><ArrowBack />Back to Dashboard</Button>
             <Paper sx={{ padding: '24px' }}>
                 <h3>Red Alerts:</h3>
                 <div style={{ height: '100%', width: '100%' }}>
@@ -94,6 +118,7 @@ const handleBackClick = () => {
                             '& .MuiDataGrid-row:hover': {
                                 backgroundColor: theme.palette.error.light, // Retain color, no hover effect
                             },
+                            fontSize: '10pt',
                         }}
                         getRowClassName={(params) =>
                             'red-alert-row' // Always apply this class regardless of is_active status
@@ -134,5 +159,3 @@ const handleBackClick = () => {
         </Box>
     );
 }
-
-

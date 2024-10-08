@@ -90,6 +90,10 @@ export default function PilerView() {
     },
   ];
 
+  const handleBackClick = () => {
+    history.push(`/site/${pilerData.siteInfo.id}`)
+  }
+
   const handleRowEdit = (updatedRow, originalRow) => {
     const mergedRow = { ...originalRow, ...updatedRow };
     setPendingUpdate(mergedRow);
@@ -199,8 +203,8 @@ export default function PilerView() {
         </Typography>
         <Box
           sx={{ display: "flex", flexDirection: "row", mt: 2 }}
-          onClick={() => history.push(`/site/${pilerData.siteInfo.id}`)}
         >
+          <Button sx={{mb: 4}} onClick={handleBackClick}><ArrowBack />Return to Dashboard</Button>
           <ArrowBack sx={{ fill: "primary.main" }} />
           <Link>
             Back To Site Details
