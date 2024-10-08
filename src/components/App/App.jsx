@@ -31,7 +31,7 @@ function App() {
 
   return (
     <Router>
-      <Box sx={{ backgroundColor: "#E5E5E5" }}>
+      <Box sx={{ backgroundColor: "#E5E5E5", minHeight: '100vh', pb: 10 }}>
         <Header />
         <AlertCaller />
         <Switch>
@@ -56,22 +56,6 @@ function App() {
           </Route>
           <Route exact path="/add-ticket/:siteId/:pilerId">
             <AddTicket />
-          </Route>
-          <Route exact path="/login">
-            {user.id ? <Redirect to="/user" /> : <LoginPage />}
-          </Route>
-          <Route exact path="/registration">
-            {user.id ? <Redirect to="/user" /> : <RegisterPage />}
-          </Route>
-          <RedirectComponent exact path="/user" />
-          <ProtectedRoute exact path="/site/:id">
-            <SiteManagerView />
-          </ProtectedRoute>
-          <ProtectedRoute exact path="/alert-history/:id">
-            <AlertHistory />
-          </ProtectedRoute>
-          <Route exact path="/piler-details/:pilerId">
-            <PilerView />
           </Route>
           <ProtectedRoute exact path="/user-list">
             <UserList />
