@@ -7,7 +7,7 @@ const {
 } = require("../modules/authentication-middleware");
 
 /**
- GET Route to receive piler data for a specific .
+ GET Route to receive a list of pilers for a specific site .
  */
 router.get("/:id", rejectUnauthenticated, (req, res) => {
   const queryText = `

@@ -6,6 +6,7 @@ import siteDataSaga from './siteData.saga';
 import siteSaga from './beet.saga';
 import alertsSaga from './alerts.saga';
 import pilerSaga from './piler.saga';
+import userListSaga from './userList.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -22,6 +23,7 @@ export default function* rootSaga() {
     siteDataSaga(),
     siteSaga(),
     alertsSaga(),
-    pilerSaga()
+    pilerSaga(),
+    userListSaga(),
   ]);
 }
