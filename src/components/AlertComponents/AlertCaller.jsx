@@ -6,7 +6,7 @@ import useInterval from "../../hooks/useInterval";
 
 export default function AlertCaller() {
   const dispatch = useDispatch();
-  useInterval(() => dispatch({ type: "GET_UNSEEN_ALERTS" }), 300000);
+  useInterval(() => dispatch({ type: "GET_UNSEEN_ALERTS" }));
   useEffect(() => {
     dispatch({ type: "GET_UNSEEN_ALERTS" });
   }, []);

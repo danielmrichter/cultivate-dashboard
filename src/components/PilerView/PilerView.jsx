@@ -36,10 +36,7 @@ export default function PilerView() {
   useEffect(() => {
     dispatch({ type: "FETCH_PILER_DATA", payload: pilerId });
   }, [pilerId, dispatch]);
-  useInterval(
-    () => dispatch({ type: "FETCH_PILER_DATA", payload: pilerId }),
-    30000
-  );
+  useInterval(() => dispatch({ type: "FETCH_PILER_DATA", payload: pilerId }));
   const ticketData =
     pilerData.ticketData?.map((row, index) => ({
       ...row,
@@ -91,8 +88,8 @@ export default function PilerView() {
   ];
 
   const handleBackClick = () => {
-    history.push(`/site/${pilerData.siteInfo.id}`)
-  }
+    history.push(`/site/${pilerData.siteInfo.id}`);
+  };
 
   const handleRowEdit = (updatedRow, originalRow) => {
     const mergedRow = { ...originalRow, ...updatedRow };
@@ -124,8 +121,8 @@ export default function PilerView() {
   };
 
   const handleAddTicket = (piler, siteId) => {
-    history.push(`/add-ticket/${siteId}/${piler}`)
-  }
+    history.push(`/add-ticket/${siteId}/${piler}`);
+  };
 
   const handleProcessRowUpdateError = (error) => {
     console.error("Error updating row:", error);
@@ -186,7 +183,7 @@ export default function PilerView() {
         gap: 5,
         marginX: 0,
         width: "100vw",
-        paddingBottom: 4
+        paddingBottom: 4,
       }}
     >
       <Box
@@ -202,13 +199,11 @@ export default function PilerView() {
           <b>{pilerData.siteInfo.piler_name} Details:</b>
         </Typography>
         <Box
+          onClick={handleBackClick}
           sx={{ display: "flex", flexDirection: "row", mt: 2 }}
         >
-          <Button sx={{mb: 4}} onClick={handleBackClick}><ArrowBack />Return to Dashboard</Button>
           <ArrowBack sx={{ fill: "primary.main" }} />
-          <Link>
-            Back To Site Details
-          </Link>
+          <Link>Back To Site Details</Link>
         </Box>
       </Box>
       <Box
@@ -274,11 +269,17 @@ export default function PilerView() {
       </Box>
 
       <Paper sx={{ padding: 4, width: "90%" }}>
-        <Box sx={{display: 'flex', flexDirection: 'row', gap: 5, mb: 4}}>
+        <Box sx={{ display: "flex", flexDirection: "row", gap: 5, mb: 4 }}>
           <Typography variant="h4">
             <b>Ticket Data</b>
           </Typography>{" "}
-          <Button variant="contained" sx={{borderRadius: 15}} onClick={() => handleAddTicket(pilerData.siteInfo.id, pilerId)}>Add Ticket</Button>
+          <Button
+            variant="contained"
+            sx={{ borderRadius: 15 }}
+            onClick={() => handleAddTicket(pilerData.siteInfo.id, pilerId)}
+          >
+            Add Ticket
+          </Button>
         </Box>
         <DataGrid
           columns={columnsDef}
