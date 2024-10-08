@@ -199,10 +199,10 @@ export default function PilerView() {
         </Typography>
         <Box
           sx={{ display: "flex", flexDirection: "row", mt: 2 }}
-          onClick={() => history.push(`/site/${pilerData.id}`)}
+          onClick={() => history.push(`/site/${pilerData.siteInfo.id}`)}
         >
           <ArrowBack sx={{ fill: theme.palette.primary.main }} />
-          <Link onClick={() => history.push(`/site/${pilerData.siteInfo.id}`)}>
+          <Link>
             Back To Site Details
           </Link>
         </Box>
@@ -233,8 +233,8 @@ export default function PilerView() {
             data={pilerData.heatMapData}
             x="x"
             y="y"
-            xLabel="Latitude"
-            yLabel="Temperature"
+            xLabel="Longitude"
+            yLabel="Latitude"
             temp="temperature"
           />
         </Paper>
