@@ -6,7 +6,7 @@ const {
 } = require("../modules/authentication-middleware");
 const {
   convertDateTimeStringToDateTime,
-} = require("../modules/testing-functions");
+} = require("../modules/helper-functions");
 
 router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
   try {
@@ -62,7 +62,7 @@ router.get("/site", rejectUnauthenticated, async (req, res) => {
       "beet_data".temperature, 
       "beet_data".coordinates, 
       "beet_data".temperature_time, 
-      "growers"."name" AS "grower_name"  
+      "growers"."field" AS "farm"  
     FROM "alerts"
     JOIN "pilers" ON "alerts"."piler_id" = "pilers"."id"
     JOIN "beet_data" ON "alerts".beet_data_id = "beet_data".id
@@ -80,16 +80,19 @@ router.get("/site", rejectUnauthenticated, async (req, res) => {
     let redAlerts = [];
     // Loops through the alerts pulled for that site
     for (let i = 0; i < dbRes.rows.length; i++) {
-      const { temperature, temperature_time } = dbRes.rows[i];
+      const { temperature, temperature_time, updated_at } = dbRes.rows[i];
 
       // Converts the alert time
       const convertedAlertTime =
         convertDateTimeStringToDateTime(temperature_time);
 
+        const convertedUpdatedTime = 
+        convertDateTimeStringToDateTime(updated_at)
       // Creates a new alert object with the converted time
       const newAlert = {
         ...dbRes.rows[i],
         temperature_time: convertedAlertTime,
+        updated_at: convertedUpdatedTime
       };
 
       // Separates the alerts based on temperature
@@ -172,7 +175,7 @@ router.get("/", (req, res) => {
           ...entry,
           temperature_time: convertDateTimeStringToDateTime(
             entry.temperature_time
-          ),
+          )
         };
       });
       res.send(formattedResponseData);

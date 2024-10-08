@@ -1,7 +1,7 @@
 const express = require("express");
 const pool = require("../modules/pool");
 const router = express.Router();
-const testingFunctions = require("../modules/testing-functions");
+const testingFunctions = require("../modules/helper-functions");
 const {
   rejectUnauthenticated,
 } = require("../modules/authentication-middleware");
