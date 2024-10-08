@@ -136,7 +136,8 @@ function convertDateTimeStringToHour(dateTimeString) {
   });
   return convertedToHoursAndMinutes;
 }
-
+// This is a helper function to get the monthly data if there is no tickets for a day,
+// Like if it's 12:01 and there's nothing that's come in for the day yet.
 async function getMonthlyData(siteId) {
   const sqlGetPilers = `
     SELECT 
@@ -188,7 +189,6 @@ WHERE "sites"."id" = $1;`;
     // Now that we have a piler object, shove it into an array to send back.
     dataToSend.pilers.push(newPilerObj);
   }
-  console.log('dataToSend is: ', dataToSend)
   return dataToSend
 }
 

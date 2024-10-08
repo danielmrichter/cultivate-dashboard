@@ -1,17 +1,17 @@
-import { Paper, Button } from "@mui/material";
-import { useSelector } from "react-redux";
+import { Paper, Button, Box, Link } from "@mui/material";
 import MiniAlert from "../AlertComponents/MiniAlert";
 import Dial from "./Dial";
-import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom";
 
-export default function SiteCard (props) {
-  const siteInfo = useSelector(store => store.site);
-  const miniAlertData = useSelector(store => store.alerts.miniAlerts);
-const history = useHistory();
+export default function SiteCard({ siteInfo, miniAlertData }) {
+  const history = useHistory();
+  const location = useLocation();
 
   const avgTempOfSite = () => {
     const totalTemp = siteInfo.pilers.reduce((sum, piler) => {
-      const lastAvgTemp = piler.monthAvgDaily.at(-1).avgTempOfEachDay;
+      const lastAvgTemp = piler.monthAvgDaily[0]
+        ? piler.monthAvgDaily[piler.monthAvgDaily.length - 1].avgTempOfEachDay
+        : 0;
       return sum + lastAvgTemp;
     }, 0);
 
@@ -19,24 +19,36 @@ const history = useHistory();
   };
 
   const handleButtonClick = () => {
-    history.push(`/alert-history/${siteInfo.site_id}`)
-  }
-
+    history.push(`/alert-history/${siteInfo.site_id}`);
+  };
   return (
     <Paper
-    key={siteInfo.id}
+    key={siteInfo.site_id}
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
         width: "300px",
         padding: "16px",
-        gap: "16px",
-        position: "relative"
+        position: "relative",
       }}
     >
-      <h2>Average Temp at Site</h2>
+      {location.pathname === "/admin" && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: '100%',
+            mb: 0,
+            alignItems: 'center'
+          }}
+        >
+          <h2>{siteInfo.site_name}</h2>
+          <Button variant="contained" size="small"
+        sx={{height: 25}} onClick={() => history.push(`/site/${siteInfo.site_id}`)}>Site Details</Button>
+        </Box>
+      )}
+      <h3>Average Temp at Site</h3>
       <Dial avgTempOfSite={avgTempOfSite} />
       <h3>{avgTempOfSite()}&deg;F</h3>
       <h3>Active Site Alerts</h3>
@@ -45,10 +57,10 @@ const history = useHistory();
       ) : (
         <div>No active alerts</div>
       )}
-      <Button 
-      variant="contained" 
-      sx={{ borderRadius: "30px" }}
-      onClick={()=> handleButtonClick()}
+      <Button
+        variant="contained"
+        sx={{ borderRadius: "30px" }}
+        onClick={() => handleButtonClick()}
       >
         Alert History
       </Button>

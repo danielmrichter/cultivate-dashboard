@@ -21,7 +21,7 @@ import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useTheme } from "@mui/material";
-import { ResponsiveContainer } from "recharts";
+import useInterval from "../../hooks/useInterval";
 
 export default function PilerView() {
   const theme = useTheme();
@@ -36,7 +36,10 @@ export default function PilerView() {
   useEffect(() => {
     dispatch({ type: "FETCH_PILER_DATA", payload: pilerId });
   }, [pilerId, dispatch]);
-
+  useInterval(
+    () => dispatch({ type: "FETCH_PILER_DATA", payload: pilerId }),
+    30000
+  );
   const ticketData =
     pilerData.ticketData?.map((row, index) => ({
       ...row,
@@ -78,10 +81,6 @@ export default function PilerView() {
             "&:hover": { backgroundColor: theme.palette.primary.main },
           }}
           onClick={() => {
-            console.log(
-              "params.row.beet_data_id is: ",
-              params.row.beet_data_id
-            );
             handleDeleteTicket(params.row.beet_data_id);
           }}
         >
@@ -203,7 +202,9 @@ export default function PilerView() {
           onClick={() => history.push(`/site/${pilerData.id}`)}
         >
           <ArrowBack sx={{ fill: theme.palette.primary.main }} />
-          <Link>Back To Site Details</Link>
+          <Link onClick={() => history.push(`/site/${pilerData.siteInfo.id}`)}>
+            Back To Site Details
+          </Link>
         </Box>
       </Box>
       <Box
