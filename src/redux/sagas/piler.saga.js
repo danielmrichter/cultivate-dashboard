@@ -28,11 +28,29 @@ function* deletePilerTicket(action) {
     yield put({ type: 'DELETE_TICKET_FAILURE', error });
   }
 }
+function* fetchGrowers() {
+try {
+  const responseData = yield axios.get('/api/growers')
+  yield put({type: 'SET_GROWERS', payload: responseData.data})
+} catch (error) {
+  console.log('Error fetching growers:', error)
+}
+}
+
+function* addTicket(action) {
+try {
+const response = yield axios.post('/api/add_ticket', action.payload)
+} catch (error) {
+  console.log('Error Adding Ticket', error)
+}
+}
 
 function* pilerSaga() {
   yield takeLatest("FETCH_PILER_DATA", pilerData);
   yield takeLatest("UPDATE_PILER_TICKET", updatePilerTicket);
   yield takeLatest('DELETE_PILER_TICKET', deletePilerTicket);
+  yield takeLatest('FETCH_GROWERS', fetchGrowers)
+  yield takeLatest('ADD_TICKET', addTicket)
 }
 
 export default pilerSaga;

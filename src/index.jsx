@@ -5,7 +5,6 @@ import store from "./redux/store";
 import App from "./components/App/App";
 import {themeOptions} from "./globalstyles.js";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-
 const theme = createTheme(themeOptions);
 
 

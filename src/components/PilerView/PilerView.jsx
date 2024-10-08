@@ -21,7 +21,7 @@ import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useTheme } from "@mui/material";
-import { ResponsiveContainer } from "recharts";
+import useInterval from "../../hooks/useInterval";
 
 export default function PilerView() {
   const theme = useTheme();
@@ -36,7 +36,10 @@ export default function PilerView() {
   useEffect(() => {
     dispatch({ type: "FETCH_PILER_DATA", payload: pilerId });
   }, [pilerId, dispatch]);
-
+  useInterval(
+    () => dispatch({ type: "FETCH_PILER_DATA", payload: pilerId }),
+    30000
+  );
   const ticketData =
     pilerData.ticketData?.map((row, index) => ({
       ...row,
@@ -78,10 +81,6 @@ export default function PilerView() {
             "&:hover": { backgroundColor: theme.palette.primary.main },
           }}
           onClick={() => {
-            console.log(
-              "params.row.beet_data_id is: ",
-              params.row.beet_data_id
-            );
             handleDeleteTicket(params.row.beet_data_id);
           }}
         >
@@ -120,21 +119,30 @@ export default function PilerView() {
     dispatch({ type: "DELETE_PILER_TICKET", payload: { beet_data_id } });
   };
 
+  const handleAddTicket = (piler, siteId) => {
+    history.push(`/add-ticket/${siteId}/${piler}`)
+  }
+
   const handleProcessRowUpdateError = (error) => {
     console.error("Error updating row:", error);
   };
+
   const chartTitleRender = () => {
     if (chartFormatToDisplay === "day") {
       return (
-        <Typography variant="h4" sx={{alignSelf: "start"}}><b>Averages Over The Day</b></Typography>
-      )
+        <Typography variant="h4" sx={{ alignSelf: "start" }}>
+          <b>Averages Over The Day</b>
+        </Typography>
+      );
     } else if (chartFormatToDisplay === "month") {
       return (
-        <Typography variant="h4" sx={{alignSelf: "start"}}><b>Averages Over The Month</b></Typography>
-      )
+        <Typography variant="h4" sx={{ alignSelf: "start" }}>
+          <b>Averages Over The Month</b>
+        </Typography>
+      );
     }
     return <div>Error</div>;
-  }
+  };
 
   const chartFormatRender = () => {
     if (chartFormatToDisplay === "day") {
@@ -174,6 +182,7 @@ export default function PilerView() {
         gap: 5,
         marginX: 0,
         width: "100vw",
+        paddingBottom: 4
       }}
     >
       <Box
@@ -182,51 +191,73 @@ export default function PilerView() {
           flexDirection: "column",
           width: "100%",
           paddingTop: 4,
-          paddingLeft: 4
+          paddingLeft: 4,
         }}
       >
-        <Typography variant="h3"><b>{pilerData.siteInfo.piler_name} Details:</b></Typography>
-        <Box sx={{display: "flex", flexDirection: "row", mt: 2}} onClick={() => history.push(`/site/${pilerData.id}`)}>
-        <ArrowBack sx={{fill: theme.palette.primary.main}} />
-        <Link> 
-          Back To Site Details
-        </Link>
+        <Typography variant="h3">
+          <b>{pilerData.siteInfo.piler_name} Details:</b>
+        </Typography>
+        <Box
+          sx={{ display: "flex", flexDirection: "row", mt: 2 }}
+          onClick={() => history.push(`/site/${pilerData.siteInfo.id}`)}
+        >
+          <ArrowBack sx={{ fill: theme.palette.primary.main }} />
+          <Link>
+            Back To Site Details
+          </Link>
         </Box>
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 5, width: "100%" }}>
-        <Paper sx={{ display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "550px",
-        width: "44%",
-        padding: "16px",
-        gap: "16px" }}>
-          <Typography variant="h4" sx={{alignSelf: "start"}}><b>Heat Map Of Pile</b></Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 5,
+          width: "100%",
+        }}
+      >
+        <Paper
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "550px",
+            width: "44%",
+            padding: "16px",
+            gap: "16px",
+          }}
+        >
+          <Typography variant="h4" sx={{ alignSelf: "start" }}>
+            <b>Heat Map Of Pile</b>
+          </Typography>
           <ScatterPlot
             data={pilerData.heatMapData}
             x="x"
             y="y"
-            xLabel="Latitude"
-            yLabel="Temperature"
+            xLabel="Longitude"
+            yLabel="Latitude"
             temp="temperature"
           />
         </Paper>
 
-        <Paper sx={{ display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "550px",
-        width: "44%",
-        padding: "16px",
-        gap: "16px" }}>
-         {chartTitleRender()}
+        <Paper
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "550px",
+            width: "44%",
+            padding: "16px",
+            gap: "16px",
+          }}
+        >
+          {chartTitleRender()}
           <ToggleButtonGroup
             size="small"
             value={chartFormatToDisplay}
             exclusive
             onChange={(e, n) => setChartFormatToDisplay(n)}
             sx={{ width: "100%" }}
-            >
+          >
             <ToggleButton value="day" sx={{ flexGrow: 1 }}>
               Day
             </ToggleButton>
@@ -234,12 +265,17 @@ export default function PilerView() {
               Month
             </ToggleButton>
           </ToggleButtonGroup>
-            {chartFormatRender()}
+          {chartFormatRender()}
         </Paper>
       </Box>
 
       <Paper sx={{ padding: 4, width: "90%" }}>
-        <Typography variant="h4"><b>Ticket Data</b></Typography>
+        <Box sx={{display: 'flex', flexDirection: 'row', gap: 5, mb: 4}}>
+          <Typography variant="h4">
+            <b>Ticket Data</b>
+          </Typography>{" "}
+          <Button variant="contained" sx={{borderRadius: 15}} onClick={() => handleAddTicket(pilerData.siteInfo.id, pilerId)}>Add Ticket</Button>
+        </Box>
         <DataGrid
           columns={columnsDef}
           rows={ticketData}

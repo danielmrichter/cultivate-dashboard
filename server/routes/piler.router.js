@@ -26,6 +26,18 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
       JOIN "growers" ON "tickets"."grower_id" = "growers"."id"
       WHERE "pilers"."id" = $1;`;
     const ticketData = await pool.query(ticketDataSqlText, [pilerId]);
+    const formattedTicketData = ticketData.rows.map((ticket) => {
+      return {
+        ...ticket,
+        coordinates: `${ticket.coordinates.x}, ${ticket.coordinates.y}`,
+        updated_at: testingFunctions.convertDateTimeStringToDateTime(
+          ticket.updated_at
+        ),
+        temperature_time: testingFunctions.convertDateTimeStringToDateTime(
+          ticket.temperature_time
+        ),
+      };
+    });
 
     // One thing to explain about this query:
     // the column "coordinates" on "beet_data" is a point data type.
@@ -91,7 +103,7 @@ WHERE "pilers"."id" = $1;`;
     const dataToSend = {
       barChartDayData: formattedBarChartDayData,
       heatMapData: formattedHeatMapData,
-      ticketData: ticketData.rows,
+      ticketData: formattedTicketData,
       barChartMonthData: formattedBarChartMonthData,
       siteInfo: siteInfo.rows[0],
     };
@@ -110,7 +122,7 @@ router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
     truck,
     coordinates,
     temperature_time,
-    ticketId
+    ticketId,
   } = req.body;
 
   try {
@@ -163,10 +175,10 @@ router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
     if (pilerResult.rows.length === 0) {
       return res.sendStatus(404);
     }
-    console.log('beetDataId is:', pilerResult.rows)
-    
+    console.log("beetDataId is:", pilerResult.rows);
+
     const pilerId = pilerResult.rows[0].piler_id;
-    console.log('Piler ID is:', pilerId);
+    console.log("Piler ID is:", pilerId);
 
     res.send({ pilerId });
   } catch (error) {
@@ -175,8 +187,7 @@ router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
   }
 });
 
-
-router.delete('/ticket/:beet_data_id', async (req, res) => {
+router.delete("/ticket/:beet_data_id", async (req, res) => {
   const beetDataId = req.params.beet_data_id;
 
   // SQL query to delete beet_data, related alerts, and the associated ticket
@@ -202,10 +213,10 @@ router.delete('/ticket/:beet_data_id', async (req, res) => {
     const pilerId = result.rows.length > 0 ? result.rows[0].piler_id : null;
 
     // Sending success response with the piler_id
-    res.send({piler_id: pilerId});
+    res.send({ piler_id: pilerId });
   } catch (error) {
-    console.error('Error deleting beet data, alerts, and ticket:', error);
-    res.sendStatus(500)
+    console.error("Error deleting beet data, alerts, and ticket:", error);
+    res.sendStatus(500);
   }
 });
 

@@ -189,7 +189,6 @@ WHERE "sites"."id" = $1;`;
     // Now that we have a piler object, shove it into an array to send back.
     dataToSend.pilers.push(newPilerObj);
   }
-  console.log('dataToSend is: ', dataToSend)
   return dataToSend
 }
 

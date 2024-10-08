@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
-import React from 'react';
 
 function* fetchSiteData(action) {  //list of pilers for a site
     try {
@@ -24,6 +23,6 @@ function* fetchSiteList(action) {  //list of all sites
 function * siteDataSaga() {
     yield takeLatest('GET_SITE_DATA', fetchSiteData);  //gets pilers for each site
     yield takeLatest('GET_SITE_LIST', fetchSiteList);  //gets list of sites
-}  
+}
 
 export default siteDataSaga;
