@@ -10,7 +10,7 @@ const {
  GET Route to receive list of all sites with users.
  */
 router.get("/", rejectUnauthenticated, (req, res) => {
-    console.log('in userList router')
+  console.log("in userList router");
   const queryText = `
     SELECT "user".id, 
            "user".username, 
@@ -26,7 +26,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
   pool
     .query(queryText)
     .then((result) => {
-        console.log('result is ',result)
+      console.log("result is ", result);
       res.send(result.rows);
     })
     .catch((err) => {
@@ -34,5 +34,25 @@ router.get("/", rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+
+router.put("/", (req,res) => {
+    const { userId, newSiteId} = req.body;
+    const queryText = `
+      UPDATE "users_sites"
+      SET "sites_id" = $1
+      WHERE "users_id" = $2;`
+    const queryValues = [newSiteId, userId];
+    pool.query(queryText, queryValues)
+    .then((dbRes) => {
+        res.sendStatus(200)
+    })
+    .catch((dbErr)=> {
+        console.log('db Error updating new site for user', dbErr)
+        res.sendStatus(500)
+    })
+})
+
+
 
 module.exports = router;
