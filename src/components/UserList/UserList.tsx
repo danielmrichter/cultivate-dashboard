@@ -23,19 +23,29 @@ export default function UserList() {
     dispatch({ type: "FETCH_ALL_USERS" });
   }, [dispatch]);
 
-
   const userList = useSelector((store) => store.userList);
   const siteList = useSelector((store) => store.siteList);
   const [rows, setRows] = useState();
 
+  interface user {
+    id: number,
+    fullName: string
+    username: string
+    email: string
+    phone: number
+    sitename: string
+  }
+  interface userList<user>
 
-    // this will initially setRows as well as anytime a users site is updated
-    // for some reason the userlist wasn't always populating correctly and 
-    // the table would show up empty
-    useEffect(() => {
-        (userList && userList.length > 0) && (setRows(userList.map((row) => ({ ...row, isClicked: false })))
-        )}, [userList]);
-    
+  // this will initially setRows as well as anytime a users site is updated
+  // for some reason the userlist wasn't always populating correctly and
+  // the table would show up empty
+  useEffect(() => {
+    userList &&
+      userList.length > 0 &&
+      setRows(userList.map((row) => ({ ...row, isClicked: false })));
+  }, [userList]);
+
   // Handle the site selection from the dropdown
   // Also inputs site.id into the object so that it can
   //    be used in the handleSiteChange function
@@ -64,31 +74,34 @@ export default function UserList() {
   };
 
   const handleRemoveUser = (userId) => {
-    console.log('userId is', userId)
-    dispatch({ type: "UNASSIGN_USER", payload: {userId}});
+    console.log("userId is", userId);
+    dispatch({ type: "UNASSIGN_USER", payload: { userId } });
     dispatch({ type: "FETCH_ALL_USERS" });
-  }
+  };
 
   // Creating the columns  --------------------------------
   const columns = [
     { field: "username", headerName: "Username", flex: 1 },
     { field: "fullname", headerName: "Name", flex: 1 },
-    { field: "phone", headerName: "Phone", flex: .75,
-        renderCell: (params) => {
-            const phoneFormat = (params.row.phone).replace(
-                    /(\d{3})(\d{3})(\d{4})/,
-                    "($1)-$2-$3"
-                  );
-                  return phoneFormat;
-        }
-     },
+    {
+      field: "phone",
+      headerName: "Phone",
+      flex: 0.75,
+      renderCell: (params) => {
+        const phoneFormat = params.row.phone.replace(
+          /(\d{3})(\d{3})(\d{4})/,
+          "($1)-$2-$3"
+        );
+        return phoneFormat;
+      },
+    },
     { field: "email", headerName: "Email", flex: 1 },
 
     // SITE column displays either site name or dropdown to choose site
     {
       field: "sitename",
       headerName: "Site",
-      flex: .8,
+      flex: 0.8,
       renderCell: (params) => {
         const isClicked = params.row.isClicked;
 
@@ -124,13 +137,13 @@ export default function UserList() {
     {
       field: "action",
       headerName: "",
-      flex: .75,
+      flex: 0.75,
       renderCell: (params) => {
         const isClicked = params.row.isClicked;
 
         return isClicked ? (
           // Render the Confirm button if the first button was clicked
-          <Button  
+          <Button
             variant="contained"
             color="primary"
             onClick={() => {
@@ -142,7 +155,8 @@ export default function UserList() {
           </Button>
         ) : (
           // Render Assign New Site button initially
-          <Button sx={{width:'110px'}}
+          <Button
+            sx={{ width: "110px" }}
             variant="contained"
             color="secondary"
             onClick={() => toggleButton(params.row.id)}
@@ -152,32 +166,33 @@ export default function UserList() {
         );
       },
     },
-  // UNASSIGN USER column
+    // UNASSIGN USER column
     {
       field: "delete",
       headerName: "",
       flex: 0.75,
       renderCell: (params) => {
-        if(!params.row.sitename){
-            return null;
+        if (!params.row.sitename) {
+          return null;
         }
-         return (
-        <Button
-          sx={{
-            backgroundColor: theme.palette.primary.main,
-            color: "white",
-            "&:hover": {
-              backgroundColor: theme.palette.primary.main, // No hover change
-            },
-            "&:active": {
-              backgroundColor: theme.palette.primary.main, // No active change
-            },
-          }}
-          onClick={() => handleRemoveUser(params.row.id)}
-        >
-          Unassign User
-        </Button>
-      )},
+        return (
+          <Button
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              color: "white",
+              "&:hover": {
+                backgroundColor: theme.palette.primary.main, // No hover change
+              },
+              "&:active": {
+                backgroundColor: theme.palette.primary.main, // No active change
+              },
+            }}
+            onClick={() => handleRemoveUser(params.row.id)}
+          >
+            Unassign User
+          </Button>
+        );
+      },
     },
   ];
   const handleBackClick = () => {

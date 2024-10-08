@@ -21,8 +21,7 @@ router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
     JOIN "beet_data" ON "alerts".beet_data_id = "beet_data".id
     JOIN "pilers" ON "alerts"."piler_id" = "pilers"."id"
     JOIN "sites" ON "pilers"."site_id" = "sites"."id"
-    JOIN "users_sites" ON "sites"."id" = "users_sites"."sites_id"
-    WHERE "users_sites"."users_id" = $1
+    WHERE "sites"."id" = $1
     AND "alerts".is_active = true;
   `;
     const dbRes = await pool.query(sqlText, [req.params.id]);
