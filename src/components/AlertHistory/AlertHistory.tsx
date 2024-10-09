@@ -4,11 +4,11 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function AlertHistory() {
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
     const theme = useTheme();
     
     useEffect(() => {
@@ -87,7 +87,7 @@ export default function AlertHistory() {
     ];
 const handleBackClick = () => {
     console.log('Site Id is:', id)
-    history.push(`/site/${id}`)
+    navigate(`/site/${id}`)
 }
 
     return (

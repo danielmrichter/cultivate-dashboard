@@ -3,7 +3,7 @@ import SiteCard from "../CardComponents/SiteCard";
 import PilerCard from "../CardComponents/PilerCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom/cjs/react-router-dom";
+import { useParams } from "react-router-dom";
 import useInterval from "../../hooks/useInterval";
 
 export default function SiteManagerView() {

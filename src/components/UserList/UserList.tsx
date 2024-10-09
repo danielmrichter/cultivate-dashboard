@@ -11,11 +11,11 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function UserList() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
 
   useEffect(() => {
@@ -195,7 +195,7 @@ export default function UserList() {
     },
   ];
   const handleBackClick = () => {
-    history.push(`/admin`);
+    navigate(`/admin`);
   };
 
   return (

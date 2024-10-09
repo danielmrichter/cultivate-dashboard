@@ -12,16 +12,16 @@ import {
   import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
   import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
   import {
-    useHistory,
+    useNavigate,
     useParams,
-  } from "react-router-dom/cjs/react-router-dom.min";
+  } from "react-router-dom";
   import { ArrowBack } from "@mui/icons-material";
   import { useEffect, useState } from "react";
   import { useDispatch, useSelector } from "react-redux";
   import dayjs from 'dayjs';
   
   export default function AddTicket() {
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const growers = useSelector((store) => store.growers);
     const { siteId, pilerId } = useParams();
@@ -46,7 +46,7 @@ import {
     };
   
     const handleBackClick = () => {
-      history.push(`/piler-details/${pilerId}`);
+      navigate(`/piler-details/${pilerId}`);
     };
   
     const submitTicket = () => {

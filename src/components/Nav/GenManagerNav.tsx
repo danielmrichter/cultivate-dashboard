@@ -11,15 +11,14 @@ import {
   Collapse,
   Box,
 } from "@mui/material";
-import ListSubheader from "@mui/material/ListSubheader";
 import { useState } from "react";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
-  useHistory,
-} from "react-router-dom/cjs/react-router-dom.min";
+  useNavigate,
+} from "react-router-dom";
 import LogOutButton from "../AccountComponents/LogOutButton/LogOutButton";
 
 export default function GenManagerNav() {
@@ -27,7 +26,7 @@ export default function GenManagerNav() {
   const [nestedOpen, setNestedOpen] = useState(false);
   const user = useSelector((store) => store.user);
   const siteList = useSelector((store) => store.siteList);
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -51,7 +50,7 @@ export default function GenManagerNav() {
   };
 
   const handleNavigation = (path) => {
-    history.push(path);
+    navigate(path);
   };
 
   // Contents of the Drawer

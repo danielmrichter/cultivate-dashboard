@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ScatterPlot from "../GraphComponents/ScatterPlot";
 import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
@@ -27,7 +27,7 @@ export default function PilerView() {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { pilerId } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const pilerData = useSelector((store) => store.piler);
   const [chartFormatToDisplay, setChartFormatToDisplay] = useState("day");
   const [openDialog, setOpenDialog] = useState(false);
@@ -88,7 +88,7 @@ export default function PilerView() {
   ];
 
   const handleBackClick = () => {
-    history.push(`/site/${pilerData.siteInfo.id}`);
+    navigate(`/site/${pilerData.siteInfo.id}`);
   };
 
   const handleRowEdit = (updatedRow, originalRow) => {
@@ -121,7 +121,7 @@ export default function PilerView() {
   };
 
   const handleAddTicket = (piler, siteId) => {
-    history.push(`/add-ticket/${siteId}/${piler}`);
+    navigate(`/add-ticket/${siteId}/${piler}`);
   };
 
   const handleProcessRowUpdateError = (error) => {
