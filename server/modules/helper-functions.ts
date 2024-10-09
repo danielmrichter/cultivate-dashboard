@@ -1,4 +1,6 @@
-const pool = require("./pool");
+import { Request } from "express";
+import pool from "./pool";
+import { PoolClient } from "pg";
 
 function getRandomInt(min, max) {
   const minCeiled = Math.ceil(min);
@@ -9,8 +11,8 @@ function getRandomInt(min, max) {
 // This is to create dummy data for a ticket.
 // Since we aren't creating the tickets in the scope of this app,
 // This is a way to test that things work as we go along.
-async function developmentPostForBeetData(req) {
-  let client;
+async function developmentPostForBeetData(req: Request) {
+  let client:PoolClient ;
   try {
     client = await pool.connect();
     await client.query("BEGIN");
@@ -192,7 +194,7 @@ WHERE "sites"."id" = $1;`;
   return dataToSend
 }
 
-module.exports = {
+export {
   getRandomInt,
   developmentPostForBeetData,
   convertDateTimeStringToTimeString,

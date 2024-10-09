@@ -1,22 +1,22 @@
-const express = require("express");
+import express from "express";
 const app = express();
 require("dotenv").config();
 const PORT = process.env.PORT || 5001;
 
 // Middleware Includes
-const sessionMiddleware = require("./modules/session-middleware");
-const passport = require("./strategies/user.strategy");
+import sessionMiddleware from "./modules/session-middleware";
+import passport from "./strategies/user.strategy";
 
 // Route Includes
-const userRouter = require("./routes/user.router");
-const siteData = require("./routes/siteData.router");
-const siteList = require("./routes/siteList.router");
-const beetDataRouter = require("./routes/beetData.router");
-const alertsRouter = require("./routes/alerts.router");
-const pilerRouter = require("./routes/piler.router");
-const userListRouter = require("./routes/userList.router");
-const growersRouter = require("./routes/growers.router")
-const addRouter = require("./routes/addTicket.router")
+import userRouter from "./routes/user.router";
+import siteData from "./routes/siteData.router";
+import siteList from "./routes/siteList.router";
+import beetDataRouter from "./routes/beetData.router";
+import alertsRouter from "./routes/alerts.router";
+import pilerRouter from "./routes/piler.router";
+import userListRouter from "./routes/userList.router";
+import growersRouter from "./routes/growers.router";
+import addRouter from "./routes/addTicket.router";
 
 // Express Middleware
 app.use(express.json());
@@ -38,8 +38,8 @@ app.use("/api/beet_data", beetDataRouter);
 app.use("/api/alerts", alertsRouter);
 app.use("/api/piler", pilerRouter);
 app.use("/api/userList", userListRouter);
-app.use("/api/growers", growersRouter)
-app.use('/api/add_ticket', addRouter)
+app.use("/api/growers", growersRouter);
+app.use("/api/add_ticket", addRouter);
 
 // Listen Server & Port
 app.listen(PORT, () => {

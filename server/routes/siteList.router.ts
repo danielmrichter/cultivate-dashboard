@@ -1,10 +1,7 @@
-const express = require("express");
-const pool = require("../modules/pool");
+import express from "express";
+import pool from "../modules/pool";
 const router = express.Router();
-const testingFunctions = require("../modules/helper-functions");
-const {
-  rejectUnauthenticated,
-} = require("../modules/authentication-middleware");
+import { rejectUnauthenticated } from "../modules/authentication-middleware";
 
 /**
  GET Route to receive piler data for a specific .
@@ -24,4 +21,4 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;
