@@ -1,10 +1,13 @@
-const express = require("express");
-const pool = require("../modules/pool");
+import express from "express";
+import pool from "../modules/pool";
 const router = express.Router();
-const testingFunctions = require("../modules/helper-functions");
-const {
-  rejectUnauthenticated,
-} = require("../modules/authentication-middleware");
+import {
+  convertDateTimeStringToDateTime,
+  convertDateTimeStringToHour,
+  convertDateObjectToDateString,
+} from "../modules/helper-functions";
+import { rejectUnauthenticated } from "../modules/authentication-middleware";
+import { expReqWithUser } from "../constants/types";
 
 router.get("/:id", rejectUnauthenticated, async (req, res) => {
   try {
@@ -30,10 +33,8 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
       return {
         ...ticket,
         coordinates: `${ticket.coordinates.x}, ${ticket.coordinates.y}`,
-        updated_at: testingFunctions.convertDateTimeStringToDateTime(
-          ticket.updated_at
-        ),
-        temperature_time: testingFunctions.convertDateTimeStringToDateTime(
+        updated_at: convertDateTimeStringToDateTime(ticket.updated_at),
+        temperature_time: convertDateTimeStringToDateTime(
           ticket.temperature_time
         ),
       };
@@ -76,7 +77,7 @@ GROUP BY "day";`;
     const formattedBarChartDayData = barChartDayData.rows.map((entry) => {
       return {
         temperature: Number(entry.temperature),
-        hour: testingFunctions.convertDateTimeStringToHour(entry.hour),
+        hour: convertDateTimeStringToHour(entry.hour),
       };
     });
     const formattedHeatMapData = heatMatData.rows.map((entry) => {
@@ -88,7 +89,7 @@ GROUP BY "day";`;
     const formattedBarChartMonthData = barChartMonthData.rows.map((entry) => {
       return {
         temperature: Number(entry.temperature),
-        day: testingFunctions.convertDateObjectToDateString(entry.day),
+        day: convertDateObjectToDateString(entry.day),
       };
     });
     const siteInfoQuery = `
@@ -142,7 +143,7 @@ router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
     ]);
 
     if (ticketResult.rows.length === 0) {
-      return res.sendStatus(404);
+      res.sendStatus(404);
     }
 
     const updatedGrowerId = ticketResult.rows[0].grower_id;
@@ -173,12 +174,9 @@ router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
     const pilerResult = await pool.query(getPilerIdSqlText, [beetDataId]);
 
     if (pilerResult.rows.length === 0) {
-      return res.sendStatus(404);
+      res.sendStatus(404);
     }
-    console.log("beetDataId is:", pilerResult.rows);
-
     const pilerId = pilerResult.rows[0].piler_id;
-    console.log("Piler ID is:", pilerId);
 
     res.send({ pilerId });
   } catch (error) {
@@ -220,4 +218,4 @@ router.delete("/ticket/:beet_data_id", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

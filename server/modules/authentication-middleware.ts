@@ -1,4 +1,6 @@
-const rejectUnauthenticated = (req, res, next) => {
+import { Request, Response } from "express";
+
+const rejectUnauthenticated = (req:Request, res:Response, next: () => void) => {
   // check if logged in
   if (req.isAuthenticated()) {
     // They were authenticated! User may do the next thing
@@ -10,4 +12,4 @@ const rejectUnauthenticated = (req, res, next) => {
   }
 };
 
-module.exports = { rejectUnauthenticated };
+export { rejectUnauthenticated };

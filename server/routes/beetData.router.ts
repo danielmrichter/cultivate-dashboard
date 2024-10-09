@@ -1,10 +1,15 @@
-const express = require("express");
-const pool = require("../modules/pool");
+import express from "express";
+import pool from "../modules/pool";
 const router = express.Router();
-const testingFunctions = require("../modules/helper-functions");
-const {
-  rejectUnauthenticated,
-} = require("../modules/authentication-middleware");
+import {
+  formatCoordinates,
+  developmentPostForBeetData,
+  convertDateTimeStringToTimeString,
+  convertDateObjectToDateString,
+  getMonthlyData
+} from "../modules/helper-functions";
+import { rejectUnauthenticated } from "../modules/authentication-middleware";
+import { PoolClient } from "pg";
 
 /**
  POST Route to recieve beet data.
@@ -14,7 +19,7 @@ router.post("/", async (req, res) => {
   // This is because our testing won't have a ticket system
   // integrated, since it's external to this app.
   if (process.env.NODE_ENV === "production") {
-    let client;
+    let client: PoolClient;
     try {
       // Since there's multiple entries at a time, we're going to use
       // a sql transaction. This allows us to double check that we're not
@@ -45,7 +50,7 @@ router.post("/", async (req, res) => {
             beetbox_id,
             temperature_time,
             ticket_number,
-            testingFunctions.formatCoordinates(coordinates),
+            formatCoordinates(coordinates),
           ];
           return client.query(sqlText, sqlValues);
         })
@@ -72,21 +77,22 @@ router.post("/", async (req, res) => {
       res.sendStatus(201);
     } catch (error) {
       await client.query("ROLLBACK");
-      console.log("Error posting data!".error);
+      console.log("Error posting data!", error);
+      res.sendStatus(500)
     } finally {
       client.release();
     }
   } else {
     // This is only used for testing and development purposes.
     // Bypasses a few systems so we can make sure everything works.
-    let response = await testingFunctions.developmentPostForBeetData(req);
+    let response = await developmentPostForBeetData(req);
     response ? res.sendStatus(201) : res.sendStatus(500);
   }
 });
 /**
  * GET /api/beet_data/:siteid
  */
-router.get("/:siteid", async (req, res) => {
+router.get("/:siteid", rejectUnauthenticated, async (req, res) => {
   let siteId = req.params.siteid;
   try {
     // These are some SQL Queries we'll use later.
@@ -148,14 +154,14 @@ router.get("/:siteid", async (req, res) => {
         const convertedDayActuals = dayActuals.map((day) => {
           return {
             ...day,
-            time: testingFunctions.convertDateTimeStringToTimeString(day.time),
+            time: convertDateTimeStringToTimeString(day.time),
           };
         });
         const convertedMonthlyAverages = monthlyAvgResponse.rows.map(
           (month) => {
             return {
               avgTempOfEachDay: Number(month.avgTempOfEachDay),
-              day: testingFunctions.convertDateObjectToDateString(month.day),
+              day: convertDateObjectToDateString(month.day),
             };
           }
         );
@@ -172,7 +178,7 @@ router.get("/:siteid", async (req, res) => {
       // This is to accomodate the edge case where there are no tickets for the day.
       // This will go get the monthly data that should already exist.
       // It's in a helper function, since it's basically the same code
-      dataToSend = await testingFunctions.getMonthlyData(siteId);
+      dataToSend = await getMonthlyData(siteId);
     }
     res.send(dataToSend);
   } catch (error) {
@@ -181,4 +187,4 @@ router.get("/:siteid", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

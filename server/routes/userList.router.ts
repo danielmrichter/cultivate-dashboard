@@ -1,10 +1,7 @@
-const express = require("express");
-const pool = require("../modules/pool");
+import express from "express";
+import pool from "../modules/pool";
 const router = express.Router();
-const testingFunctions = require("../modules/helper-functions");
-const {
-  rejectUnauthenticated,
-} = require("../modules/authentication-middleware");
+import { rejectUnauthenticated } from "../modules/authentication-middleware";
 
 /**
  GET Route to receive list of all sites with users.
@@ -91,4 +88,4 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

@@ -48,7 +48,7 @@ export default function UserList() {
   // Handle the site selection from the dropdown
   // Also inputs site.id into the object so that it can
   //    be used in the handleSiteChange function
-  const handleSiteSelect = (id, siteId, newSite) => {
+  const handleSiteSelect = (id:number, siteId:number, newSite) => {
     setRows((prevRows) =>
       prevRows.map((row) =>
         row.id === id

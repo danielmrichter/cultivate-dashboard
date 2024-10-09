@@ -1,9 +1,9 @@
 // No changes should be required in this file
 
-const expressSession = require('express-session');
+import expressSession from 'express-session';
 const PgSession = require('connect-pg-simple')(expressSession);
-const pool = require('./pool.js');
-const warnings = require('../constants/warnings');
+import pool from './pool';
+import warnings from '../constants/warnings';
 
 /*
   The session makes it so a user can enters their username and password one time,
@@ -28,11 +28,11 @@ const serverSessionSecret = () => {
   return process.env.SERVER_SESSION_SECRET;
 };
 
-let pruneSessionInterval = 60;
+let pruneSessionInterval:any = 60;
 if (process.env.NODE_ENV === 'test') {
     pruneSessionInterval = false;
 }
-module.exports = expressSession({
+export default expressSession({
     store: new PgSession({
         pool,
         createTableIfMissing: true,
