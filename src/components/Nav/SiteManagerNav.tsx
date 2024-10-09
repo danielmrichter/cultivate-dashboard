@@ -6,7 +6,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useHistory, useEffect } from 'react-router-dom/cjs/react-router-dom.min';
+import { useNavigate, useEffect } from 'react-router-dom';
 import LogOutButton from '../AccountComponents/LogOutButton/LogOutButton';
 
 
@@ -16,7 +16,7 @@ export default function SiteManagerNav() {
   const [nestedOpen, setNestedOpen] = useState(true);
   const user = useSelector((store) => store.user);
   const siteData = useSelector((store) => store.siteData)
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -36,7 +36,7 @@ export default function SiteManagerNav() {
   };
 
   const handleNavigation = (path) => {
-    history.push(path);
+    navigate(path);
   };
 
   // Contents of the Drawer
@@ -90,7 +90,7 @@ export default function SiteManagerNav() {
         </Collapse>
             {/* Alerts list item */}
         <ListItemButton key="alerts">
-          <ListItemText primary="ALERT HISTORY"
+          <ListItemText primary="ALERT History"
             onClick={() => {setDrawerOpen(false);handleNavigation(`/alert-history/${user.site_id}`)}}
             onKeyDown={toggleDrawer(false)}/>
         </ListItemButton>

@@ -1,10 +1,10 @@
 import { Button, ToggleButtonGroup, Paper, ToggleButton } from "@mui/material";
 import ScatterPlot from "../GraphComponents/ScatterPlot";
 import { useState } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useNavigate } from "react-router-dom";
 
 export default function PilerCard(props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [chartFormat, setChartFormat] = useState("day");
   const pilerData = props.data;
   const dayData = pilerData.dayActuals;
@@ -15,7 +15,7 @@ export default function PilerCard(props) {
   };
 
   const handlePilerDetails = () => {
-    history.push(`/piler-details/${pilerData.piler_id}`)
+    navigate(`/piler-details/${pilerData.piler_id}`)
   }
 
   const scatterChartDisplay = () => {

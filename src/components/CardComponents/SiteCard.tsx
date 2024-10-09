@@ -1,10 +1,10 @@
 import { Paper, Button, Box, Link } from "@mui/material";
 import MiniAlert from "../AlertComponents/MiniAlert";
 import Dial from "./Dial";
-import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function SiteCard({ siteInfo, miniAlertData }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const avgTempOfSite = () => {
@@ -19,7 +19,7 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
   };
 
   const handleButtonClick = () => {
-    history.push(`/alert-history/${siteInfo.site_id}`);
+    navigate(`/alert-history/${siteInfo.site_id}`);
   };
   return (
     <Paper
@@ -45,7 +45,7 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
         >
           <h2>{siteInfo.site_name}</h2>
           <Button variant="contained" size="small"
-        sx={{height: 25, minWidth: 40}} onClick={() => history.push(`/site/${siteInfo.site_id}`)}>Site Details</Button>
+        sx={{height: 25, minWidth: 40}} onClick={() => navigate(`/site/${siteInfo.site_id}`)}>Site Details</Button>
         </Box>
       )}
       <h3>Average Temp at Site</h3>

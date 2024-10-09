@@ -4,9 +4,11 @@ import SiteCard from "../CardComponents/SiteCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useInterval from "../../hooks/useInterval";
+import { useLocation } from "react-router-dom";
 
 export default function AdminView() {
   const siteList = useSelector((store) => store.siteList);
+  const location = useLocation()
   const [listOfSiteData, setListOfSiteData] = useState([]);
   const fetchSiteData = async () => {
     // Get the data for each site. This is overkill and a lot of
@@ -42,6 +44,7 @@ export default function AdminView() {
   // More info: https://stackoverflow.com/questions/53332321/react-hook-warnings-for-async-function-in-useeffect-useeffect-function-must-ret
   useEffect(() => {
     fetchSiteData();
+    console.log('location is: ', location)
   }, [siteList]);
   
   useInterval(fetchSiteData, 300000);
