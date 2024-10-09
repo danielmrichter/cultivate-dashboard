@@ -7,7 +7,6 @@ import {
   convertDateObjectToDateString,
 } from "../modules/helper-functions";
 import { rejectUnauthenticated } from "../modules/authentication-middleware";
-import { expReqWithUser } from "../constants/types";
 
 router.get("/:id", rejectUnauthenticated, async (req, res) => {
   try {

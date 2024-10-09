@@ -3,12 +3,12 @@ import { rejectUnauthenticated } from '../modules/authentication-middleware';
 import encryptLib from '../modules/encryption';
 import pool from '../modules/pool';
 import userStrategy from '../strategies/user.strategy';
-import { expReqWithUser } from '../constants/types';
+import { IAUser } from '../constants/types';
 
 const router = express.Router();
 
 // Handles Ajax request for user information if user is authenticated
-router.get('/', rejectUnauthenticated, (req: expReqWithUser, res) => {
+router.get('/', rejectUnauthenticated, (req: IAUser, res) => {
   // Send back user object from the session (previously queried from the database)
   const userId = [req.user.id];
   let userData = {}

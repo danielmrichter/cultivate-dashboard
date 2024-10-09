@@ -3,7 +3,7 @@ import pool from "../modules/pool";
 const router = express.Router();
 import { rejectUnauthenticated } from "../modules/authentication-middleware";
 import { convertDateTimeStringToDateTime } from "../modules/helper-functions";
-import { expReqWithUser } from "../constants/types";
+import { IAUser } from "../constants/types";
 
 router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
   try {
@@ -44,7 +44,7 @@ router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
     res.sendStatus(500);
   }
 });
-router.get("/site", rejectUnauthenticated, async (req: expReqWithUser, res) => {
+router.get("/site", rejectUnauthenticated, async (req: IAUser, res) => {
   try {
     const sqlText = `
     SELECT
@@ -109,7 +109,7 @@ router.get("/site", rejectUnauthenticated, async (req: expReqWithUser, res) => {
   }
 });
 
-router.post("/", rejectUnauthenticated, (req: expReqWithUser, res) => {
+router.post("/", rejectUnauthenticated, (req: IAUser, res) => {
   console.log("req.body is", req.body.id);
   const sqlText = `
     INSERT INTO "users_alerts"
@@ -142,7 +142,7 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.get("/", (req: expReqWithUser, res) => {
+router.get("/", (req: IAUser, res) => {
   const queryText = ` SELECT
     "pilers"."name" AS "pilerName",
     "beet_data"."temperature",
