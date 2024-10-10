@@ -21,6 +21,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useTheme } from "@mui/material";
 import useInterval from "../../hooks/useInterval";
+import axios from "axios";
+import DummyData from "../DummyData.json"
 
 export default function PilerView() {
   const theme = useTheme();
@@ -131,7 +133,7 @@ export default function PilerView() {
     if (chartFormatToDisplay === "day") {
       return (
         <Typography variant="h4" sx={{ alignSelf: "start" }}>
-          <b>Averages Over The Day</b>
+          <b onClick={() => {axios.post('/api/beet_data', DummyData)}}>Averages Over The Day</b>
         </Typography>
       );
     } else if (chartFormatToDisplay === "month") {
