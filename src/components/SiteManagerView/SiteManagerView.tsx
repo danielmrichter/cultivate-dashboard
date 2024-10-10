@@ -1,13 +1,13 @@
 import { Box, Paper } from "@mui/material";
 import SiteCard from "../CardComponents/SiteCard";
 import PilerCard from "../CardComponents/PilerCard";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useInterval from "../../hooks/useInterval";
 
 export default function SiteManagerView() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { id } = useParams();
 
@@ -20,8 +20,8 @@ export default function SiteManagerView() {
     dataFetches()
   }, []);
   useInterval(dataFetches, 300000)
-  const siteData = useSelector((store) => store.site);
-  const alerts = useSelector((store) => store.alerts.miniAlerts);
+  const siteData = useAppSelector((store) => store.site);
+  const alerts = useAppSelector((store) => store.alerts.miniAlerts);
 
   return (
     <Box

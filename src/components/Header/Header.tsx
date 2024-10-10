@@ -1,17 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Typography, IconButton, Button } from "@mui/material";
-
-import { useSelector } from "react-redux";
-import MenuIcon from "@mui/icons-material/Menu";
+import { useAppSelector } from "../../hooks/reduxHooks";
 import BaseNav from "../Nav/BaseNav";
 import SiteManagerNav from "../Nav/SiteManagerNav";
 import GenManagerNav from "../Nav/GenManagerNav";
-import LogOutButton from "../AccountComponents/LogOutButton/LogOutButton";
-import axios from "axios";
+
 
 function Header() {
-  const user = useSelector((store) => store.user);
+  const user = useAppSelector((store) => store.user);
 
   return (
     <div>

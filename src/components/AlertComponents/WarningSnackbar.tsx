@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Snackbar, Button, Box, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/reduxHooks";
 
 function WarningSnackbar({ alert }) {
   const [open, setOpen] = useState(true); // Snackbar state
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const alertData = alert;
 
   // posts to alerts_users table that the alert has been seen

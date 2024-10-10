@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -19,8 +19,8 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const errors = useSelector((store) => store.errors);
-  const dispatch = useDispatch();
+  const errors = useAppSelector((store) => store.errors);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);

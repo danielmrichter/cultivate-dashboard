@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/reduxHooks";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function LoginChecker({ children }) {
@@ -8,7 +8,7 @@ export default function LoginChecker({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const origin = location.state?.from?.pathname;
-  const user = useSelector((store) => store.user);
+  const user = useAppSelector((store) => store.user);
   if (user.id) {
     origin
       ? navigate(origin)

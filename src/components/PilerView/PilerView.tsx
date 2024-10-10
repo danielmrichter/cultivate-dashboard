@@ -1,7 +1,6 @@
 import {
   Box,
   CircularProgress,
-  Link,
   Paper,
   ToggleButton,
   Button,
@@ -14,7 +13,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useNavigate, useParams } from "react-router-dom";
 import ScatterPlot from "../GraphComponents/ScatterPlot";
 import BarGraph from "../GraphComponents/BarGraph";
@@ -25,10 +24,10 @@ import useInterval from "../../hooks/useInterval";
 
 export default function PilerView() {
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { pilerId } = useParams();
   const navigate = useNavigate();
-  const pilerData = useSelector((store) => store.piler);
+  const pilerData = useAppSelector((store) => store.piler);
   const [chartFormatToDisplay, setChartFormatToDisplay] = useState("day");
   const [openDialog, setOpenDialog] = useState(false);
   const [pendingUpdate, setPendingUpdate] = useState(null);
@@ -279,8 +278,7 @@ export default function PilerView() {
           columns={columnsDef}
           rows={ticketData}
           getRowId={(row) => row.beet_data_id}
-          pageSize={5}
-          rowsPerPageOptions={[5, 10, 20]}
+          pageSizeOptions={[5, 10, 20]}
           disableRowSelectionOnClick
           autoHeight
           processRowUpdate={handleRowEdit}
@@ -309,7 +307,7 @@ export default function PilerView() {
     </Box>
   ) : (
     <Box sx={{ display: "flex", justifyContent: "center", height: "100vh" }}>
-      <CircularProgress color="primary.main" />
+      <CircularProgress color="primary" />
     </Box>
   );
 }

@@ -1,17 +1,17 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import WarningSnackbar from "./WarningSnackbar";
 import AlertModal from "./AlertModal";
 import { useEffect } from "react";
 import useInterval from "../../hooks/useInterval";
 
 export default function AlertCaller() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useInterval(() => dispatch({ type: "GET_UNSEEN_ALERTS" }));
   useEffect(() => {
     dispatch({ type: "GET_UNSEEN_ALERTS" });
   }, []);
 
-  const unseenAlerts = useSelector((store) => store.alerts.unseenAlerts);
+  const unseenAlerts = useAppSelector((store) => store.alerts.unseenAlerts);
   return (
     <>
       {unseenAlerts[0] &&

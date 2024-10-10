@@ -17,13 +17,13 @@ import {
   } from "react-router-dom";
   import { ArrowBack } from "@mui/icons-material";
   import { useEffect, useState } from "react";
-  import { useDispatch, useSelector } from "react-redux";
+  import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
   import dayjs from 'dayjs';
   
   export default function AddTicket() {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const growers = useSelector((store) => store.growers);
+    const dispatch = useAppDispatch();
+    const growers = useAppSelector((store) => store.growers);
     const { siteId, pilerId } = useParams();
   
     // form field values

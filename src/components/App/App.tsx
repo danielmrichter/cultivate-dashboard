@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch } from "../../hooks/reduxHooks";
 import LoginPage from "../AccountComponents/LoginPage/LoginPage.js";
 import RegisterPage from "../AccountComponents/RegisterPage/RegisterPage.jsx";
 import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
@@ -18,7 +18,7 @@ import LoginChecker from "../LoginChecker/LoginChecker.jsx";
 import IsUserAdmin from "../IsUserAdmin/IsUserAdmin.jsx";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch({ type: "FETCH_USER" });

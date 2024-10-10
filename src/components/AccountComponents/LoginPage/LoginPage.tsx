@@ -10,7 +10,7 @@ function LoginPage() {
     <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
       <LoginForm />
       <Button
-          type="=button"
+          type="button"
           variant="outlined"
           sx={{ marginY: '15px', width: '126px', borderRadius: "30px", paddingX: "40px" }}
           onClick={() => {

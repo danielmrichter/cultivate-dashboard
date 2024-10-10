@@ -1,13 +1,13 @@
 import { Button, Paper, Box, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { useTheme } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function AlertHistory() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const theme = useTheme();
     
@@ -15,8 +15,8 @@ export default function AlertHistory() {
         dispatch({ type: 'FETCH_ALL_ALERTS' });
     }, [dispatch]);
 
-    const redAlerts = useSelector(store => store.alerts.allSiteAlerts.redAlerts);
-    const warningAlerts = useSelector(store => store.alerts.allSiteAlerts.warningAlerts);
+    const redAlerts = useAppSelector(store => store.alerts.allSiteAlerts.redAlerts);
+    const warningAlerts = useAppSelector(store => store.alerts.allSiteAlerts.warningAlerts);
     const { id } = useParams();
 
     const handleMarkResolved = (id) => {
@@ -101,8 +101,7 @@ const handleBackClick = () => {
                         rows={redAlerts}
                         columns={columns}
                         getRowId={(row) => row.ticket_number}
-                        pageSize={5}
-                        rowsPerPageOptions={[5, 10, 20]}
+                        pageSizeOptions={[5, 10, 20]}
                         checkboxSelection={false}
                         disableRowSelectionOnClick
                         autoHeight
@@ -132,8 +131,7 @@ const handleBackClick = () => {
                         rows={warningAlerts}
                         columns={columns}
                         getRowId={(row) => row.ticket_number}
-                        pageSize={5}
-                        rowsPerPageOptions={[5, 10, 20]}
+                        pageSizeOptions={[5, 10, 20]}
                         checkboxSelection={false}
                         disableRowSelectionOnClick
                         autoHeight
