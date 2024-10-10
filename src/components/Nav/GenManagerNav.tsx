@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   useNavigate,
@@ -24,10 +24,10 @@ import LogOutButton from "../AccountComponents/LogOutButton/LogOutButton";
 export default function GenManagerNav() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [nestedOpen, setNestedOpen] = useState(false);
-  const user = useSelector((store) => store.user);
-  const siteList = useSelector((store) => store.siteList);
+  const user = useAppSelector((store) => store.user);
+  const siteList = useAppSelector((store) => store.siteList);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch({ type: "GET_SITE_LIST" });

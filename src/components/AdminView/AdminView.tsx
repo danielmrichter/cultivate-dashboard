@@ -1,5 +1,5 @@
 import { CircularProgress, Container, Grid2 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/reduxHooks";
 import SiteCard from "../CardComponents/SiteCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -7,7 +7,7 @@ import useInterval from "../../hooks/useInterval";
 import { useLocation } from "react-router-dom";
 
 export default function AdminView() {
-  const siteList = useSelector((store) => store.siteList);
+  const siteList = useAppSelector((store) => store.siteList);
   const location = useLocation()
   const [listOfSiteData, setListOfSiteData] = useState([]);
   const fetchSiteData = async () => {

@@ -4,13 +4,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Typography, Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/reduxHooks";
 
 export default function AlertModal({ alert }) {
   const [open, setOpen] = useState(true);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
     // posts to alerts_users table that the alert has been seen
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function AlertModal({ alert }) {
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      PaperComponent="Paper"
+      PaperComponent={Paper}
       PaperProps={{ sx: { backgroundColor: "error.light" } }}
     >
       <DialogTitle fontSize="2rem" id="alert-dialog-title">
@@ -58,7 +58,7 @@ export default function AlertModal({ alert }) {
         <Button variant="contained" onClick={handleMarkResolved}>
           Mark As Resolved
         </Button>
-        <Button variant="contained" onClick={handleClose} autoFocus>
+        <Button variant="contained" onClick={() => setOpen(false)} autoFocus>
           Dismiss
         </Button>
       </DialogActions>

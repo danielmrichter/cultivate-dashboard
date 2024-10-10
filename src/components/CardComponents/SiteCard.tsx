@@ -1,4 +1,4 @@
-import { Paper, Button, Box, Link } from "@mui/material";
+import { Paper, Button, Box } from "@mui/material";
 import MiniAlert from "../AlertComponents/MiniAlert";
 import Dial from "./Dial";
 import { useNavigate, useLocation } from "react-router-dom";

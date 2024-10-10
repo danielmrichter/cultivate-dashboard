@@ -1,4 +1,3 @@
-import React, {PureComponent} from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -6,7 +5,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   Line,
 } from "recharts";
 
@@ -22,7 +20,7 @@ export default function LineGraph({ data, x, y, xLabel, yLabel }) {
         margin={{ top: 100, right: 30, left: 30, bottom: 100 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis 
+        <XAxis
         dataKey={x}
         label={{value: xLabel, position: "bottom"}} 
         tick={{angle: -45, dy: 30, dx: -30}}

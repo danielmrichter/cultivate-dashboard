@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -26,11 +26,11 @@ function RegisterForm() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [accessLevel, setAccessLevel] = useState(1);
+  const [accessLevel, setAccessLevel] = useState('1');
   const [showPassword, setShowPassword] = useState(false);
 
-  const errors = useSelector((store) => store.errors);
-  const dispatch = useDispatch();
+  const errors = useAppSelector((store) => store.errors);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);

@@ -8,13 +8,13 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { useTheme } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 export default function UserList() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -23,8 +23,8 @@ export default function UserList() {
     dispatch({ type: "FETCH_ALL_USERS" });
   }, [dispatch]);
 
-  const userList = useSelector((store) => store.userList);
-  const siteList = useSelector((store) => store.siteList);
+  const userList = useAppSelector((store) => store.userList);
+  const siteList = useAppSelector((store) => store.siteList);
   const [rows, setRows] = useState();
 
   interface user {
@@ -73,7 +73,6 @@ export default function UserList() {
   };
 
   const handleRemoveUser = (userId) => {
-    console.log("userId is", userId);
     dispatch({ type: "UNASSIGN_USER", payload: { userId } });
     dispatch({ type: "FETCH_ALL_USERS" });
   };
@@ -213,8 +212,7 @@ export default function UserList() {
             rows={rows}
             columns={columns}
             getRowId={(row) => row.id}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 20]}
+            pageSizeOptions={[5, 10, 20]}
             checkboxSelection={false}
             disableRowSelectionOnClick
             autoHeight

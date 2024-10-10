@@ -1,9 +1,8 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
 import { useNavigate } from "react-router-dom";
 
 function LogOutButton(props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   return (
     <button

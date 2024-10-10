@@ -1,12 +1,10 @@
-import * as React from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItemButton, ListItemText, Collapse, Box, Button, Link } from '@mui/material';
-import ListSubheader from '@mui/material/ListSubheader';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useNavigate, useEffect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import LogOutButton from '../AccountComponents/LogOutButton/LogOutButton';
 
 
@@ -14,12 +12,12 @@ import LogOutButton from '../AccountComponents/LogOutButton/LogOutButton';
 export default function SiteManagerNav() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [nestedOpen, setNestedOpen] = useState(true);
-  const user = useSelector((store) => store.user);
-  const siteData = useSelector((store) => store.siteData)
+  const user = useAppSelector((store) => store.user);
+  const siteData = useAppSelector((store) => store.siteData)
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch({type: 'GET_SITE_DATA', payload: user.site_id})
   },[]);
     // open or close the Drawer
