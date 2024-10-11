@@ -23,7 +23,7 @@ import { useTheme } from "@mui/material";
 import useInterval from "../../hooks/useInterval";
 
 export default function PilerView() {
-  const theme = useTheme();
+  const theme = useTheme(); // Access the global theme here
   const dispatch = useAppDispatch();
   const { pilerId } = useParams();
   const navigate = useNavigate();
@@ -197,7 +197,10 @@ export default function PilerView() {
         <Typography variant="h3">
           <b>{pilerData.siteInfo.piler_name} Details:</b>
         </Typography>
-        <Button sx={{mb: 4, alignSelf: 'flex-start'}} onClick={handleBackClick}><ArrowBack />Back to Dashboard</Button>
+        <Button sx={{ mb: 4, alignSelf: "flex-start" }} onClick={handleBackClick}>
+          <ArrowBack />
+          Back to Dashboard
+        </Button>
       </Box>
       <Box
         sx={{
@@ -283,31 +286,45 @@ export default function PilerView() {
           autoHeight
           processRowUpdate={handleRowEdit}
           onProcessRowUpdateError={handleProcessRowUpdateError}
+          sx={{
+            "& .MuiDataGrid-row": {
+              "&.alert-row": {
+                backgroundColor: theme.palette.error.light, // Using the global error light color
+              },
+              "&.warning-row": {
+                backgroundColor: theme.palette.warning.light, // Using the global warning light color
+              },
+              "&.normal-row": {
+                backgroundColor: theme.palette.success.light, // Example for normal row
+              },
+            },
+          }}
+          getRowClassName={(params) => {
+            const temp = params.row.temperature;
+            if (temp >= 40) return "alert-row";
+            if (temp >= 30) return "warning-row";
+            return "normal-row";
+          }}
         />
       </Paper>
 
-      {/* Confirmation Editing Dialog */}
-      <Dialog open={openDialog} onClose={handleCancelUpdate}>
-        <DialogTitle>Confirm Update</DialogTitle>
+      <Dialog open={openDialog}>
+        <DialogTitle>{"Update Data?"}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Are you sure you want to update ticket{" "}
-            {pendingUpdate?.ticket_number}?
-          </DialogContentText>
+          <DialogContentText>Do you want to update the ticket?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancelUpdate} color="primary">
-            No
+            Cancel
           </Button>
-          <Button onClick={handleConfirmUpdate} color="primary">
-            Yes
+          <Button onClick={handleConfirmUpdate} color="primary" autoFocus>
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
     </Box>
   ) : (
-    <Box sx={{ display: "flex", justifyContent: "center", height: "100vh" }}>
-      <CircularProgress color="primary" />
-    </Box>
+    <CircularProgress />
   );
 }
+

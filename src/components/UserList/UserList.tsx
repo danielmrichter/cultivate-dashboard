@@ -79,6 +79,7 @@ export default function UserList() {
 
   // Creating the columns  --------------------------------
   const columns = [
+    { field: "fullname", headerName: "Name", flex: 1 },
     { field: "username", headerName: "Username", flex: 1 },
     { field: "fullname", headerName: "Name", flex: 1 },
     {
