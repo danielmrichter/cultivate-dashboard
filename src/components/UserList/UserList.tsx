@@ -81,7 +81,6 @@ export default function UserList() {
   const columns = [
     { field: "fullname", headerName: "Name", flex: 1 },
     { field: "username", headerName: "Username", flex: 1 },
-    { field: "fullname", headerName: "Name", flex: 1 },
     {
       field: "phone",
       headerName: "Phone",
@@ -155,7 +154,6 @@ export default function UserList() {
         ) : (
           // Render Assign New Site button initially
           <Button
-            sx={{ width: "110px" }}
             variant="contained"
             color="secondary"
             onClick={() => toggleButton(params.row.id)}
