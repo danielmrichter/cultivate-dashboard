@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useNavigate, useParams } from "react-router-dom";
-import ScatterPlot from "../GraphComponents/ScatterPlot";
+import HeatScatter from "../GraphComponents/HeatScatter";
 import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
@@ -23,7 +23,7 @@ import { useTheme } from "@mui/material";
 import useInterval from "../../hooks/useInterval";
 
 export default function PilerView() {
-  const theme = useTheme(); // Access the global theme here
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const { pilerId } = useParams();
   const navigate = useNavigate();
@@ -59,11 +59,29 @@ export default function PilerView() {
     { field: "truck", headerName: "Truck", editable: true, flex: 0.5 },
     { field: "field", headerName: "Grower", editable: false, flex: 1 },
     {
-      field: "coordinates",
-      headerName: "Coordinates",
-      editable: true,
+      field: 'coordinates',
+      headerName: 'Coordinates',
       flex: 1,
-    },
+      renderCell: (params) => {
+          const { coordinates } = params.row;
+          if (coordinates && coordinates.x !== undefined && coordinates.y !== undefined) {
+              return (
+                  <Box
+                  sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      height: '100%',
+                  }}
+              >
+                  <Typography fontSize={12}>
+                      {Number.parseFloat(coordinates.x).toFixed(3)}, {Number.parseFloat(coordinates.y).toFixed(3)}
+                  </Typography>
+              </Box>);
+          }
+          return 'N/A';
+      },
+  },
     { field: "updated_at", headerName: "Last Updated", flex: 1 },
     {
       field: "markResolved",
@@ -197,7 +215,10 @@ export default function PilerView() {
         <Typography variant="h3">
           <b>{pilerData.siteInfo.piler_name} Details:</b>
         </Typography>
-        <Button sx={{ mb: 4, alignSelf: "flex-start" }} onClick={handleBackClick}>
+        <Button
+          sx={{ mb: 4, alignSelf: "flex-start" }}
+          onClick={handleBackClick}
+        >
           <ArrowBack />
           Back to Dashboard
         </Button>
@@ -224,7 +245,7 @@ export default function PilerView() {
           <Typography variant="h4" sx={{ alignSelf: "start" }}>
             <b>Heat Map Of Pile</b>
           </Typography>
-          <ScatterPlot
+          <HeatScatter
             data={pilerData.heatMapData}
             x="x"
             y="y"
@@ -289,20 +310,20 @@ export default function PilerView() {
           sx={{
             "& .MuiDataGrid-row": {
               "&.alert-row": {
-                backgroundColor: theme.palette.error.light, // Using the global error light color
+                backgroundColor: theme.palette.error.light,
               },
               "&.warning-row": {
-                backgroundColor: theme.palette.warning.light, // Using the global warning light color
+                backgroundColor: theme.palette.warning.light,
               },
               "&.normal-row": {
-                backgroundColor: theme.palette.success.light, // Example for normal row
+                backgroundColor: "#FFFFFF",
               },
             },
           }}
           getRowClassName={(params) => {
             const temp = params.row.temperature;
-            if (temp >= 40) return "alert-row";
-            if (temp >= 30) return "warning-row";
+            if (temp >= 43) return "alert-row";
+            if (temp >= 40 && temp ) return "warning-row";
             return "normal-row";
           }}
         />
@@ -311,7 +332,9 @@ export default function PilerView() {
       <Dialog open={openDialog}>
         <DialogTitle>{"Update Data?"}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Do you want to update the ticket?</DialogContentText>
+          <DialogContentText>
+            Do you want to update the ticket?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancelUpdate} color="primary">
@@ -327,4 +350,3 @@ export default function PilerView() {
     <CircularProgress />
   );
 }
-

@@ -15,8 +15,9 @@ import {
 
 // xLabel is going to be a string that will be displayed as the label on the x axis.
 // Similarly for the yLabel.
-export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
-  console.log('Data is:', data)
+export default function HeatScatter({ data, x, y, xLabel, yLabel, temp }) {
+    console.log('Data is:', data)
+    console.log(typeof x)
   // This grabs the theme from MUI.
   const theme = useTheme();
   // Define the color dependent on the temperature reading.
