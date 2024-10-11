@@ -133,7 +133,7 @@ export default function PilerView() {
     if (chartFormatToDisplay === "day") {
       return (
         <Typography variant="h4" sx={{ alignSelf: "start" }}>
-          <b onClick={() => {axios.post('/api/beet_data', DummyData)}}>Averages Over The Day</b>
+          <b>Averages Over The Day</b>
         </Typography>
       );
     } else if (chartFormatToDisplay === "month") {
@@ -197,7 +197,7 @@ export default function PilerView() {
         }}
       >
         <Typography variant="h3">
-          <b>{pilerData.siteInfo.piler_name} Details:</b>
+          <b onClick={() => {axios.post('/api/beet_data', DummyData)}}>{pilerData.siteInfo.piler_name} Details:</b>
         </Typography>
         <Button sx={{mb: 4, alignSelf: 'flex-start'}} onClick={handleBackClick}><ArrowBack />Back to Dashboard</Button>
       </Box>
