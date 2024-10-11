@@ -21,6 +21,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useTheme } from "@mui/material";
 import useInterval from "../../hooks/useInterval";
+import axios from "axios";
+import DummyData from "../DummyData.json"
 
 export default function PilerView() {
   const theme = useTheme();
@@ -213,7 +215,7 @@ export default function PilerView() {
         }}
       >
         <Typography variant="h3">
-          <b>{pilerData.siteInfo.piler_name} Details:</b>
+          <b onClick={() => {axios.post('/api/beet_data', DummyData)}}>{pilerData.siteInfo.piler_name} Details:</b>
         </Typography>
         <Button
           sx={{ mb: 4, alignSelf: "flex-start" }}
