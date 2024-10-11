@@ -8,6 +8,8 @@ import {
   List,
   ListItemButton,
   ListItemText,
+  Menu,
+  MenuItem,
   Collapse,
   Box,
 } from "@mui/material";
@@ -16,6 +18,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import MenuIcon from "@mui/icons-material/Menu";
+import ArrowRightIcon  from "@mui/icons-material/ArrowRight";
 import {
   useNavigate,
 } from "react-router-dom";
@@ -28,6 +31,8 @@ export default function GenManagerNav() {
   const siteList = useAppSelector((store) => store.siteList);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [activeSite, setActiveSite] = useState(null); // Track the active site button
 
   useEffect(() => {
     dispatch({ type: "GET_SITE_LIST" });
@@ -49,6 +54,17 @@ export default function GenManagerNav() {
     setNestedOpen(!nestedOpen);
   };
 
+  const handleSiteExpand = (choice, site) => {
+    setAnchorEl(choice.currentTarget);
+    setActiveSite(site)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setActiveSite(null);
+    setDrawerOpen(false);
+  };
+  
   const handleNavigation = (path) => {
     navigate(path);
   };
@@ -100,26 +116,51 @@ export default function GenManagerNav() {
             {siteList[0] &&
               siteList.map((site) => {
                 return (
+                  <>
                   <ListItemButton
                     sx={{ pl: 4, backgroundColor: "#F1F1F1" }}
                     key={site.id}
+                    onClick={(e) => handleSiteExpand(e, site.id)}
                   >
                     <ListItemText
-                      primary={site.site}
-                      onClick={() => {
-                        {
-                          /* collapses the Drawer and goes to site page */
-                        }
-                        setDrawerOpen(false);
-                        handleNavigation(`/site/${site.id}`);
-                      }}
+                      primary={site.site} 
                     />
+                      <IconButton edge="end" aria-label="expand">
+                        <ArrowRightIcon />
+                      </IconButton>
                   </ListItemButton>
+
+                      {/* Pop-out menu for each site */}
+                      <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl) && activeSite === site.id}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "left",
+                      }}
+                    >
+                      <MenuItem onClick={()=>{
+                        handleNavigation(`/site/${site.id}`);
+                        handleClose()}}>
+                          Site Dashboard
+                        </MenuItem>
+                      <MenuItem onClick={()=>{
+                        handleNavigation(`/alert-history/${site.id}`);
+                        handleClose()}}>
+                          Alert History
+                      </MenuItem>
+                    </Menu>
+                    </>
                 );
               })}
           </List>
         </Collapse>
-        {/* Alerts list item */}
+        {/* User list item */}
         <ListItemButton key="users">
           <ListItemText
             primary="USER LIST"
@@ -186,3 +227,13 @@ export default function GenManagerNav() {
     </div>
   );
 }
+
+
+
+{/*}
+onClick={() => {
+  {/* collapses the Drawer and goes to site page 
+  setDrawerOpen(false);
+  handleNavigation(`/site/${site.id}`);
+}}
+  */}

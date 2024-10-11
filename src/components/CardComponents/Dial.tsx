@@ -6,11 +6,11 @@ export default function Dial({ avgTempOfSite }) {
     let translateAngle = 0;
     const avgTemp = avgTempOfSite();
 
-    if (avgTemp < 39 && avgTemp >= 34) {
+    if (avgTemp < 40 && avgTemp >= 34) {
       translateAngle = -11;
-    } else if (avgTemp >= 39 && avgTemp < 42) {
+    } else if (avgTemp >= 40 && avgTemp < 43) {
       translateAngle = -25;
-    } else if (avgTemp > 42) {
+    } else if (avgTemp >= 43) {
       translateAngle = -27;
     } else {
       translateAngle = 0;
@@ -22,11 +22,11 @@ export default function Dial({ avgTempOfSite }) {
     let translateAngle = 0;
     const avgTemp = avgTempOfSite();
 
-    if (avgTemp < 39 && avgTemp >= 34) {
+    if (avgTemp < 40 && avgTemp >= 34) {
       translateAngle = 25;
-    } else if (avgTemp >= 39 && avgTemp < 42) {
+    } else if (avgTemp >= 40 && avgTemp < 43) {
       translateAngle = 15;
-    } else if (avgTemp > 42) {
+    } else if (avgTemp >= 43) {
       translateAngle = -23;
     } else {
       translateAngle = 0;
@@ -38,11 +38,11 @@ export default function Dial({ avgTempOfSite }) {
     let rotAngle = 0;
     const avgTemp = avgTempOfSite();
 
-    if (avgTemp < 39 && avgTemp >= 34) {
+    if (avgTemp < 40 && avgTemp >= 34) {
       rotAngle = 60;
-    } else if (avgTemp >= 39 && avgTemp < 42) {
+    } else if (avgTemp >= 40 && avgTemp < 43) {
       rotAngle = 120;
-    } else if (avgTemp > 42) {
+    } else if (avgTemp >= 43) {
       rotAngle = 180;
     } else {
       rotAngle = 0;
