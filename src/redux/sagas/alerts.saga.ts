@@ -12,7 +12,7 @@ function* fetchSiteMiniAlerts(action) {
 
 function* fetchAllSiteAlerts(action) {
   try {
-    const response = yield axios.get(`/api/alerts/site`);
+    const response = yield axios.get(`/api/alerts/site/${action.payload}`);
     yield put({ type: "SET_ALL_ALERTS", payload: response.data });
   } catch (error) {
     console.log("Fetch All Alerts failed:", error);
@@ -21,9 +21,9 @@ function* fetchAllSiteAlerts(action) {
 
 function* markAlertResolved(action) {
   try {
-    yield axios.put(`/api/alerts/${action.payload}`);
+    yield axios.put(`/api/alerts/${action.payload.alertId}`);
     yield put({ type: "FETCH_MINI_ALERTS" });
-    yield put({ type: "FETCH_ALL_ALERTS" });
+    yield put({ type: "FETCH_ALL_ALERTS", payload: action.payload.siteId });
   } catch (error) {
     console.log("Mark Resolved/Unresolved action failed:", error);
   }

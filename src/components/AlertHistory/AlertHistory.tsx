@@ -10,17 +10,17 @@ export default function AlertHistory() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const theme = useTheme();
-    
-    useEffect(() => {
-        dispatch({ type: 'FETCH_ALL_ALERTS' });
-    }, [dispatch]);
-
     const redAlerts = useAppSelector(store => store.alerts.allSiteAlerts.redAlerts);
     const warningAlerts = useAppSelector(store => store.alerts.allSiteAlerts.warningAlerts);
     const { id } = useParams();
 
+    useEffect(() => {
+        dispatch({ type: 'FETCH_ALL_ALERTS', payload: id });
+    }, [dispatch]);
+
+
     const handleMarkResolved = (id) => {
-        dispatch({ type: 'MARK_RESOLVED', payload: id });
+        dispatch({ type: 'MARK_RESOLVED', payload: {alertId: id, siteId: id} });
     };
 
     const columns = [
@@ -86,7 +86,6 @@ export default function AlertHistory() {
         },
     ];
 const handleBackClick = () => {
-    console.log('Site Id is:', id)
     navigate(`/site/${id}`)
 }
 
