@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import { Box } from "@mui/material";
-import { useAppDispatch } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import LoginPage from "../AccountComponents/LoginPage/LoginPage.js";
 import RegisterPage from "../AccountComponents/RegisterPage/RegisterPage.jsx";
 import SiteManagerView from "../SiteManagerView/SiteManagerView.jsx";
@@ -19,6 +19,7 @@ import IsUserAdmin from "../IsUserAdmin/IsUserAdmin.jsx";
 
 function App() {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(store => store.user)
 
   useEffect(() => {
     dispatch({ type: "FETCH_USER" });
@@ -28,7 +29,7 @@ function App() {
     <Router>
       <Box sx={{ backgroundColor: "#E5E5E5", minHeight: "100vh", pb: 10 }}>
         <Header />
-        <AlertCaller />
+        {user.id && <AlertCaller />}
         <Routes>
           {/* Home - if a user is logged in, send them to their dashboard, or send them to login. */}
           <Route path="/" index element={<RedirectComponent />} />

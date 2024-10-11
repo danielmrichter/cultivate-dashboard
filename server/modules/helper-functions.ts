@@ -70,7 +70,7 @@ async function developmentPostForBeetData(req: Request) {
       })
     );
     const newAlertsToCreate = newBeetData.filter(
-      (data) => data.rows[0].temperature > 39
+      (data) => data.rows[0].temperature >=40
     );
     await Promise.all(
       newAlertsToCreate.map((data) => {

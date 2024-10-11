@@ -37,7 +37,6 @@ router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
 
       newAlertList.push(newAlert);
     }
-
     res.send(newAlertList);
   } catch (dbErr) {
     console.log("Error getting alerts from the DB! ", dbErr);
@@ -142,8 +141,8 @@ router.put("/:id", rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.get("/", (req: IAUser, res) => {
-  const queryText = ` SELECT
+router.get("/", rejectUnauthenticated, (req: IAUser, res) => {
+  const queryText = `SELECT
     "pilers"."name" AS "pilerName",
     "beet_data"."temperature",
     "beet_data"."temperature_time",
@@ -156,7 +155,7 @@ router.get("/", (req: IAUser, res) => {
     JOIN "beet_data" ON "alerts"."beet_data_id" = "beet_data"."id"
     WHERE "user"."id" = $1
     AND "alerts"."is_active" = TRUE
-    AND ("alerts"."id") NOT IN(
+    AND ("alerts"."id") NOT IN (
       SELECT "alerts"."id" FROM "alerts"
       JOIN "users_alerts" ON "alerts"."id" = "users_alerts"."alert_id"
       JOIN "user" ON "user"."id" = "users_alerts"."user_id"

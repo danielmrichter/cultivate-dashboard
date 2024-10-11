@@ -46,21 +46,24 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
   const tooltipRenderFn = ({ active, payload, label }) => {
     if (active && payload && payload.length)
       return (
-        <Paper sx={{p:1}} elevation={2}>
+        <Paper sx={{ p: 1 }} elevation={2}>
+          <p>Temperature: {payload[0].payload.temperature}ºF</p>
           <p>
-            Temperature: {payload[0].payload.temperature}ºF
+            {xLabel}: {payload[0].payload[x]}
           </p>
-          <p>{xLabel}: {payload[0].payload[x]}</p>
-          <p>{yLabel}: {payload[0].payload[y]}</p>  
+          <p>
+            {yLabel}: {payload[0].payload[y]}
+          </p>
         </Paper>
       );
   };
 
   return (
-    <ResponsiveContainer width="100%" style={{marginBottom: "20px", marginLeft:"15px"}}>
-      <ScatterChart
-      overflow = "visible"
-      style={{padding: "10px"}}>
+    <ResponsiveContainer
+      width="100%"
+      style={{ marginBottom: "20px", marginLeft: "15px" }}
+    >
+      <ScatterChart overflow="visible" style={{ padding: "10px" }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
   dataKey={x}
@@ -87,7 +90,6 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
               dataMax + (dataMax - dataMin) * 0.1,
             ];
           }}
-          
           // Helper function to round the displays of the ticks to be three decimal places.
           // Does not affect functionality, only visuals.
           tickFormatter={formatTick}

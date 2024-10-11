@@ -80,7 +80,7 @@ export default function SiteManagerNav() {
                   <ListItemText primary={site.name}  
                       onClick={() => {   {/* collapses the Drawer and goes to piler page */}
                         setDrawerOpen(false);
-                        handleNavigation(`/pilers/${site.piler_id}`)}}
+                        handleNavigation(`/piler-details/${site.piler_id}`)}}
                       />
               </ListItemButton>
             )})}

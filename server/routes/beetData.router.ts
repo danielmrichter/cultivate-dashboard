@@ -58,7 +58,7 @@ router.post("/", async (req, res) => {
       // Now that that's done, we need to check if we have to create any
       // alerts. First, let's check if there's any that we need to create.
       const newAlertsToCreate = newBeetData.filter(
-        (data) => data.rows[0].temperature > 39
+        (data) => data.rows[0].temperature >=40 
       );
       await Promise.all(
         newAlertsToCreate.map((data) => {
