@@ -51,8 +51,8 @@ router.post("/", rejectUnauthenticated, async (req, res) => {
     ]);
     const beetDataId = beetDataResult.rows[0].id;
 
-    // Generate an alert if temperature is over 39
-    if (temperature > 39) {
+    // Generate an alert if temperature is over 40
+    if (temperature >=40) {
       const alertInsertQuery = `
           INSERT INTO alerts (beet_data_id, piler_id)
           VALUES ($1, $2);
