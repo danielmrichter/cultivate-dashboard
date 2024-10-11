@@ -43,12 +43,12 @@ router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
     res.sendStatus(500);
   }
 });
-router.get("/site", rejectUnauthenticated, async (req: IAUser, res) => {
+router.get("/site/:id", rejectUnauthenticated, async (req: IAUser, res) => {
   try {
     const sqlText = `
     SELECT
       "alerts".id AS "alert_id", 
-      "users_sites".sites_id, 
+      "sites"."id", 
       "alerts".is_active, 
       "alerts".updated_at, 
       "pilers"."name" AS "piler_name", 
@@ -62,13 +62,12 @@ router.get("/site", rejectUnauthenticated, async (req: IAUser, res) => {
     JOIN "pilers" ON "alerts"."piler_id" = "pilers"."id"
     JOIN "beet_data" ON "alerts".beet_data_id = "beet_data".id
     JOIN "sites" ON "pilers"."site_id" = "sites"."id"
-    JOIN "users_sites" ON "sites"."id" = "users_sites"."sites_id"
     JOIN "tickets" ON "beet_data".ticket_id = "tickets".id
     JOIN "growers" ON "tickets".grower_id = "growers".id
-    WHERE "users_sites"."users_id" = $1;
+    WHERE "sites"."id" = $1;
     `;
 
-    const dbRes = await pool.query(sqlText, [req.user.id]);
+    const dbRes = await pool.query(sqlText, [req.params.id]);
 
     // Sets new arrays for the warnings and for the red alerts
     let warningAlerts = [];
@@ -109,7 +108,6 @@ router.get("/site", rejectUnauthenticated, async (req: IAUser, res) => {
 });
 
 router.post("/", rejectUnauthenticated, (req: IAUser, res) => {
-  console.log("req.body is", req.body.id);
   const sqlText = `
     INSERT INTO "users_alerts"
     ("user_id", "alert_id")
@@ -146,7 +144,8 @@ router.get("/", rejectUnauthenticated, (req: IAUser, res) => {
     "pilers"."name" AS "pilerName",
     "beet_data"."temperature",
     "beet_data"."temperature_time",
-    "alerts"."id" AS "alert_id"
+    "alerts"."id" AS "alert_id",
+    "sites"."id" AS "site_id"
     FROM "alerts"
     JOIN "pilers" ON "alerts"."piler_id" = "pilers"."id"
     JOIN "sites" ON "pilers"."site_id" = "sites"."id"
