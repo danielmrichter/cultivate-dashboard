@@ -4,6 +4,8 @@ const siteListReducer = (state = [], action) => {
         return action.payload;
       case 'UNSET_SITE_DATA':
         return {};
+      case "UNSET_USER":
+        return [];
       default:
         return state;
     }

@@ -7,6 +7,10 @@ const miniAlerts = (state = {}, action) => {
       return action.payload;
     case "UNSET_MINI_ALERTS":
       return {};
+    case "UNSET_USER":
+      return {};
+    case "UNSET_GM_SITE_VIEW":
+      return {};
     default:
       return state;
   }
