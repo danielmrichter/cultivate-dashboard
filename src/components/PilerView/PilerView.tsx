@@ -131,6 +131,8 @@ export default function PilerView() {
     setPendingUpdate(null);
   };
 
+
+  
   const handleDeleteTicket = (beet_data_id) => {
     if (!beet_data_id) {
       console.error("Missing ticketId for delete operation.");
@@ -309,6 +311,11 @@ export default function PilerView() {
           autoHeight
           processRowUpdate={handleRowEdit}
           onProcessRowUpdateError={handleProcessRowUpdateError}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'temperature_time', sort: 'desc' }],
+            },
+          }}
           sx={{
             "& .MuiDataGrid-row": {
               "&.alert-row": {

@@ -15,8 +15,8 @@ router.get("/", rejectUnauthenticated, (req, res) => {
            "user".email,  
            "sites"."site" AS sitename
     FROM "user"
-    JOIN "users_sites" ON "user".id = "users_sites".users_id
-    JOIN "sites" ON "sites".id = "users_sites".sites_id
+    FULL JOIN "users_sites" ON "user".id = "users_sites".users_id
+    LEFT JOIN "sites" ON "sites".id = "users_sites".sites_id
     WHERE "user"."access_level" = 1 -- Filter out admins
     ;`;
   pool

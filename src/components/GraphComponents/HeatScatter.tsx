@@ -16,8 +16,6 @@ import {
 // xLabel is going to be a string that will be displayed as the label on the x axis.
 // Similarly for the yLabel.
 export default function HeatScatter({ data, x, y, xLabel, yLabel, temp }) {
-    console.log('Data is:', data)
-    console.log(typeof x)
   // This grabs the theme from MUI.
   const theme = useTheme();
   // Define the color dependent on the temperature reading.
@@ -74,7 +72,7 @@ export default function HeatScatter({ data, x, y, xLabel, yLabel, temp }) {
       dataMax + (dataMax - dataMin) * 0.1,
     ],
     tickFormatter: formatTick,
-  } : {tick: {angle: -45, dy: 15, dx: -15}})}
+  } : {tickFormatter: formatTick, tick: {angle: -45, dy: 15, dx: -15}})}
   
   interval={"preserveStartEnd"}
 />
