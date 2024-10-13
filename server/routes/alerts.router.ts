@@ -7,6 +7,7 @@ import { IAUser } from "../constants/types";
 
 router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
   try {
+    const miniId = Number(req.params.id);
     const sqlText = `
     SELECT 
       "beet_data".temperature, 
@@ -21,7 +22,7 @@ router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
     WHERE "sites"."id" = $1
     AND "alerts".is_active = true;
   `;
-    const dbRes = await pool.query(sqlText, [req.params.id]);
+    const dbRes = await pool.query(sqlText, [miniId]);
     let newAlertList = [];
 
     for (let i = 0; i < dbRes.rows.length; i++) {

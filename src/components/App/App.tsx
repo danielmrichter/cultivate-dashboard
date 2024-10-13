@@ -50,7 +50,7 @@ function App() {
 
           {/* A site's alert history: */}
           <Route
-            path="/alert-history/:id"
+            path="/alert-history/:siteId"
             element={<AuthenticateUser component={AlertHistory} />}
           />
 

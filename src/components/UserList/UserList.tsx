@@ -49,7 +49,7 @@ export default function UserList() {
   // Also inputs site.id into the object so that it can
   //    be used in the handleSiteChange function
   const handleSiteSelect = (id:number, siteId:number, newSite) => {
-    setRows((prevRows) =>
+    setRows((prevRows: any) =>
       prevRows.map((row) =>
         row.id === id
           ? { ...row, sitename: newSite, selectedSiteId: siteId }
@@ -61,7 +61,7 @@ export default function UserList() {
   // toggle betwen 'ReAssign Site' and 'Confirm' which also
   // instantiates the pulldown menu
   const toggleButton = (id) => {
-    setRows((prevRows) =>
+    setRows((prevRows: any) =>
       prevRows.map((row) =>
         row.id === id ? { ...row, isClicked: !row.isClicked } : row
       )
