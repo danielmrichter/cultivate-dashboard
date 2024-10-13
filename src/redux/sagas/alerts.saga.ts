@@ -22,7 +22,7 @@ function* fetchAllSiteAlerts(action) {
 function* markAlertResolved(action) {
   try {
     yield axios.put(`/api/alerts/${action.payload.alertId}`);
-    yield put({ type: "FETCH_MINI_ALERTS" });
+    yield put({ type: "FETCH_MINI_ALERTS", payload: action.payload.siteId });
     yield put({ type: "FETCH_ALL_ALERTS", payload: action.payload.siteId });
   } catch (error) {
     console.log("Mark Resolved/Unresolved action failed:", error);
