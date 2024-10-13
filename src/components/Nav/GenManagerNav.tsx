@@ -36,6 +36,7 @@ export default function GenManagerNav() {
 
   useEffect(() => {
     dispatch({ type: "GET_SITE_LIST" });
+    // return () => {dispatch({ type: "UNSET_GM_SITE_VIEW"})}
   }, []);
   // open or close the Drawer
   const toggleDrawer = (open) => (event) => {
@@ -66,7 +67,23 @@ export default function GenManagerNav() {
   };
   
   const handleNavigation = (path) => {
-    navigate(path);
+    navigate(path, {replace: true});
+  };
+
+  const [activeSiteId, setActiveSiteId] = useState(null);
+
+  const handleSiteNavigation = (path, siteId) => {
+    if (activeSiteId !== siteId) {
+      setActiveSiteId(siteId); // Set the active site ID to trigger the re-fetch
+      dispatch({ type: "FETCH_SITE", payload: siteId });
+      dispatch({ type: "FETCH_MINI_ALERTS", payload: siteId });
+      navigate(path);
+    } else {
+      // If navigating to the same site, re-dispatch to refresh data
+      dispatch({ type: "FETCH_SITE", payload: siteId });
+      dispatch({ type: "FETCH_MINI_ALERTS", payload: siteId });
+      navigate(path);
+    }
   };
 
   // Contents of the Drawer
@@ -112,7 +129,7 @@ export default function GenManagerNav() {
 
         {/* sites mapped into the collapsible list */}
         <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
+          <List component="div" disablePadding key='sublist'>
             {siteList[0] &&
               siteList.map((site) => {
                 return (
@@ -145,12 +162,12 @@ export default function GenManagerNav() {
                       }}
                     >
                       <MenuItem onClick={()=>{
-                        handleNavigation(`/site/${site.id}`);
+                        handleSiteNavigation(`/site/${site.id}`, site.id);
                         handleClose()}}>
                           Site Dashboard
                         </MenuItem>
                       <MenuItem onClick={()=>{
-                        handleNavigation(`/alert-history/${site.id}`);
+                        handleSiteNavigation(`/alert-history/${site.id}`, site.id);
                         handleClose()}}>
                           Alert History
                       </MenuItem>

@@ -3,7 +3,9 @@ const siteDataReducer = (state = [], action) => {
       case 'SET_SITE_DATA':
         return action.payload;
       case 'UNSET_SITE_DATA':
-        return {};
+        return [];
+      case "UNSET_USER":
+        return []
       default:
         return state;
     }
