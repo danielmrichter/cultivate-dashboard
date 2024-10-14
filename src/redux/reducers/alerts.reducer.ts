@@ -9,8 +9,6 @@ const miniAlerts = (state = {}, action) => {
       return {};
     case "UNSET_USER":
       return {};
-    case "UNSET_GM_SITE_VIEW":
-      return {};
     default:
       return state;
   }
@@ -20,7 +18,7 @@ const allSiteAlerts = (state = {}, action) => {
   switch (action.type) {
     case "SET_ALL_ALERTS":
       return action.payload;
-    case "UNSET_ALERTS":
+    case "UNSET_USER":
       return {};
     default:
       return state;
@@ -32,6 +30,8 @@ const unseenAlerts = (state = [], action) => {
   switch (action.type) {
     case "SET_UNSEEN_ALERTS":
       return action.payload;
+    case "UNSET_USER":
+      return [];
     default:
       return state;
   }
