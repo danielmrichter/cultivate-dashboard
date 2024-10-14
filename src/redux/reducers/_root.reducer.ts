@@ -9,6 +9,7 @@ import piler from './piler.reducer'
 import userList from './userList.reducer';
 import growers from './growers.reducer';
 import isFetchingUser from './isFetchingUser.reducer';
+import siteManager from './siteManager.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   piler,
   userList,
   growers,
-  isFetchingUser
+  isFetchingUser,
+  siteManager
 });
 
 export default rootReducer;
