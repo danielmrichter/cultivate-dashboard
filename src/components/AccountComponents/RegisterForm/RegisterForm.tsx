@@ -31,10 +31,9 @@ function RegisterForm() {
 
   const errors = useAppSelector((store) => store.errors);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleRadio = (event) => setAccessLevel(event.target.value);
+  // const handleRadio = (event) => setAccessLevel(event.target.value);
 
   const phoneFormat = (phoneString) => {
     if (phoneString) {
