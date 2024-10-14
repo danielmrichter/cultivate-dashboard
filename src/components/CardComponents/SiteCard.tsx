@@ -24,7 +24,7 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
   };
   return (
     <Paper
-    key={siteInfo.site_id}
+      key={siteInfo.site_id}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -36,20 +36,25 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
     >
       {location.pathname === "/admin" && (
         <>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: '100%',
-            mb: 0,
-            alignItems: 'center'
-          }}
-        >
-          <h2>{siteInfo.site_name}</h2>
-          <Button variant="contained" size="small"
-        sx={{height: 25, minWidth: 40}} onClick={() => navigate(`/site/${siteInfo.site_id}`)}>Site Details</Button>
-        </Box>
-        <ManagerInfo siteId={siteInfo.site_id} />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              mb: 0,
+              alignItems: "center",
+            }}
+          >
+            <h2>{siteInfo.site_name}</h2>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ height: 25, minWidth: 40 }}
+              onClick={() => navigate(`/site/${siteInfo.site_id}`)}
+            >
+              Site Details
+            </Button>
+          </Box>
         </>
       )}
       <h3>Average Temp at Site</h3>
@@ -63,11 +68,17 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
       )}
       <Button
         variant="contained"
-        sx={{ borderRadius: "30px" }}
+        sx={{ borderRadius: "30px", mb: 3, mt: 2 }}
         onClick={() => handleButtonClick()}
       >
         Alert History
       </Button>
+      {location.pathname === "/admin" && (
+        <Box sx={{ display: "flex", flexDirection: "column", justifyContent:'space-between' }}>
+          Site Manager Info:
+          <ManagerInfo siteId={siteInfo.site_id} />
+        </Box>
+      )}
     </Paper>
   );
 }
