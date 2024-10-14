@@ -2,6 +2,7 @@ import { Paper, Button, Box } from "@mui/material";
 import MiniAlert from "../AlertComponents/MiniAlert";
 import Dial from "./Dial";
 import { useNavigate, useLocation } from "react-router-dom";
+import ManagerInfo from "./managerInfo";
 
 export default function SiteCard({ siteInfo, miniAlertData }) {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
       }}
     >
       {location.pathname === "/admin" && (
+        <>
         <Box
           sx={{
             display: "flex",
@@ -47,6 +49,8 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
           <Button variant="contained" size="small"
         sx={{height: 25, minWidth: 40}} onClick={() => navigate(`/site/${siteInfo.site_id}`)}>Site Details</Button>
         </Box>
+        <ManagerInfo siteId={siteInfo.site_id} />
+        </>
       )}
       <h3>Average Temp at Site</h3>
       <Dial avgTempOfSite={avgTempOfSite} />

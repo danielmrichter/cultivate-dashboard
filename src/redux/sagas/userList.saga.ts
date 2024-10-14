@@ -29,10 +29,22 @@ function* unassignUser(action){
     }
 }
 
+function* fetchSiteManager(action) {
+    try {
+    const response = yield axios.get(`/api/siteList/siteManager/${action.payload}`);
+    console.log('site manager info response is', response)
+    yield put({ type: "SET_SITE_MANAGER", payload: response.data });
+  } catch (error) {
+    console.log("Fetch site managerfailed:", error);
+  }
+}
+
+
 function* userListSaga() {
   yield takeLatest('FETCH_ALL_USERS', fetchAllUsers);
   yield takeLatest('NEW_SITE_ASSIGNMENT', newSiteAssignment);
   yield takeLatest('UNASSIGN_USER', unassignUser);
+  yield takeLatest('SITE_MANAGER_INFO', fetchSiteManager);
 }
 
 export default userListSaga;
