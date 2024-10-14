@@ -28,6 +28,7 @@ export default function UserList() {
   const [rows, setRows] = useState();
 
   interface user {
+    isClicked: any;
     id: number,
     fullName: string
     username: string
@@ -35,6 +36,7 @@ export default function UserList() {
     phone: number
     sitename: string
   }
+  interface rowOfUsers extends Array<user>{}
 
   // this will initially setRows as well as anytime a users site is updated
   // for some reason the userlist wasn't always populating correctly and
@@ -50,6 +52,7 @@ export default function UserList() {
   //    be used in the handleSiteChange function
   const handleSiteSelect = (id:number, siteId:number, newSite) => {
     setRows((prevRows) =>
+      prevRows &&
       prevRows.map((row) =>
         row.id === id
           ? { ...row, sitename: newSite, selectedSiteId: siteId }
@@ -62,6 +65,7 @@ export default function UserList() {
   // instantiates the pulldown menu
   const toggleButton = (id) => {
     setRows((prevRows) =>
+      prevRows && 
       prevRows.map((row) =>
         row.id === id ? { ...row, isClicked: !row.isClicked } : row
       )
