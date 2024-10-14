@@ -1,4 +1,4 @@
-import { Box, Paper } from "@mui/material";
+import { Box } from "@mui/material";
 import SiteCard from "../CardComponents/SiteCard";
 import PilerCard from "../CardComponents/PilerCard";
 import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";

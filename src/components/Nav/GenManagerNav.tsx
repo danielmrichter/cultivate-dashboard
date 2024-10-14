@@ -18,10 +18,8 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import MenuIcon from "@mui/icons-material/Menu";
-import ArrowRightIcon  from "@mui/icons-material/ArrowRight";
-import {
-  useNavigate,
-} from "react-router-dom";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { useNavigate } from "react-router-dom";
 import LogOutButton from "../AccountComponents/LogOutButton/LogOutButton";
 
 export default function GenManagerNav() {
@@ -37,7 +35,7 @@ export default function GenManagerNav() {
   useEffect(() => {
     dispatch({ type: "GET_SITE_LIST" });
   }, []);
-  
+
   // open or close the Drawer
   const toggleDrawer = (open) => (event) => {
     if (
@@ -57,17 +55,17 @@ export default function GenManagerNav() {
 
   const handleSiteExpand = (choice, site) => {
     setAnchorEl(choice.currentTarget);
-    setActiveSite(site)
-  }
+    setActiveSite(site);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
     setActiveSite(null);
     setDrawerOpen(false);
   };
-  
+
   const handleNavigation = (path) => {
-    navigate(path, {replace: true});
+    navigate(path, { replace: true });
   };
 
   const [activeSiteId, setActiveSiteId] = useState(null);
@@ -129,26 +127,24 @@ export default function GenManagerNav() {
 
         {/* sites mapped into the collapsible list */}
         <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding key='sublist'>
+          <List component="div" disablePadding key="sublist">
             {siteList[0] &&
               siteList.map((site) => {
                 return (
                   <>
-                  <ListItemButton
-                    sx={{ pl: 4, backgroundColor: "#F1F1F1" }}
-                    key={site.id}
-                    onClick={(e) => handleSiteExpand(e, site.id)}
-                  >
-                    <ListItemText
-                      primary={site.site} 
-                    />
+                    <ListItemButton
+                      sx={{ pl: 4, backgroundColor: "#F1F1F1" }}
+                      key={site.id}
+                      onClick={(e) => handleSiteExpand(e, site.id)}
+                    >
+                      <ListItemText primary={site.site} />
                       <IconButton edge="end" aria-label="expand">
                         <ArrowRightIcon />
                       </IconButton>
-                  </ListItemButton>
+                    </ListItemButton>
 
-                      {/* Pop-out menu for each site */}
-                      <Menu
+                    {/* Pop-out menu for each site */}
+                    <Menu
                       anchorEl={anchorEl}
                       open={Boolean(anchorEl) && activeSite === site.id}
                       onClose={handleClose}
@@ -161,18 +157,27 @@ export default function GenManagerNav() {
                         horizontal: "left",
                       }}
                     >
-                      <MenuItem onClick={()=>{
-                        handleSiteNavigation(`/site/${site.id}`, site.id);
-                        handleClose()}}>
-                          Site Dashboard
-                        </MenuItem>
-                      <MenuItem onClick={()=>{
-                        handleSiteNavigation(`/alert-history/${site.id}`, site.id);
-                        handleClose()}}>
-                          Alert History
+                      <MenuItem
+                        onClick={() => {
+                          handleSiteNavigation(`/site/${site.id}`, site.id);
+                          handleClose();
+                        }}
+                      >
+                        Site Dashboard
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleSiteNavigation(
+                            `/alert-history/${site.id}`,
+                            site.id
+                          );
+                          handleClose();
+                        }}
+                      >
+                        Alert History
                       </MenuItem>
                     </Menu>
-                    </>
+                  </>
                 );
               })}
           </List>
@@ -244,13 +249,3 @@ export default function GenManagerNav() {
     </div>
   );
 }
-
-
-
-{/*}
-onClick={() => {
-  {/* collapses the Drawer and goes to site page 
-  setDrawerOpen(false);
-  handleNavigation(`/site/${site.id}`);
-}}
-  */}

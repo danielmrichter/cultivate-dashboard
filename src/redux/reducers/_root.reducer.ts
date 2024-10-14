@@ -1,15 +1,15 @@
-import { combineReducers } from 'redux';
-import errors from './errors.reducer';
-import user from './user.reducer';
-import siteData from './siteData.reducer';
-import siteList from './siteList.reducer';
-import site from './beet.reducer';
-import alerts from './alerts.reducer';
-import piler from './piler.reducer'
-import userList from './userList.reducer';
-import growers from './growers.reducer';
-import isFetchingUser from './isFetchingUser.reducer';
-import siteManager from './siteManager.reducer';
+import { combineReducers } from "redux";
+import errors from "./errors.reducer";
+import user from "./user.reducer";
+import siteData from "./siteData.reducer";
+import siteList from "./siteList.reducer";
+import site from "./beet.reducer";
+import alerts from "./alerts.reducer";
+import piler from "./piler.reducer";
+import userList from "./userList.reducer";
+import growers from "./growers.reducer";
+import isFetchingUser from "./isFetchingUser.reducer";
+import siteManager from "./siteManager.reducer";
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -28,7 +28,7 @@ const rootReducer = combineReducers({
   userList,
   growers,
   isFetchingUser,
-  siteManager
+  siteManager,
 });
 
 export default rootReducer;
