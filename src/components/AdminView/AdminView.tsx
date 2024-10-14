@@ -34,8 +34,7 @@ export default function AdminView() {
     // They use the same array to grab the data, so they should be
     // in the same order.
     const siteData = allOfTheDataAboutEachSite.map((site, i) => {
-      console.log('manager info is',allOfTheManagersForEachSite)
-      return { site: site.data, alerts: allOfTheAlertsForEachSite[i].data, manager: allOfTheManagersForEachSite[i].data };
+      return { site: site.data, alerts: allOfTheAlertsForEachSite[i].data, };
     });
     setListOfSiteData(siteData);
   };
@@ -69,7 +68,6 @@ export default function AdminView() {
                 key={i}
                 siteInfo={site.site}
                 miniAlertData={site.alerts}
-                managerInfo={site.manager} 
               />
             );
           })}
