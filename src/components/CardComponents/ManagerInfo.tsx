@@ -1,9 +1,7 @@
-import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function ManagerInfo({ siteId }) {
-  const dispatch = useDispatch();
   const [siteManager, setSiteManager] = useState([]);
 
   useEffect(() => {
