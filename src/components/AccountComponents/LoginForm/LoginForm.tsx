@@ -21,7 +21,6 @@ function LoginForm() {
 
   const errors = useAppSelector((store) => store.errors);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

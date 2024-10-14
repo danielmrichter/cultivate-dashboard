@@ -24,7 +24,7 @@ import {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const growers = useAppSelector((store) => store.growers);
-    const { siteId, pilerId } = useParams();
+    const { pilerId } = useParams();
   
     // form field values
     const [ticketNum, setTicketNum] = useState(null);

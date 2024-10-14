@@ -5,7 +5,6 @@ import { useAppSelector, useAppDispatch } from "../../hooks/reduxHooks";
 import { useTheme } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
-import { use } from "passport";
 
 export default function AlertHistory() {
   const dispatch = useAppDispatch();
