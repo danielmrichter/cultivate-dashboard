@@ -36,8 +36,8 @@ export default function GenManagerNav() {
 
   useEffect(() => {
     dispatch({ type: "GET_SITE_LIST" });
-    // return () => {dispatch({ type: "UNSET_GM_SITE_VIEW"})}
   }, []);
+  
   // open or close the Drawer
   const toggleDrawer = (open) => (event) => {
     if (

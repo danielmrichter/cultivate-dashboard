@@ -24,11 +24,17 @@ export default function AdminView() {
         return axios.get(`/api/alerts/mini/${site.id}`);
       })
     );
+    // Here are the managers for each site.
+    const allOfTheManagersForEachSite = await Promise.all(
+      siteList.map((site) => axios.get(`/api/siteList/siteManager/${site.id}`))
+    );
+
     // Now, combine them together.
     // They use the same array to grab the data, so they should be
     // in the same order.
     const siteData = allOfTheDataAboutEachSite.map((site, i) => {
-      return { site: site.data, alerts: allOfTheAlertsForEachSite[i].data };
+      console.log('manager info is',allOfTheManagersForEachSite)
+      return { site: site.data, alerts: allOfTheAlertsForEachSite[i].data, manager: allOfTheManagersForEachSite[i].data };
     });
     setListOfSiteData(siteData);
   };
@@ -59,6 +65,7 @@ export default function AdminView() {
                 key={i}
                 siteInfo={site.site}
                 miniAlertData={site.alerts}
+                managerInfo={site.manager} 
               />
             );
           })}

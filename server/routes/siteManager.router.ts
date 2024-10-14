@@ -6,22 +6,9 @@ import { rejectUnauthenticated } from "../modules/authentication-middleware";
 /**
  GET Route to receive piler data for a specific .
  */
-router.get("/", rejectUnauthenticated, (req, res) => {
-  const queryText = `
-    SELECT * FROM "sites"
-    `;
-  pool
-    .query(queryText)
-    .then((result) => {
-      res.send(result.rows);
-    })
-    .catch((err) => {
-      console.log("error getting site list", err);
-      res.sendStatus(500);
-    });
-});
 
-router.get('/siteManager/:id', (req, res) => {
+router.get("/siteManager/:id", rejectUnauthenticated, (req, res) => {
+  console.log('req.body is ',req.body)
   console.log('params is ',req.params.id)
   const queryText = `
     SELECT CONCAT("user".first_name, ' ', "user".last_name) AS fullname, 
@@ -34,7 +21,6 @@ router.get('/siteManager/:id', (req, res) => {
 
   pool.query(queryText, queryValues)
   .then(result => {
-    console.log('result is ',result)
     res.send(result.rows);
   })
   .catch ((err) => {
