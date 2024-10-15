@@ -35,15 +35,13 @@ export default function BarGraph({ data, x, y, xLabel, yLabel }) {
     return fill;
   };
 
-  // Sort the data based on the x-axis (date) in ascending order
   const sortedData = [...data].sort((a, b) => new Date(a[x]) - new Date(b[x]));
 
   const enrichedData = sortedData.map((entry) => ({
     ...entry,
-    fill: fillColor(entry[y]), // Add the fill color based on temperature
+    fill: fillColor(entry[y]),
   }));
 
-  // Formatter function for the graph tick marks on the Axes
   const formatTick = (value) => {
     return parseFloat(value).toFixed(3);
   };
