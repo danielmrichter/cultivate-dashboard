@@ -40,7 +40,7 @@ router.get("/mini/:id", rejectUnauthenticated, async (req, res) => {
     }
     res.send(newAlertList);
   } catch (dbErr) {
-    console.log("Error getting alerts from the DB! ", dbErr);
+    console.log("mini error getting alerts from the DB! ", dbErr);
     res.sendStatus(500);
   }
 });
@@ -103,7 +103,7 @@ router.get("/site/:id", rejectUnauthenticated, async (req: IAUser, res) => {
       redAlerts,
     });
   } catch (dbErr) {
-    console.log("Error getting alerts from the DB! ", dbErr);
+    console.log("all alerts error getting alerts from the DB! ", dbErr);
     res.sendStatus(500);
   }
 });
