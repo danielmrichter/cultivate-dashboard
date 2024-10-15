@@ -1,9 +1,7 @@
-const siteListReducer = (state = [], action) => {
+const siteManagerReducer = (state = [], action) => {
   switch (action.type) {
-    case "SET_SITE_LIST":
+    case "SET_SITE_MANAGER":
       return action.payload;
-    case "UNSET_SITE_DATA":
-      return {};
     case "UNSET_USER":
       return [];
     default:
@@ -12,5 +10,5 @@ const siteListReducer = (state = [], action) => {
 };
 
 // user will be on the redux state at:
-// state.siteList
-export default siteListReducer;
+// state.siteManager
+export default siteManagerReducer;

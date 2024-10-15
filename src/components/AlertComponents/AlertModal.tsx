@@ -12,7 +12,7 @@ export default function AlertModal({ alert }) {
   const [open, setOpen] = useState(true);
   const dispatch = useAppDispatch();
 
-    // posts to alerts_users table that the alert has been seen
+  // posts to alerts_users table that the alert has been seen
   useEffect(() => {
     dispatch({ type: "HAS_SEEN_ALERT", payload: alert.alert_id });
   }, []);
@@ -23,9 +23,12 @@ export default function AlertModal({ alert }) {
     }
   };
 
-    //marks an alert as resolved - that it's no longer active
+  //marks an alert as resolved - that it's no longer active
   const handleMarkResolved = () => {
-    dispatch({ type: "MARK_RESOLVED", payload: {alertId: alert.alert_id, siteId: alert.site_id} });
+    dispatch({
+      type: "MARK_RESOLVED",
+      payload: { alertId: alert.alert_id, siteId: alert.site_id },
+    });
     setOpen(false);
   };
 
