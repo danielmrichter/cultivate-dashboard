@@ -91,7 +91,7 @@ router.get("/site/:id", rejectUnauthenticated, async (req: IAUser, res) => {
       };
 
       // Separates the alerts based on temperature
-      if (temperature < 42) {
+      if (temperature < 43) {
         warningAlerts.push(newAlert);
       } else {
         redAlerts.push(newAlert);

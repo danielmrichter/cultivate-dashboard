@@ -1,4 +1,4 @@
-import { useTheme, Tooltip as MuiTooltip, Paper } from "@mui/material";
+import { useTheme, Paper } from "@mui/material";
 import {
   ResponsiveContainer,
   Scatter,

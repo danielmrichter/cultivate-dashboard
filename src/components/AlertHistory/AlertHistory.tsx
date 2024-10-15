@@ -19,15 +19,19 @@ export default function AlertHistory() {
   const { siteId } = useParams();
   const errorResolved = "#ffe3d9";
   const warningResolved = "#ffffd4";
+  const site = useAppSelector(store => store.site)  // to get site name if Site Manager
+  const siteList = useAppSelector(store=> store.siteList) // to get site name if Gen Manager
+  const siteName = Object.keys(site).length > 0 ? site.site_name : siteList[3]?.site;
+  
 
   useEffect(() => {
     dispatch({ type: "FETCH_ALL_ALERTS", payload: siteId });
-  }, [dispatch]);
+  }, [dispatch, siteId]);
 
-  const handleMarkResolved = (id) => {
+  const handleMarkResolved = (alertId) => {
     dispatch({
       type: "MARK_RESOLVED",
-      payload: { alertId: id, siteId: siteId },
+      payload: { alertId: alertId, siteId: siteId},
     });
   };
 
@@ -81,23 +85,45 @@ export default function AlertHistory() {
       field: "markResolved",
       headerName: "",
       flex: 1.25,
-      renderCell: (params) => (
-        <Button
-          sx={{
-            backgroundColor: theme.palette.primary.main,
-            color: "white",
-            "&:hover": {
-              backgroundColor: theme.palette.primary.main, // No hover change
-            },
-            "&:active": {
-              backgroundColor: theme.palette.primary.main, // No active change
-            },
-          }}
-          onClick={() => handleMarkResolved(params.row.alert_id)}
-        >
-          {params.row.is_active ? "Mark Resolved" : "Mark Unresolved"}
-        </Button>
-      ),
+      renderCell: (params) => {
+        if (params.row.is_active) {
+          return (
+            <Button
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: "white",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.main, // No hover change
+                },
+                "&:active": {
+                  backgroundColor: theme.palette.primary.main, // No active change
+                },
+              }}
+              onClick={() => handleMarkResolved(params.row.alert_id)}
+            >
+              Mark Resolved
+            </Button>
+          );
+        } else {
+          return (
+            <Button
+              sx={{
+                backgroundColor: theme.palette.secondary.main,
+                color: "white",
+                "&:hover": {
+                  backgroundColor: theme.palette.secondary.main, // No hover change
+                },
+                "&:active": {
+                  backgroundColor: theme.palette.secondary.main, // No active change
+                },
+              }}
+              onClick={() => handleMarkResolved(params.row.alert_id)}
+            >
+              Mark UnResolved
+            </Button>
+          );
+        }
+      },
     },
   ];
   const handleBackClick = () => {
@@ -107,7 +133,7 @@ export default function AlertHistory() {
   return (
     <Box sx={{ padding: "24px" }}>
       <Typography variant="h3">
-        <b>Alert History:</b>
+        <b>Alert History: {siteName}</b>
       </Typography>
       <Button sx={{ mb: 4 }} onClick={handleBackClick}>
         <ArrowBack />

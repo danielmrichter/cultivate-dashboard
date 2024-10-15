@@ -23,7 +23,6 @@ function* markAlertResolved(action) {
   try {
     const alertId = action.payload.alertId;
     const siteId = action.payload.siteId;
-    console.log('action.payload.alertId is:', alertId, 'action.payload.siteId is:', siteId)
     yield axios.put(`/api/alerts/${alertId}`);
     yield put({ type: "FETCH_MINI_ALERTS", payload: siteId });
     yield put({ type: "FETCH_ALL_ALERTS", payload: siteId });

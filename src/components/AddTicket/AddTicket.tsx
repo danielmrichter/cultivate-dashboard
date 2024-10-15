@@ -1,4 +1,5 @@
 import {
+<<<<<<< HEAD
   Paper,
   Box,
   Button,
@@ -58,6 +59,52 @@ export default function AddTicket() {
       longitude: Number(longitude),
       piler_id: piler_id,
       beetbox_id: beetbox_id,
+=======
+    Paper,
+    Box,
+    Button,
+    Typography,
+    TextField,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+  } from "@mui/material";
+  import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+  import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+  import {
+    useNavigate,
+    useParams,
+  } from "react-router-dom";
+  import { ArrowBack } from "@mui/icons-material";
+  import { useEffect, useState } from "react";
+  import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+  import dayjs from 'dayjs';
+  
+  export default function AddTicket() {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const growers = useAppSelector((store) => store.growers);
+    const { pilerId } = useParams();
+  
+    // form field values
+    const [ticketNum, setTicketNum] = useState(null);
+    const [grower, setGrower] = useState('');
+    const [temperature, setTemperature] = useState(null);
+    const [tempTime, setTempTime] = useState(null);
+    const [truckNum, setTruckNum] = useState(null);
+    const [longitude, setLongitude] = useState(null);
+    const [latitude, setLatitude] = useState(null);
+    const [piler_id, setPilerId] = useState(pilerId);
+    const [beetbox_id, setBeetboxId] = useState(null);
+  
+    useEffect(() => {
+      dispatch({ type: "FETCH_GROWERS" });
+    }, [dispatch]);
+  
+    const handleChange = (event) => {
+      setGrower(event.target.value);
+>>>>>>> main
     };
 
     dispatch({ type: "ADD_TICKET", payload: ticketToSubmit });

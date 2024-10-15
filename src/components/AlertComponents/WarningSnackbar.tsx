@@ -14,7 +14,10 @@ function WarningSnackbar({ alert }) {
 
   //marks an alert as resolved - that it's no longer active
   const handleMarkResolved = () => {
-    dispatch({ type: "MARK_RESOLVED", payload: {alertId: alertData.alert_id, siteId: alert.site_id} });
+    dispatch({
+      type: "MARK_RESOLVED",
+      payload: { alertId: alertData.alert_id, siteId: alert.site_id },
+    });
     setOpen(false);
   };
 
