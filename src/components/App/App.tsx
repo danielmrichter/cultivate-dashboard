@@ -62,7 +62,7 @@ function App() {
 
           {/* Manually Add A Ticket */}
           <Route
-            path="/add-ticket/:siteId/:pilerId"
+            path="/add-ticket/:pilerId"
             element={<AuthenticateUser component={AddTicket} />}
           />
 
