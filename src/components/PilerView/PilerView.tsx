@@ -30,9 +30,6 @@ export default function PilerView() {
 
   useInterval(() => dispatch({ type: "FETCH_PILER_DATA", payload: pilerId }));
 
-  // This columnsDef is used in a MUIX DataGrid component.
-  // It's a headache to look at, but defines what will be contained
-  // in each column.
   const columnsDef = [
     {
       field: "ticket_number",
@@ -100,6 +97,7 @@ export default function PilerView() {
       ),
     },
   ];
+
   const handleDeleteTicket = (beet_data_id) => {
     if (!beet_data_id) {
       console.error("Missing ticketId for delete operation.");
@@ -120,8 +118,6 @@ export default function PilerView() {
       beet_data_id: row.beet_data_id || `temp_id_${index}`,
     })) || [];
 
-  // All of this stuff is for editing. It controls a dialog
-  // To confirm if a user wants to edit something.
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [pendingUpdate, setPendingUpdate] = useState(null);
   const handleRowEdit = (updatedRow, originalRow) => {
@@ -165,28 +161,36 @@ export default function PilerView() {
 
   const chartFormatRender = () => {
     if (chartFormatToDisplay === "day") {
+      if (
+        !pilerData.barChartDayData ||
+        pilerData.barChartDayData.length === 0
+      ) {
+        return <Typography>No data available for daily averages.</Typography>;
+      }
       return (
-        <>
-          <BarGraph
-            data={pilerData.barChartDayData}
-            x="hour"
-            y="temperature"
-            xLabel="Time"
-            yLabel="Temperature"
-          />
-        </>
+        <BarGraph
+          data={pilerData.barChartDayData}
+          x="hour"
+          y="temperature"
+          xLabel="Time"
+          yLabel="Temperature"
+        />
       );
     } else if (chartFormatToDisplay === "month") {
+      if (
+        !pilerData.barChartMonthData ||
+        pilerData.barChartMonthData.length === 0
+      ) {
+        return <Typography>No data available for monthly averages.</Typography>;
+      }
       return (
-        <>
-          <BarGraph
-            data={pilerData.barChartMonthData}
-            x="day"
-            y="temperature"
-            xLabel="Day"
-            yLabel="Temperature"
-          />
-        </>
+        <BarGraph
+          data={pilerData.barChartMonthData}
+          x="day"
+          y="temperature"
+          xLabel="Day"
+          yLabel="Temperature"
+        />
       );
     }
     return <div>Error</div>;
@@ -296,52 +300,28 @@ export default function PilerView() {
             sx={{ borderRadius: 15 }}
             onClick={() => navigate(`/add-ticket/${pilerId}`)}
           >
-            Add Ticket
+            Add New Ticket
           </Button>
         </Box>
         <DataGrid
-          columns={columnsDef}
           rows={ticketData}
-          getRowId={(row) => row.beet_data_id}
-          pageSizeOptions={[5, 10, 20]}
-          disableRowSelectionOnClick
+          columns={columnsDef}
           autoHeight
           processRowUpdate={handleRowEdit}
           onProcessRowUpdateError={handleProcessRowUpdateError}
-          initialState={{
-            sorting: {
-              sortModel: [{ field: "temperature_time", sort: "desc" }],
-            },
-          }}
-          sx={{
-            "& .MuiDataGrid-row": {
-              "&.alert-row": {
-                backgroundColor: "error.light",
-              },
-              "&.warning-row": {
-                backgroundColor: "warning.light",
-              },
-              "&.normal-row": {
-                backgroundColor: "#FFFFFF",
-              },
-            },
-          }}
-          getRowClassName={(params) => {
-            const temp = params.row.temperature;
-            if (temp >= 43) return "alert-row";
-            if (temp >= 40 && temp) return "warning-row";
-            return "normal-row";
-          }}
+          getRowId={(row) => row.beet_data_id}
+          disableRowSelectionOnClick
         />
       </Paper>
+
       <UpdateTicket
         open={isDialogOpen}
-        cancelFn={handleCancelUpdate}
-        confirmFn={handleConfirmUpdate}
+        onClose={handleCancelUpdate}
+        onConfirm={handleConfirmUpdate}
+        data={pendingUpdate}
       />
     </Box>
   ) : (
-    //
     <CircularProgress />
   );
 }

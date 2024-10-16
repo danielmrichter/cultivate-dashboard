@@ -1,4 +1,4 @@
-import { Button, ToggleButtonGroup, Paper, ToggleButton, Box } from "@mui/material";
+import { Button, ToggleButtonGroup, Paper, ToggleButton, Box, Typography } from "@mui/material";
 import ScatterPlot from "../GraphComponents/ScatterPlot";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,34 +15,43 @@ export default function PilerCard(props) {
   };
 
   const handlePilerDetails = () => {
-    navigate(`/piler-details/${pilerData.piler_id}`)
-  }
+    navigate(`/piler-details/${pilerData.piler_id}`);
+  };
 
   const scatterChartDisplay = () => {
     if (chartFormat === "day") {
-    return (
-      <ScatterPlot
-        data={dayData}
-        x="time"
-        y="temperature"
-        xLabel="Time"
-        yLabel="Temperature"
-        temp="temperature"
-      />
-    )
-  } else if (chartFormat === "month") {
-    return (
-      <ScatterPlot 
-      data={monthAvgDaily}
-      x="day"
-      y="avgTempOfEachDay"
-      xLabel="Day"
-      yLabel="Avg Daily Temp"
-      temp="avgTempOfEachDay"
-      />
-    )
-  }
-}
+      if (dayData && dayData.length > 0) {
+        return (
+          <ScatterPlot
+            data={dayData}
+            x="time"
+            y="temperature"
+            xLabel="Time"
+            yLabel="Temperature"
+            temp="temperature"
+          />
+        );
+      } else {
+        return <Typography sx={{textAlign: 'center'}}>No data available for the selected format.</Typography>;
+      }
+    } else if (chartFormat === "month") {
+      if (monthAvgDaily && monthAvgDaily.length > 0) {
+        return (
+          <ScatterPlot
+            data={monthAvgDaily}
+            x="day"
+            y="avgTempOfEachDay"
+            xLabel="Day"
+            yLabel="Avg Daily Temp"
+            temp="avgTempOfEachDay"
+          />
+        );
+      } else {
+        return <Typography sx={{textAlign: 'center'}}>No data available for the selected format.</Typography>;
+      }
+    }
+  };
+
   return (
     <Paper
       sx={{
@@ -58,9 +67,7 @@ export default function PilerCard(props) {
 
       <ToggleButtonGroup
         size="small"
-        sx={{ 
-          width: "100%"
-        }}  
+        sx={{ width: "100%" }}
         color="primary"
         value={chartFormat}
         exclusive
@@ -74,14 +81,15 @@ export default function PilerCard(props) {
           Month
         </ToggleButton>
       </ToggleButtonGroup>
-      <Box sx={{ width: '100%', height: '350px'}}>
-      {scatterChartDisplay()}
+      <Box sx={{ width: '100%', height: '350px' }}>
+        {scatterChartDisplay()}
       </Box>
       <Button variant="contained" sx={{ borderRadius: "30px" }}
-      onClick={handlePilerDetails}>
+        onClick={handlePilerDetails}>
         Piler Details
       </Button>
     </Paper>
   );
 }
+
 
