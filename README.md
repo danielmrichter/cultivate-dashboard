@@ -14,7 +14,7 @@ This app is designed to seamlessly integrate with Cultivate Custom Hardware's Be
 With this user-friendly visualization, Site Managers can quickly identify and respond to any readings that threaten produce integrity. Additionally, the app allows General Managers the ability to monitor the overall status of multiple sites and Site Managers, enabling better decision-making and resource allocation. By transforming complex data into actionable insights using comprehensive data visualization, this app empowers teams to maintain optimal conditions and enhance operational efficiency, ultimately safeguarding the quality of their product.
 
 
-## Screen Shot
+## Screen Shots
 ![Piler Details](./public/Piler-Details.png)
 Piler Details Page
 
