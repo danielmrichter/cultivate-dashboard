@@ -1,4 +1,4 @@
-import { Button, ToggleButtonGroup, Paper, ToggleButton } from "@mui/material";
+import { Button, ToggleButtonGroup, Paper, ToggleButton, Box } from "@mui/material";
 import ScatterPlot from "../GraphComponents/ScatterPlot";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +37,7 @@ export default function PilerCard(props) {
       x="day"
       y="avgTempOfEachDay"
       xLabel="Day"
-      yLabel="Average Daily Temp"
+      yLabel="Avg Daily Temp"
       temp="avgTempOfEachDay"
       />
     )
@@ -50,7 +50,6 @@ export default function PilerCard(props) {
         flexDirection: "column",
         alignItems: "center",
         width: "400px",
-        height: "550px",
         padding: "16px",
         gap: "16px"
       }}
@@ -75,7 +74,9 @@ export default function PilerCard(props) {
           Month
         </ToggleButton>
       </ToggleButtonGroup>
+      <Box sx={{ width: '100%', height: '350px'}}>
       {scatterChartDisplay()}
+      </Box>
       <Button variant="contained" sx={{ borderRadius: "30px" }}
       onClick={handlePilerDetails}>
         Piler Details

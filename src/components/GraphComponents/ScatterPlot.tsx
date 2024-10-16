@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 // data needs to be an array of objects. These objects should have
-// properties that are numbers. x and y need to the names of the
+// properties that are numbers. x and y need to be the names of the
 // x and y coordinates that you wish to use.
 
 // xLabel is going to be a string that will be displayed as the label on the x axis.
@@ -18,6 +18,7 @@ import {
 export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
   // This grabs the theme from MUI.
   const theme = useTheme();
+
   // Define the color dependent on the temperature reading.
   const fillColor = (temp) => {
     let fill = "";
@@ -31,17 +32,19 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
     return fill;
   };
 
+  // Map the data to enrich it with the fill color based on temperature.
   const enrichedData = data.map((entry) => ({
     ...entry,
     fill: fillColor(entry[temp]), // Add the fill color based on temperature
   }));
 
-  //Formatter function for the graph tick marks on the Axes
+  // Formatter function for the graph tick marks on the Axes
   const formatTick = (value) => {
     const num = parseFloat(value).toFixed(3);
     return num;
   };
 
+  // Function to render the custom tooltip content
   const tooltipRenderFn = ({ active, payload, label }) => {
     if (active && payload && payload.length)
       return (
@@ -60,39 +63,57 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
   return (
     <ResponsiveContainer
       width="100%"
+      height="100%"
       style={{ marginBottom: "20px", marginLeft: "15px" }}
     >
-    {/* There are errors on two of these parts. I'm going to be real with you,
-    I don't know why they're not accepting these. */}
-      <ScatterChart overflow="visible" style={{ padding: "10px" }}>
+      <ScatterChart margin={{ bottom: 60, left: 30, right: 20, top: 20 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
-  dataKey={x}
-  type={typeof x === 'number' ? 'number' : 'category'}
-  label={{ value: xLabel, position: "bottom", offset: 30 }}
-  // Conditionally add domain and tickFormatter if x is a number
-  {...(typeof x === 'number' ? {
-    domain: ([dataMin, dataMax]) => [
-      dataMin - (dataMax - dataMin) * 0.1,
-      dataMax + (dataMax - dataMin) * 0.1,
-    ],
-    tickFormatter: formatTick,
-  } : {tick: {angle: -45, dy: 15, dx: -15}})}
-  
-  interval={"preserveStartEnd"}
-/>
+          dataKey={x}
+          type={typeof x === "number" ? "number" : "category"}
+          label={{ value: xLabel, position: "bottom", offset: 40 }}
+          {...(typeof x === "number"
+            ? {
+                domain: ([dataMin, dataMax]) => [
+                  dataMin - (dataMax - dataMin) * 0.1,
+                  dataMax + (dataMax - dataMin) * 0.1,
+                ],
+                tickFormatter: formatTick,
+              }
+            : {
+                tick: (props) => {
+                  const { x, y, payload } = props;
+                  return (
+                    <g transform={`translate(${x},${y})`}>
+                      <text
+                        x={0}
+                        y={0}
+                        dy={15}
+                        textAnchor="end"
+                        transform="rotate(-45)"
+                        fill="#666"
+                      >
+                        {payload.value}
+                      </text>
+                    </g>
+                  );
+                },
+              })}
+          interval={"preserveStartEnd"}
+        />
         <YAxis
           dataKey={y}
           type="number"
-          label={{ value: yLabel, angle: -90, position: "left", offset: 15 }}
-          domain={([dataMin, dataMax]) => {
-            return [
-              dataMin - (dataMax - dataMin) * 0.1,
-              dataMax + (dataMax - dataMin) * 0.1,
-            ];
+          label={{
+            value: yLabel,
+            angle: -90,
+            position: "left",
+            offset: 20,
           }}
-          // Helper function to round the displays of the ticks to be three decimal places.
-          // Does not affect functionality, only visuals.
+          domain={([dataMin, dataMax]) => [
+            dataMin - (dataMax - dataMin) * 0.1,
+            dataMax + (dataMax - dataMin) * 0.1,
+          ]}
           tickFormatter={formatTick}
           interval={"preserveStartEnd"}
         />
