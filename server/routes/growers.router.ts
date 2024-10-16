@@ -11,7 +11,6 @@ router.get("/", rejectUnauthenticated, (req, res) => {
   pool
     .query(sqlQuery)
     .then((response) => {
-      console.log("Growers are:", response.rows);
       res.send(response.rows);
     })
     .catch((dbErr) => {
