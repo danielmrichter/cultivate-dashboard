@@ -16,20 +16,22 @@ export default function AlertHistory() {
   const warningAlerts = useAppSelector(
     (store) => store.alerts.allSiteAlerts.warningAlerts
   );
-  const { id } = useParams();
+  const { siteId } = useParams();
+  const errorResolved = "#ffe3d9";
+  const warningResolved = "#ffffd4";
   const site = useAppSelector(store => store.site)  // to get site name if Site Manager
   const siteList = useAppSelector(store=> store.siteList) // to get site name if Gen Manager
   const siteName = Object.keys(site).length > 0 ? site.site_name : siteList[3]?.site;
   
 
   useEffect(() => {
-    dispatch({ type: "FETCH_ALL_ALERTS", payload: id });
-  }, [dispatch, id]);
+    dispatch({ type: "FETCH_ALL_ALERTS", payload: siteId });
+  }, [dispatch, siteId]);
 
   const handleMarkResolved = (alertId) => {
     dispatch({
       type: "MARK_RESOLVED",
-      payload: { alertId: alertId, siteId: id },
+      payload: { alertId: alertId, siteId: siteId},
     });
   };
 
@@ -125,7 +127,7 @@ export default function AlertHistory() {
     },
   ];
   const handleBackClick = () => {
-    navigate(`/site/${id}`);
+    navigate(`/site/${siteId}`);
   };
 
   return (
@@ -159,13 +161,21 @@ export default function AlertHistory() {
                 backgroundColor: theme.palette.error.light,
               },
               "& .MuiDataGrid-row:hover": {
-                backgroundColor: theme.palette.error.light, // Retain color, no hover effect
+                backgroundColor: theme.palette.error.light,
+              },
+              "& .error-alert-row-resolved": {
+                backgroundColor: errorResolved,
               },
               fontSize: "10pt",
             }}
             getRowClassName={
-              (params) => "red-alert-row" // Always apply this class regardless of is_active status
-            }
+              (params) => {
+                if (params.row.is_active){
+                    return "red-alert-row"
+                } else {
+                    return 'error-alert-row-resolved'
+                }
+            }}
           />
         </div>
         <h3>Warning Alerts:</h3>
@@ -188,13 +198,20 @@ export default function AlertHistory() {
               "& .warning-alert-row": {
                 backgroundColor: theme.palette.warning.light,
               },
-              "& .MuiDataGrid-row:hover": {
-                backgroundColor: theme.palette.warning.light, // Retain color, no hover effect
+              "& .warning-alert-row-resolved": {
+                backgroundColor: warningResolved,
               },
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: theme.palette.warning.light,
+              }
             }}
-            getRowClassName={
-              (params) => "warning-alert-row" // Always apply this class regardless of is_active status
-            }
+            getRowClassName={(params) => {
+              if (params.row.is_active) {
+                return "warning-alert-row";
+              } else {
+                return "warning-alert-row-resolved";
+              }
+            }}
           />
         </div>
       </Paper>

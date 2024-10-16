@@ -108,18 +108,18 @@ const convertDateTimeStringToTimeString = (dateTimeString) => {
 
 const convertDateObjectToDateString = (dateObject) => {
   const convertedDateObject = dateObject.toLocaleDateString(undefined, {
-    day: "numeric",
-    month: "numeric",
+    day: "2-digit",
+    month: "2-digit",
   });
   return convertedDateObject;
 };
 
 const convertDateTimeStringToDateTime = (dateTimeString) => {
   const parsedDate = new Intl.DateTimeFormat("en-US", {
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   }).format(dateTimeString);
   return parsedDate;
 };
@@ -134,7 +134,7 @@ function convertDateTimeStringToHour(dateTimeString) {
   const parsedDate = Date.parse(dateTimeString);
   const dateObject = new Date(parsedDate);
   const convertedToHoursAndMinutes = dateObject.toLocaleTimeString([], {
-    hour: "numeric",
+    hour: "2-digit",
   });
   return convertedToHoursAndMinutes;
 }

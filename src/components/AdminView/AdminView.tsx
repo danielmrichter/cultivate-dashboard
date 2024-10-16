@@ -1,16 +1,14 @@
-import { CircularProgress, Container, Grid2 } from "@mui/material";
+import { CircularProgress, Container, Grid2, Box, Typography } from "@mui/material";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import SiteCard from "../CardComponents/SiteCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useInterval from "../../hooks/useInterval";
-import { useLocation } from "react-router-dom";
 
 export default function AdminView() {
   const siteList = useAppSelector((store) => store.siteList);
-  const location = useLocation();
   const [listOfSiteData, setListOfSiteData] = useState([]);
-
+  const user = useAppSelector((store) => store.user)
   const fetchSiteData = async () => {
     // Get the data for each site. This is overkill and a lot of
     // data, but this is how we're doing it right now.
@@ -50,9 +48,12 @@ export default function AdminView() {
   useInterval(fetchSiteData, 300000);
 
   return (
-    <>
+    <Box sx={{padding: 4}}>
+      <Typography variant="h4" sx={{ marginBottom: 4}}>
+    <b>Welcome {user.first_name} {user.last_name}</b>
+      </Typography>
       {listOfSiteData[0] ? (
-        <Grid2 container margin={2} spacing={8}>
+        <Grid2 container spacing={8}>
           {listOfSiteData.map((site, i) => {
             return (
               <SiteCard
@@ -68,6 +69,6 @@ export default function AdminView() {
           <CircularProgress />
         </Container>
       )}
-    </>
+    </Box>
   );
 }

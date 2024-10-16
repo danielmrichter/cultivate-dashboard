@@ -31,7 +31,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     const formattedTicketData = ticketData.rows.map((ticket) => {
       return {
         ...ticket,
-        coordinates: `${ticket.coordinates.x}, ${ticket.coordinates.y}`,
+        // coordinates: `${ticket.coordinates.x}, ${ticket.coordinates.y}`,
         updated_at: convertDateTimeStringToDateTime(ticket.updated_at),
         temperature_time: convertDateTimeStringToDateTime(
           ticket.temperature_time

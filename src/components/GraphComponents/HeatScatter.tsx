@@ -1,4 +1,4 @@
-import { useTheme, Paper } from "@mui/material";
+import { useTheme, Tooltip as MuiTooltip, Paper } from "@mui/material";
 import {
   ResponsiveContainer,
   Scatter,
@@ -15,7 +15,7 @@ import {
 
 // xLabel is going to be a string that will be displayed as the label on the x axis.
 // Similarly for the yLabel.
-export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
+export default function HeatScatter({ data, x, y, xLabel, yLabel, temp }) {
   // This grabs the theme from MUI.
   const theme = useTheme();
   // Define the color dependent on the temperature reading.
@@ -45,24 +45,21 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
   const tooltipRenderFn = ({ active, payload, label }) => {
     if (active && payload && payload.length)
       return (
-        <Paper sx={{ p: 1 }} elevation={2}>
-          <p>Temperature: {payload[0].payload.temperature}ºF</p>
+        <Paper sx={{p:1}} elevation={2}>
           <p>
-            {xLabel}: {payload[0].payload[x]}
+            Temperature: {payload[0].payload.temperature}ºF
           </p>
-          <p>
-            {yLabel}: {payload[0].payload[y]}
-          </p>
+          <p>{xLabel}: {payload[0].payload[x]}</p>
+          <p>{yLabel}: {payload[0].payload[y]}</p>  
         </Paper>
       );
   };
 
   return (
-    <ResponsiveContainer
-      width="100%"
-      style={{ marginBottom: "20px", marginLeft: "15px" }}
-    >
-      <ScatterChart overflow="visible" style={{ padding: "10px" }}>
+    <ResponsiveContainer width="100%" style={{marginBottom: "20px", marginLeft:"15px"}}>
+      <ScatterChart
+      overflow = "visible"
+      style={{padding: "10px"}}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
   dataKey={x}
@@ -75,7 +72,7 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
       dataMax + (dataMax - dataMin) * 0.1,
     ],
     tickFormatter: formatTick,
-  } : {tick: {angle: -45, dy: 15, dx: -15}})}
+  } : {tickFormatter: formatTick, tick: {angle: -45, dy: 15, dx: -15}})}
   
   interval={"preserveStartEnd"}
 />
@@ -89,6 +86,7 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
               dataMax + (dataMax - dataMin) * 0.1,
             ];
           }}
+          
           // Helper function to round the displays of the ticks to be three decimal places.
           // Does not affect functionality, only visuals.
           tickFormatter={formatTick}

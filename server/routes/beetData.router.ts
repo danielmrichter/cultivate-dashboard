@@ -92,7 +92,7 @@ router.post("/", async (req, res) => {
 /**
  * GET /api/beet_data/:siteid
  */
-router.get("/:siteid", rejectUnauthenticated, async (req, res) => {
+router.get("/:siteid", async (req, res) => {
   let siteId = req.params.siteid;
   try {
     // These are some SQL Queries we'll use later.

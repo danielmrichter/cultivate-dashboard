@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useNavigate, useParams } from "react-router-dom";
-import ScatterPlot from "../GraphComponents/ScatterPlot";
+import HeatScatter from "../GraphComponents/HeatScatter";
 import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
@@ -61,11 +61,29 @@ export default function PilerView() {
     { field: "truck", headerName: "Truck", editable: true, flex: 0.5 },
     { field: "field", headerName: "Grower", editable: false, flex: 1 },
     {
-      field: "coordinates",
-      headerName: "Coordinates",
-      editable: true,
+      field: 'coordinates',
+      headerName: 'Coordinates',
       flex: 1,
-    },
+      renderCell: (params) => {
+          const { coordinates } = params.row;
+          if (coordinates && coordinates.x !== undefined && coordinates.y !== undefined) {
+              return (
+                  <Box
+                  sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      height: '100%',
+                  }}
+              >
+                  <Typography fontSize={12}>
+                      {Number.parseFloat(coordinates.x).toFixed(3)}, {Number.parseFloat(coordinates.y).toFixed(3)}
+                  </Typography>
+              </Box>);
+          }
+          return 'N/A';
+      },
+  },
     { field: "updated_at", headerName: "Last Updated", flex: 1 },
     {
       field: "markResolved",
@@ -113,6 +131,8 @@ export default function PilerView() {
     setPendingUpdate(null);
   };
 
+
+  
   const handleDeleteTicket = (beet_data_id) => {
     if (!beet_data_id) {
       console.error("Missing ticketId for delete operation.");
@@ -199,7 +219,13 @@ export default function PilerView() {
         <Typography variant="h3">
           <b onClick={() => {axios.post('/api/beet_data', DummyData)}}>{pilerData.siteInfo.piler_name} Details:</b>
         </Typography>
-        <Button sx={{mb: 4, alignSelf: 'flex-start'}} onClick={handleBackClick}><ArrowBack />Back to Dashboard</Button>
+        <Button
+          sx={{ mb: 4, alignSelf: "flex-start" }}
+          onClick={handleBackClick}
+        >
+          <ArrowBack />
+          Back to Dashboard
+        </Button>
       </Box>
       <Box
         sx={{
@@ -223,7 +249,7 @@ export default function PilerView() {
           <Typography variant="h4" sx={{ alignSelf: "start" }}>
             <b>Heat Map Of Pile</b>
           </Typography>
-          <ScatterPlot
+          <HeatScatter
             data={pilerData.heatMapData}
             x="x"
             y="y"
@@ -285,31 +311,51 @@ export default function PilerView() {
           autoHeight
           processRowUpdate={handleRowEdit}
           onProcessRowUpdateError={handleProcessRowUpdateError}
+          initialState={{
+            sorting: {
+              sortModel: [{ field: 'temperature_time', sort: 'desc' }],
+            },
+          }}
+          sx={{
+            "& .MuiDataGrid-row": {
+              "&.alert-row": {
+                backgroundColor: theme.palette.error.light,
+              },
+              "&.warning-row": {
+                backgroundColor: theme.palette.warning.light,
+              },
+              "&.normal-row": {
+                backgroundColor: "#FFFFFF",
+              },
+            },
+          }}
+          getRowClassName={(params) => {
+            const temp = params.row.temperature;
+            if (temp >= 43) return "alert-row";
+            if (temp >= 40 && temp ) return "warning-row";
+            return "normal-row";
+          }}
         />
       </Paper>
 
-      {/* Confirmation Editing Dialog */}
-      <Dialog open={openDialog} onClose={handleCancelUpdate}>
-        <DialogTitle>Confirm Update</DialogTitle>
+      <Dialog open={openDialog}>
+        <DialogTitle>{"Update Data?"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to update ticket{" "}
-            {pendingUpdate?.ticket_number}?
+            Do you want to update the ticket?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancelUpdate} color="primary">
-            No
+            Cancel
           </Button>
-          <Button onClick={handleConfirmUpdate} color="primary">
-            Yes
+          <Button onClick={handleConfirmUpdate} color="primary" autoFocus>
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
     </Box>
   ) : (
-    <Box sx={{ display: "flex", justifyContent: "center", height: "100vh" }}>
-      <CircularProgress color="primary" />
-    </Box>
+    <CircularProgress />
   );
 }

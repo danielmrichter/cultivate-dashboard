@@ -9,6 +9,7 @@ import { rejectUnauthenticated } from "../modules/authentication-middleware";
 router.get("/", rejectUnauthenticated, (req, res) => {
   const queryText = `
     SELECT * FROM "sites"
+    ORDER BY "sites".id
     `;
   pool
     .query(queryText)
