@@ -15,7 +15,6 @@ import {
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useNavigate, useParams } from "react-router-dom";
-import HeatScatter from "../GraphComponents/HeatScatter";
 import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
@@ -23,6 +22,7 @@ import { useTheme } from "@mui/material";
 import useInterval from "../../hooks/useInterval";
 import axios from "axios";
 import DummyData from "../DummyData.json"
+import ScatterPlot from "../GraphComponents/ScatterPlot";
 
 export default function PilerView() {
   const theme = useTheme();
@@ -249,7 +249,7 @@ export default function PilerView() {
           <Typography variant="h4" sx={{ alignSelf: "start" }}>
             <b>Heat Map Of Pile</b>
           </Typography>
-          <HeatScatter
+          <ScatterPlot
             data={pilerData.heatMapData}
             x="x"
             y="y"
