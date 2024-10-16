@@ -74,7 +74,13 @@ export default function SiteCard({ siteInfo, miniAlertData }) {
         Alert History
       </Button>
       {location.pathname === "/admin" && (
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent:'space-between' }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
           Site Manager Info:
           <ManagerInfo siteId={siteInfo.site_id} />
         </Box>

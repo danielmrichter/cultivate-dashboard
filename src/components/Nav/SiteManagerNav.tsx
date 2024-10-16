@@ -1,34 +1,49 @@
-import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItemButton, ListItemText, Collapse, Box, Button, Link } from '@mui/material';
-import { useState, useEffect } from 'react';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import MenuIcon from '@mui/icons-material/Menu';
-import { useNavigate } from 'react-router-dom';
-import LogOutButton from '../AccountComponents/LogOutButton/LogOutButton';
-
-
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemText,
+  Collapse,
+  Box,
+  Button,
+  Link,
+} from "@mui/material";
+import { useState, useEffect } from "react";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useNavigate } from "react-router-dom";
+import LogOutButton from "../AccountComponents/LogOutButton/LogOutButton";
 
 export default function SiteManagerNav() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [nestedOpen, setNestedOpen] = useState(true);
   const user = useAppSelector((store) => store.user);
-  const siteData = useAppSelector((store) => store.siteData)
+  const siteData = useAppSelector((store) => store.siteData);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch({type: 'GET_SITE_DATA', payload: user.site_id})
-  },[]);
-    // open or close the Drawer
+    dispatch({ type: "GET_SITE_DATA", payload: user.site_id });
+  }, []);
+  // open or close the Drawer
   const toggleDrawer = (open) => (event) => {
-    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
     setDrawerOpen(open);
   };
 
-   // expand or condense the collapsible list
+  // expand or condense the collapsible list
   const handleNestedClick = () => {
     setNestedOpen(!nestedOpen);
   };
@@ -42,12 +57,12 @@ export default function SiteManagerNav() {
     <Box
       sx={{ width: 160 }}
       role="presentation"
-    //   onClick={toggleDrawer(false)}   
-    //   onKeyDown={toggleDrawer(false)}
-    //   having them here closes the Drawer on any subsequent click
+      //   onClick={toggleDrawer(false)}
+      //   onKeyDown={toggleDrawer(false)}
+      //   having them here closes the Drawer on any subsequent click
     >
       <List
-        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         component="nav"
         aria-labelledby="nested-list-subheader"
         // subheader={
@@ -56,41 +71,63 @@ export default function SiteManagerNav() {
         //   </ListSubheader>
         // }
       >
-          {/* Dashboard list item */}
-        <ListItemButton key="dashboard" >
-          <ListItemText primary="SITE DASHBOARD"
-            onClick={() =>  { handleNavigation(`/site/${user.site_id}`);setDrawerOpen(false);}}
-            onKeyDown={toggleDrawer(false)}/>
+        {/* Dashboard list item */}
+        <ListItemButton key="dashboard">
+          <ListItemText
+            primary="SITE DASHBOARD"
+            onClick={() => {
+              handleNavigation(`/site/${user.site_id}`);
+              setDrawerOpen(false);
+            }}
+            onKeyDown={toggleDrawer(false)}
+          />
         </ListItemButton>
 
-          {/* Pilers list item */}
-        <ListItemButton key="pilers"
-            onClick={handleNestedClick} sx={{backgroundColor:'#F1F1F1'}}>
+        {/* Pilers list item */}
+        <ListItemButton
+          key="pilers"
+          onClick={handleNestedClick}
+          sx={{ backgroundColor: "#F1F1F1" }}
+        >
           <ListItemText primary="PILERS" />
           {nestedOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
 
-           {/* pilers mapped into the collapsible list */}
+        {/* pilers mapped into the collapsible list */}
         <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {siteData[0] && siteData.map((site) => {
-              return(
-              <ListItemButton sx={{ pl: 4, backgroundColor:'#F1F1F1'}} 
-                  key={site.piler_id} >
-                  <ListItemText primary={site.name}  
-                      onClick={() => {   {/* collapses the Drawer and goes to piler page */}
+            {siteData[0] &&
+              siteData.map((site) => {
+                return (
+                  <ListItemButton
+                    sx={{ pl: 4, backgroundColor: "#F1F1F1" }}
+                    key={site.piler_id}
+                  >
+                    <ListItemText
+                      primary={site.name}
+                      onClick={() => {
+                        {
+                          /* collapses the Drawer and goes to piler page */
+                        }
                         setDrawerOpen(false);
-                        handleNavigation(`/piler-details/${site.piler_id}`)}}
-                      />
-              </ListItemButton>
-            )})}
+                        handleNavigation(`/piler-details/${site.piler_id}`);
+                      }}
+                    />
+                  </ListItemButton>
+                );
+              })}
           </List>
         </Collapse>
-            {/* Alerts list item */}
+        {/* Alerts list item */}
         <ListItemButton key="alerts">
-          <ListItemText primary="ALERT History"
-            onClick={() => {setDrawerOpen(false);handleNavigation(`/alert-history/${user.site_id}`)}}
-            onKeyDown={toggleDrawer(false)}/>
+          <ListItemText
+            primary="ALERT History"
+            onClick={() => {
+              setDrawerOpen(false);
+              handleNavigation(`/alert-history/${user.site_id}`);
+            }}
+            onKeyDown={toggleDrawer(false)}
+          />
         </ListItemButton>
       </List>
     </Box>
@@ -110,10 +147,14 @@ export default function SiteManagerNav() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, textAlign: "center" }}
+          >
             Cultivate Site Manager
           </Typography>
-      <LogOutButton />
+          <LogOutButton />
         </Toolbar>
       </AppBar>
 
@@ -123,8 +164,8 @@ export default function SiteManagerNav() {
         onClose={toggleDrawer(false)}
         variant="temporary"
         sx={{
-          '& .MuiDrawer-paper': {
-            marginTop: '64px', // keeps the Drawer below the AppBar
+          "& .MuiDrawer-paper": {
+            marginTop: "64px", // keeps the Drawer below the AppBar
             width: 160,
           },
         }}

@@ -8,9 +8,10 @@ import { useLocation } from "react-router-dom";
 
 export default function AdminView() {
   const siteList = useAppSelector((store) => store.siteList);
-  const location = useLocation()
   const user = useAppSelector(store => store.user)
+  const location = useLocation();
   const [listOfSiteData, setListOfSiteData] = useState([]);
+
   const fetchSiteData = async () => {
     // Get the data for each site. This is overkill and a lot of
     // data, but this is how we're doing it right now.
@@ -25,16 +26,11 @@ export default function AdminView() {
         return axios.get(`/api/alerts/mini/${site.id}`);
       })
     );
-    // Here are the managers for each site.
-    const allOfTheManagersForEachSite = await Promise.all(
-      siteList.map((site) => axios.get(`/api/siteList/siteManager/${site.id}`))
-    );
-
     // Now, combine them together.
     // They use the same array to grab the data, so they should be
     // in the same order.
     const siteData = allOfTheDataAboutEachSite.map((site, i) => {
-      return { site: site.data, alerts: allOfTheAlertsForEachSite[i].data, };
+      return { site: site.data, alerts: allOfTheAlertsForEachSite[i].data };
     });
     setListOfSiteData(siteData);
   };
@@ -50,9 +46,8 @@ export default function AdminView() {
   // More info: https://stackoverflow.com/questions/53332321/react-hook-warnings-for-async-function-in-useeffect-useeffect-function-must-ret
   useEffect(() => {
     fetchSiteData();
-    console.log('location is: ', location)
   }, [siteList]);
-  
+
   useInterval(fetchSiteData, 300000);
 
   return (
