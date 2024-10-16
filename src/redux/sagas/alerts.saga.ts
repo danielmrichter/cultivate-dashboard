@@ -31,8 +31,8 @@ function* markAlertResolved(action) {
 
 function* markAlertSeen(action) {
   try {
-    yield axios.post(`/api/alerts`, { id: action.payload });
-    yield put({ type: "FETCH_MINI_ALERTS" });
+    yield axios.post(`/api/alerts`, { id: action.payload.alertId });
+    yield put({ type: "FETCH_MINI_ALERTS", payload: action.payload.siteId });
   } catch (error) {
     console.log("error marking alert as having been seen", error);
   }
