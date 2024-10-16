@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Paper,
@@ -11,8 +10,6 @@ import {
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
-// import Visibility from "@mui/icons-material/Visibility";
-// import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function LoginForm() {
   const [username, setUsername] = useState("");

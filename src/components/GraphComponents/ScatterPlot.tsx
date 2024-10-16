@@ -49,7 +49,7 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
     if (active && payload && payload.length)
       return (
         <Paper sx={{ p: 1 }} elevation={2}>
-          <p>Temperature: {payload[0].payload.temperature}ºF</p>
+          <p>Temperature: {payload[0].payload[temp]}ºF</p>
           <p>
             {xLabel}: {payload[0].payload[x]}
           </p>

@@ -23,7 +23,6 @@ router.get("/", rejectUnauthenticated, (req, res) => {
 });
 
 router.get("/siteManager/:id", (req, res) => {
-  console.log("params is ", req.params.id);
   const queryText = `
     SELECT CONCAT("user".first_name, ' ', "user".last_name) AS fullname, 
             "user".cell_phone AS phone
@@ -36,7 +35,6 @@ router.get("/siteManager/:id", (req, res) => {
   pool
     .query(queryText, queryValues)
     .then((result) => {
-      console.log("result is ", result);
       res.send(result.rows);
     })
     .catch((err) => {

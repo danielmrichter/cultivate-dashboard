@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -16,8 +15,7 @@ import {
   RadioGroup,
   FormLabel,
 } from "@mui/material";
-// import Visibility from "@mui/icons-material/Visibility";
-// import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 
 function RegisterForm() {
   const [username, setUsername] = useState("");
@@ -33,7 +31,6 @@ function RegisterForm() {
   const dispatch = useAppDispatch();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  // const handleRadio = (event) => setAccessLevel(event.target.value);
 
   const phoneFormat = (phoneString) => {
     if (phoneString) {
