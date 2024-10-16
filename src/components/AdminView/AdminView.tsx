@@ -9,7 +9,6 @@ export default function AdminView() {
   const siteList = useAppSelector((store) => store.siteList);
   const [listOfSiteData, setListOfSiteData] = useState([]);
   const user = useAppSelector((store) => store.user)
-
   const fetchSiteData = async () => {
     // Get the data for each site. This is overkill and a lot of
     // data, but this is how we're doing it right now.
