@@ -15,26 +15,37 @@ With this user-friendly visualization, Site Managers can quickly identify and re
 
 
 ## Screen Shot
+![Piler Details](./public/Piler-Details.png)
+Piler Details Page
 
-Include one or two screen shots of your project here (optional). Remove if unused.
+![Piler Details Ticket Table](./public/Piler-Details-Tickets.png)
+Piler Details Ticket Table
+
+![Alert History](./public/Alert-History-Tables.png)
+Alert History Tables
+
+![Site View](./public/Site-View.png)
+Site View Page
+
+![User List](./public/User-List.png)
+User List
 
 ### Prerequisites
 
-Link to software that is required to install the app (e.g. node).
+Link to software that is required to install the app.
 
 - [Node.js](https://nodejs.org/en/)
 
 ## Installation
 
 1. Create a database named `cultivate`,
-2. The queries in the `database.sql` file are set up to create all the necessary tables and populate the needed data to allow the application to run correctly. The project is built on [Postgres](https://www.postgresql.org/download/), so you will need to make sure to have that installed. We recommend using Postico to run those queries as that was used to create the queries, 
+2. The queries in the `database.sql` file are set up to create all the necessary tables and populate the needed data to allow the application to run correctly. The project is built on [Postgres](https://www.postgresql.org/download/), so you will need to make sure to have that installed. We recommend using Postico to run those queries as that was used to create the queries.
 3. Open up your editor of choice and run an `npm install`
+4. Create a file called `.env`. This file will provide some environment 
 4. Run `npm run server` in your terminal
 5. Run `npm run client` in your terminal
 
 ## Usage
-How does someone use this application? Tell a user story here.
-
 1. User can register as either a Site Manager or a general Manager. Site Managers will see one specific site and need to be assigned to that site by a General Manager. General Managers can see all sites.
 2. Each site view has a list of the pilers and an overall site card.
 3. Each piler card contains data visualization on the temperatures at the site over the day and can be toggled to see the month view.
@@ -53,7 +64,8 @@ How does someone use this application? Tell a user story here.
 - [Recharts](https://recharts.org/en-US)
 - [PostGreSQL](https://www.postgresql.org/)
 - [ExpressJS](https://expressjs.com/)
-- []
+- [Material UI](https://mui.com/material-ui/)
+- [TypeScript](https://www.typescriptlang.org/)
 
 ## Acknowledgement
 - Thanks to Adam Shepard and Cultivate Custom Hardware for giving us this opportunity space.

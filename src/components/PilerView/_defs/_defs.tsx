@@ -29,7 +29,7 @@ export const columnsDef = [
     {
       field: "temperature_time",
       headerName: "Temperature Time",
-      editable: true,
+      editable: false,
       flex: 1,
     },
     { field: "truck", headerName: "Truck", editable: true, flex: 0.5 },

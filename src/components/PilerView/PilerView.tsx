@@ -110,7 +110,7 @@ export default function PilerView() {
     return <div>Error</div>;
   };
 
-  return pilerData.ticketData[0] ? (
+  return pilerData.ticketData ? (
     <Box
       sx={{
         display: "flex",

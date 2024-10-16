@@ -62,6 +62,8 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
       width="100%"
       style={{ marginBottom: "20px", marginLeft: "15px" }}
     >
+    {/* There are errors on two of these parts. I'm going to be real with you,
+    I don't know why they're not accepting these. */}
       <ScatterChart overflow="visible" style={{ padding: "10px" }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
