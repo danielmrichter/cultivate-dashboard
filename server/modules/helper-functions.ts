@@ -12,7 +12,7 @@ function getRandomInt(min, max) {
 // Since we aren't creating the tickets in the scope of this app,
 // This is a way to test that things work as we go along.
 async function developmentPostForBeetData(req: Request) {
-  let client:PoolClient ;
+  let client: PoolClient;
   try {
     client = await pool.connect();
     await client.query("BEGIN");
@@ -70,7 +70,7 @@ async function developmentPostForBeetData(req: Request) {
       })
     );
     const newAlertsToCreate = newBeetData.filter(
-      (data) => data.rows[0].temperature >=40
+      (data) => data.rows[0].temperature >= 40
     );
     await Promise.all(
       newAlertsToCreate.map((data) => {
@@ -114,7 +114,7 @@ const convertDateObjectToDateString = (dateObject) => {
   return convertedDateObject;
 };
 
-const convertDateTimeStringToDateTime = (dateTimeString) => {
+const convertDateTimeStringToDateTime = (dateTimeString: Date) => {
   const parsedDate = new Intl.DateTimeFormat("en-US", {
     month: "2-digit",
     day: "2-digit",
@@ -124,13 +124,13 @@ const convertDateTimeStringToDateTime = (dateTimeString) => {
   return parsedDate;
 };
 
-function formatCoordinates(string) {
+function formatCoordinates(string: string) {
   const regex = /[A-Za-z]/gi;
   const filteredString = string.replace(regex, "");
   return filteredString.replace(" ", ",");
 }
 
-function convertDateTimeStringToHour(dateTimeString) {
+function convertDateTimeStringToHour(dateTimeString: string) {
   const parsedDate = Date.parse(dateTimeString);
   const dateObject = new Date(parsedDate);
   const convertedToHoursAndMinutes = dateObject.toLocaleTimeString([], {
@@ -140,7 +140,7 @@ function convertDateTimeStringToHour(dateTimeString) {
 }
 // This is a helper function to get the monthly data if there is no tickets for a day,
 // Like if it's 12:01 and there's nothing that's come in for the day yet.
-async function getMonthlyData(siteId) {
+async function getMonthlyData(siteId: string | number) {
   const sqlGetPilers = `
     SELECT 
     "pilers"."name" AS "piler_name",
@@ -164,7 +164,7 @@ WHERE "sites"."id" = $1;`;
     site_id: siteId,
     site_name: pilers.rows[0].site_name,
     pilers: [],
-  }
+  };
   for (let piler of pilers.rows) {
     const monthlyAvgResponse = await pool.query(sqlMonthlyAvgText, [
       piler.piler_id,
@@ -175,7 +175,7 @@ WHERE "sites"."id" = $1;`;
     const { piler_name, piler_id } = piler;
 
     // We're not getting the datetime in the format we want. So, we need to convert it.
-   
+
     const convertedMonthlyAverages = monthlyAvgResponse.rows.map((month) => {
       return {
         avgTempOfEachDay: Number(month.avgTempOfEachDay),
@@ -191,7 +191,7 @@ WHERE "sites"."id" = $1;`;
     // Now that we have a piler object, shove it into an array to send back.
     dataToSend.pilers.push(newPilerObj);
   }
-  return dataToSend
+  return dataToSend;
 }
 
 export {
@@ -202,5 +202,5 @@ export {
   convertDateTimeStringToDateTime,
   formatCoordinates,
   convertDateTimeStringToHour,
-  getMonthlyData
+  getMonthlyData,
 };
