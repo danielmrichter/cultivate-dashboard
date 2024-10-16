@@ -22,7 +22,6 @@ import ArrowBack from "@mui/icons-material/ArrowBack";
 import { useTheme } from "@mui/material";
 import useInterval from "../../hooks/useInterval";
 import axios from "axios";
-import DummyData from "../DummyData.json"
 
 export default function PilerView() {
   const theme = useTheme();
@@ -130,9 +129,6 @@ export default function PilerView() {
     setOpenDialog(false);
     setPendingUpdate(null);
   };
-
-
-  
   const handleDeleteTicket = (beet_data_id) => {
     if (!beet_data_id) {
       console.error("Missing ticketId for delete operation.");
@@ -217,7 +213,7 @@ export default function PilerView() {
         }}
       >
         <Typography variant="h3">
-          <b onClick={() => {axios.post('/api/beet_data', DummyData)}}>{pilerData.siteInfo.piler_name} Details:</b>
+          <b>{pilerData.siteInfo.piler_name} Details:</b>
         </Typography>
         <Button
           sx={{ mb: 4, alignSelf: "flex-start" }}
