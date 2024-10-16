@@ -14,7 +14,7 @@ export default function AlertModal({ alert }) {
 
   // posts to alerts_users table that the alert has been seen
   useEffect(() => {
-    dispatch({ type: "HAS_SEEN_ALERT", payload: alert.alert_id });
+    dispatch({ type: "HAS_SEEN_ALERT", payload: { alertId: alert.alert_id, siteId: alert.site_id } });
   }, []);
 
   const handleClose = (event, reason) => {

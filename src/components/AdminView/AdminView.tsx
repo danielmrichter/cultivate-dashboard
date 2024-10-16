@@ -4,11 +4,9 @@ import SiteCard from "../CardComponents/SiteCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useInterval from "../../hooks/useInterval";
-import { useLocation } from "react-router-dom";
 
 export default function AdminView() {
   const siteList = useAppSelector((store) => store.siteList);
-  const location = useLocation();
   const [listOfSiteData, setListOfSiteData] = useState([]);
   const user = useAppSelector((store) => store.user)
 
