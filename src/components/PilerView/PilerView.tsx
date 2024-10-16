@@ -10,13 +10,12 @@ import {
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useNavigate, useParams } from "react-router-dom";
-import HeatScatter from "../GraphComponents/HeatScatter";
 import BarGraph from "../GraphComponents/BarGraph";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import useInterval from "../../hooks/useInterval";
-import { columnsDef } from "./_defs/_defs";
 import UpdateTicket from "./UpdateTicket/UpdateTicket.jsx";
+import ScatterPlot from "../GraphComponents/ScatterPlot";
 
 export default function PilerView() {
   const dispatch = useAppDispatch();
@@ -24,13 +23,96 @@ export default function PilerView() {
   const navigate = useNavigate();
   const pilerData = useAppSelector((store) => store.piler);
   const [chartFormatToDisplay, setChartFormatToDisplay] = useState("day");
- 
 
   useEffect(() => {
     dispatch({ type: "FETCH_PILER_DATA", payload: pilerId });
   }, [pilerId, dispatch]);
 
   useInterval(() => dispatch({ type: "FETCH_PILER_DATA", payload: pilerId }));
+
+  // This columnsDef is used in a MUIX DataGrid component.
+  // It's a headache to look at, but defines what will be contained
+  // in each column.
+  const columnsDef = [
+    {
+      field: "ticket_number",
+      headerName: "Ticket #",
+      editable: true,
+      flex: 0.5,
+    },
+    { field: "temperature", headerName: "Temp", editable: true, flex: 0.5 },
+    {
+      field: "temperature_time",
+      headerName: "Temperature Time",
+      editable: true,
+      flex: 1,
+    },
+    { field: "truck", headerName: "Truck", editable: true, flex: 0.5 },
+    { field: "field", headerName: "Grower", editable: false, flex: 1 },
+    {
+      field: "coordinates",
+      headerName: "Coordinates",
+      flex: 1,
+      renderCell: (params) => {
+        const { coordinates } = params.row;
+        if (
+          coordinates &&
+          coordinates.x !== undefined &&
+          coordinates.y !== undefined
+        ) {
+          return (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                height: "100%",
+              }}
+            >
+              <Typography fontSize={12}>
+                {Number.parseFloat(coordinates.x).toFixed(3)},{" "}
+                {Number.parseFloat(coordinates.y).toFixed(3)}
+              </Typography>
+            </Box>
+          );
+        }
+        return "N/A";
+      },
+    },
+    { field: "updated_at", headerName: "Last Updated", flex: 1 },
+    {
+      field: "markResolved",
+      headerName: "",
+      flex: 0.5,
+      renderCell: (params) => (
+        <Button
+          sx={{
+            backgroundColor: "error.main",
+            color: "white",
+            "&:hover": { backgroundColor: "primary.main" },
+          }}
+          onClick={() => {
+            handleDeleteTicket(params.row.beet_data_id);
+          }}
+        >
+          Delete
+        </Button>
+      ),
+    },
+  ];
+  const handleDeleteTicket = (beet_data_id) => {
+    if (!beet_data_id) {
+      console.error("Missing ticketId for delete operation.");
+      return;
+    } else {
+      const userConfirm = window.confirm(
+        "Are you sure you want to delete this ticket?"
+      );
+      if (userConfirm) {
+        dispatch({ type: "DELETE_PILER_TICKET", payload: { beet_data_id } });
+      }
+    }
+  };
 
   const ticketData =
     pilerData.ticketData?.map((row, index: number) => ({
@@ -164,7 +246,7 @@ export default function PilerView() {
           <Typography variant="h4" sx={{ alignSelf: "start" }}>
             <b>Heat Map Of Pile</b>
           </Typography>
-          <HeatScatter
+          <ScatterPlot
             data={pilerData.heatMapData}
             x="x"
             y="y"
@@ -259,7 +341,7 @@ export default function PilerView() {
       />
     </Box>
   ) : (
-    // 
+    //
     <CircularProgress />
   );
 }
