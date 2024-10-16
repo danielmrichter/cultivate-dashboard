@@ -9,10 +9,6 @@ import {
   Tooltip,
 } from "recharts";
 
-// data needs to be an array of objects. These objects should have
-// properties that are numbers. x and y need to be the names of the
-// x and y coordinates that you wish to use.
-
 // xLabel is going to be a string that will be displayed as the label on the x axis.
 // Similarly for the yLabel.
 export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
@@ -70,18 +66,19 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey={x}
-          type={typeof x === "number" ? "number" : "category"}
+          type={typeof data[0][x] === "number" ? "number" : "category"}
           label={{ value: xLabel, position: "bottom", offset: 40 }}
-          {...(typeof x === "number"
-            ? {
-                domain: ([dataMin, dataMax]) => [
-                  dataMin - (dataMax - dataMin) * 0.1,
-                  dataMax + (dataMax - dataMin) * 0.1,
-                ],
-                tickFormatter: formatTick,
-              }
-            : {
-                tick: (props) => {
+          domain={typeof data[0][x] === "number"
+            ? ([dataMin, dataMax]) => [
+                dataMin - (dataMax - dataMin) * 0.1,
+                dataMax + (dataMax - dataMin) * 0.1,
+              ]
+            : undefined}
+          tickFormatter={typeof data[0][x] === "number" ? formatTick : undefined} // Apply formatTick only for number types
+          interval={"preserveStartEnd"}
+          tick={
+            typeof data[0][x] === "number"
+              ? (props) => {
                   const { x, y, payload } = props;
                   return (
                     <g transform={`translate(${x},${y})`}>
@@ -90,16 +87,16 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
                         y={0}
                         dy={15}
                         textAnchor="end"
-                        transform="rotate(-45)"
+                        transform="rotate(-45)" // Rotate for numeric data
                         fill="#666"
                       >
-                        {payload.value}
+                        {formatTick(payload.value)} {/* Use formatTick for number data */}
                       </text>
                     </g>
                   );
-                },
-              })}
-          interval={"preserveStartEnd"}
+                }
+              : undefined // No custom rendering for categorical data
+          }
         />
         <YAxis
           dataKey={y}
@@ -114,7 +111,7 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
             dataMin - (dataMax - dataMin) * 0.1,
             dataMax + (dataMax - dataMin) * 0.1,
           ]}
-          tickFormatter={formatTick}
+          tickFormatter={formatTick} // Always apply the tickFormatter
           interval={"preserveStartEnd"}
         />
         <Tooltip
@@ -126,3 +123,4 @@ export default function ScatterPlot({ data, x, y, xLabel, yLabel, temp }) {
     </ResponsiveContainer>
   );
 }
+
