@@ -50,7 +50,7 @@ function App() {
 
           {/* A site's alert history: */}
           <Route
-            path="/alert-history/:id"
+            path="/alert-history/:siteId"
             element={<AuthenticateUser component={AlertHistory} />}
           />
 
@@ -62,7 +62,7 @@ function App() {
 
           {/* Manually Add A Ticket */}
           <Route
-            path="/add-ticket/:siteId/:pilerId"
+            path="/add-ticket/:pilerId"
             element={<AuthenticateUser component={AddTicket} />}
           />
 

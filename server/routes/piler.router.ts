@@ -31,7 +31,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     const formattedTicketData = ticketData.rows.map((ticket) => {
       return {
         ...ticket,
-        coordinates: `${ticket.coordinates.x}, ${ticket.coordinates.y}`,
+        // coordinates: `${ticket.coordinates.x}, ${ticket.coordinates.y}`,
         updated_at: convertDateTimeStringToDateTime(ticket.updated_at),
         temperature_time: convertDateTimeStringToDateTime(
           ticket.temperature_time
@@ -152,15 +152,13 @@ router.put("/update/:id", rejectUnauthenticated, async (req, res) => {
       UPDATE "beet_data" 
       SET 
         "temperature" = $1,
-        "coordinates" = POINT($2, $3),
-        "temperature_time" = $4
-      WHERE "id" = $5;`;
+        "coordinates" = POINT($2, $3)
+      WHERE "id" = $4;`;
 
     await pool.query(updateBeetDataSqlText, [
       temperature,
       coordinates.x,
       coordinates.y,
-      temperature_time,
       beetDataId,
     ]);
 

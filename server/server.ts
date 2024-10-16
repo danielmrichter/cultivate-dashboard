@@ -16,7 +16,7 @@ import alertsRouter from "./routes/alerts.router";
 import pilerRouter from "./routes/piler.router";
 import userListRouter from "./routes/userList.router";
 import growersRouter from "./routes/growers.router";
-import addRouter from "./routes/addTicket.router";
+import addTicketRouter from "./routes/addTicket.router";
 
 // Express Middleware
 app.use(express.json());
@@ -39,7 +39,7 @@ app.use("/api/alerts", alertsRouter);
 app.use("/api/piler", pilerRouter);
 app.use("/api/userList", userListRouter);
 app.use("/api/growers", growersRouter);
-app.use("/api/add_ticket", addRouter);
+app.use("/api/add_ticket", addTicketRouter);
 
 // Listen Server & Port
 app.listen(PORT, () => {

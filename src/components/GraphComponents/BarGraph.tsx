@@ -7,28 +7,32 @@ import {
   Tooltip,
   BarChart,
   Bar,
-  Rectangle,
 } from "recharts";
 
-// data needs to be an array of objects. These objects should have
-// properties that are numbers. x and y need to the names of the
-// x and y coordinates that you wish to use.
+// Define the interface for the data entries
+interface DataEntry {
+  temperature: number; // Assuming temperature is a number
+  [key: string]: any; // Allows for additional properties
+}
 
-// Note: The bar graph will always display in order of the array from left to right.
-// Sort it before passing to this BarGraph.
+// Define the props for the BarGraph component
+interface BarGraphProps {
+  data: DataEntry[]; // An array of DataEntry objects
+  x: string;         // The key for the x-axis
+  y: string;         // The key for the y-axis
+  xLabel: string;    // Label for the x-axis
+  yLabel: string;    // Label for the y-axis
+}
 
-// xLabel is going to be a string that will be displayed as the label on the x axis.
-// Similarly for the yLabel.
-export default function BarGraph({ data, x, y, xLabel, yLabel }) {
-  // This grabs the theme from MUI.
+export default function BarGraph({ data, x, y, xLabel, yLabel }: BarGraphProps) {
   const theme = useTheme();
 
   // Define the color dependent on the temperature reading.
-  const fillColor = (temp) => {
+  const fillColor = (temp: number) => {
     let fill = "";
-    if (parseFloat(temp) > 42) {
+    if (temp > 42) {
       fill = theme.palette.error.main;
-    } else if (parseFloat(temp) > 39 && parseFloat(temp) < 43) {
+    } else if (temp > 39 && temp < 43) {
       fill = theme.palette.warning.main;
     } else {
       fill = theme.palette.success.main;
@@ -36,17 +40,25 @@ export default function BarGraph({ data, x, y, xLabel, yLabel }) {
     return fill;
   };
 
-  const enrichedData = data.map((entry) => ({
+  // Validate date values before sorting
+  const isValidDate = (dateString: string) => !isNaN(new Date(dateString).getTime());
+
+  const sortedData = [...data].sort((a, b) => {
+    const dateA = isValidDate(a[x]) ? new Date(a[x]) : new Date(0); // Default to epoch
+    const dateB = isValidDate(b[x]) ? new Date(b[x]) : new Date(0); // Default to epoch
+    return dateA.getTime() - dateB.getTime(); // Ensure to get the time in milliseconds
+  });
+
+  const enrichedData = sortedData.map((entry) => ({
     ...entry,
-    fill: fillColor(entry[y]), // Add the fill color based on temperature
+    fill: fillColor(entry[y]),
   }));
 
-  //Formatter function for the graph tick marks on the Axes
-  const formatTick = (value) => {
-    return parseFloat(value).toFixed(3);
+  const formatTick = (value: number) => {
+    return value.toFixed(3);
   };
 
-  const tooltipRenderFn = ({ active, payload, label }) => {
+  const tooltipRenderFn = ({ active, payload }: any) => {
     if (active && payload && payload.length)
       return (
         <Paper sx={{ p: 1 }} elevation={2}>
@@ -61,13 +73,26 @@ export default function BarGraph({ data, x, y, xLabel, yLabel }) {
       );
   };
 
+  const CustomBar = (props: any) => {
+    const { x, y, width, height, fill } = props;
+    return (
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        fill={props.payload.fill} // Use the fill from the payload
+      />
+    );
+  };
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
         margin={{
           top: 15,
           right: 15,
-          bottom: 15,
+          bottom: 25,
           left: 15,
         }}
         data={enrichedData}
@@ -83,17 +108,14 @@ export default function BarGraph({ data, x, y, xLabel, yLabel }) {
           dataKey={y}
           type="number"
           label={{ value: yLabel, angle: -90, position: "left" }}
-          // This looks funny. I know. ReCharts allows for callback functions in calculating
-          // the domain (AKA, the upper and lower bounds of the graph, where the edges are).
-          // This is basically finding the range, and then adding 10% to it.
           domain={([dataMin, dataMax]) => {
+            const min = typeof dataMin === 'number' ? dataMin : 0; // default to 0 if not a number
+            const max = typeof dataMax === 'number' ? dataMax : 1; // default to 1 if not a number
             return [
-              dataMin - (dataMax - dataMin) * 0.1,
-              dataMax + (dataMax - dataMin) * 0.1,
+              min - (max - min) * 0.1,
+              max + (max - min) * 0.1,
             ];
           }}
-          // Helper function to round the displays of the ticks to be three decimal places.
-          // Does not affect functionality, only visuals.
           tickFormatter={formatTick}
           interval={"preserveStartEnd"}
         />
@@ -104,7 +126,7 @@ export default function BarGraph({ data, x, y, xLabel, yLabel }) {
         <Bar
           data={enrichedData}
           dataKey="temperature"
-          activeBar={<Rectangle fill={enrichedData.temperature} />}
+          shape={<CustomBar />} // Use the custom shape for dynamic fills
         />
       </BarChart>
     </ResponsiveContainer>
